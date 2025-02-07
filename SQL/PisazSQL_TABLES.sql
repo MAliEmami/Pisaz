@@ -103,9 +103,9 @@ CREATE TABLE ShoppingCart
 (
     Id                            INT                                       NOT NULL,
     ShoppingCartNumber            TINYINT                   IDENTITY(1,1)   NOT NULL, -- check
-    SCStatus                      VARCHAR(20)                               NOT NULL CHECK (SCStatus IN ('locked',
-                                                                                                         'blocked',
-                                                                                                         'active')),
+    CartStatus                      VARCHAR(20)                               NOT NULL CHECK (CartStatus IN ('locked',
+                                                                                                             'blocked',
+                                                                                                             'active')),
     PRIMARY KEY(Id,ShoppingCartNumber),
     FOREIGN KEY(Id) REFERENCES Client(Id) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -193,7 +193,7 @@ CREATE TABLE Case
     NumberOfFans                    SMALLINT                                            CHECK (NumberOfFans >= 0),
     FanSize                         INT                                                 CHECK (FanSize >= 0),
     Wattage                         INT                                                 CHECK (Wattage > 0),
-    CType                           VARCHAR(50)                             NOT NULL,
+    CaseType                        VARCHAR(50)                             NOT NULL,
     Material                        VARCHAR(50)                             NOT NULL,
     Color                           VARCHAR(30)                             NOT NULL,  -- No specific constraint but should not be NULL
     Depth                           DECIMAL(6,2)                                        CHECK (Depth > 0),
