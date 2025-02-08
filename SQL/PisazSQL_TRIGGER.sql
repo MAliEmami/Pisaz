@@ -9,15 +9,13 @@ BEGIN
 END;
 
 
-DECLARE @DepoPercentage DECIMAL = 0.15;
-
 CREATE TRIGGER VIPDepo
 ON IssuedFor
 AFTER INSERT
 AS
 BEGIN
     UPDATE Client
-    SET C.WalletBalance = C.WalletBalance + (SUM(CurrentPrice) * @DepoPercentage)
+    SET C.WalletBalance = C.WalletBalance + (SUM(CurrentPrice) * 0.15)
     FROM INSERTED I, LockedShoppingCart L, Client C, AddedTo A, Product P
     WHERE
         -- JOIN IssuedFor with LockedShoppingCart
@@ -34,3 +32,4 @@ BEGIN
         AND A.Id = p.Id
     GROUP BY L.LockedNumber
 END;
+
