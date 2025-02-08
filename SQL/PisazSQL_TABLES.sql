@@ -64,8 +64,8 @@ CREATE TABLE Transactions
 (
     TrackingCode                INT         PRIMARY KEY     IDENTITY(1,1)   NOT NULL,
     TransactionsStatus          VARCHAR(20)                                 NOT NULL CHECK(TransactionsStatus IN ('Successful',
-                                                                                                       'SemiSuccessful',
-                                                                                                       'Unsuccessful')),-- sql server dose no have enum -- TINYINT and (0:unsuccessful, 1:successful, 2:semi_successful)
+                                                                                                                  'SemiSuccessful',
+                                                                                                                  'Unsuccessful')),-- sql server dose no have enum -- TINYINT and (0:unsuccessful, 1:successful, 2:semi_successful)
     TransactionTime             DATETIME    DEFAULT CURRENT_TIMESTAMP       NOT NULL
 );
 
@@ -102,11 +102,11 @@ CREATE TABLE DepositsIntoWallet
 CREATE TABLE ShoppingCart
 (
     Id                            INT                                       NOT NULL,
-    ShoppingCartNumber            TINYINT                   IDENTITY(1,1)   NOT NULL, -- check
-    CartStatus                      VARCHAR(20)                               NOT NULL CHECK (CartStatus IN ('locked',
-                                                                                                             'blocked',
-                                                                                                             'active')),
-    PRIMARY KEY(Id,ShoppingCartNumber),
+    CartNumber                    TINYINT                   IDENTITY(1,1)   NOT NULL, -- check
+    CartStatus                    VARCHAR(20)                               NOT NULL CHECK (CartStatus IN ('locked',
+                                                                                                           'blocked',
+                                                                                                           'active')),
+    PRIMARY KEY(Id,CartNumber),
     FOREIGN KEY(Id) REFERENCES Client(Id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -114,10 +114,11 @@ CREATE TABLE LockedShoppingCart
 (
     Id                             INT                                    NOT NULL,
     CartNumber                     TINYINT                                NOT NULL,
-    ShoppingCartNumber             INT                    IDENTITY(1,1)   NOT NULL,
+    LockedNumber                   INT                    IDENTITY(1,1)   NOT NULL,
+
     LockedShoppingCartTimestamp    DATETIME   DEFAULT CURRENT_TIMESTAMP   NOT NULL,
-    PRIMARY KEY(Id, CartNumber, ShoppingCartNumber),
-    FOREIGN KEY(Id, CartNumber) REFERENCES ShoppingCart(Id, ShoppingCartNumber) ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY(Id, CartNumber, LockedNumber),
+    FOREIGN KEY(Id, CartNumber) REFERENCES ShoppingCart(Id, CartNumber) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
 CREATE TABLE AppliedTo
@@ -128,7 +129,7 @@ CREATE TABLE AppliedTo
     Code                            INT                                     NOT NULL,
     AppliedToTimestamp              DATETIME                                NOT NULL,
     PRIMARY KEY(Id, CartNumber, LockedNumber, Code),
-    FOREIGN KEY(Id, CartNumber, LockedNumber) REFERENCES LockedShoppingCart(Id, CartNumber, ShoppingCartNumber) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(Id, CartNumber, LockedNumber) REFERENCES LockedShoppingCart(Id, CartNumber, LockedNumber) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY(Code) REFERENCES DiscountCode(Code) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -139,7 +140,7 @@ CREATE TABLE IssuedFor
     CartNumber                      TINYINT                                 NOT NULL,
     LockedNumber                    INT                                     NOT NULL,
     FOREIGN KEY(TrackingCode) REFERENCES Transactions(TrackingCode) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY(Id, CartNumber, LockedNumber) REFERENCES LockedShoppingCart(Id, CartNumber, ShoppingCartNumber) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(Id, CartNumber, LockedNumber) REFERENCES LockedShoppingCart(Id, CartNumber, LockedNumber) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE Product
@@ -170,7 +171,7 @@ CREATE TABLE AddedTo
     Quantity                        SMALLINT                                           CHECK (quantity > 0),
     CartPrice                       INT                                                CHECK (CartPrice >= 0),
     PRIMARY KEY (Id, CartNumber, LockedNumber, ProductId),
-    FOREIGN KEY(Id, CartNumber, LockedNumber) REFERENCES LockedShoppingCart(Id, CartNumber, ShoppingCartNumber) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(Id, CartNumber, LockedNumber) REFERENCES LockedShoppingCart(Id, CartNumber, LockedNumber) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY(ProductId) REFERENCES Product(Id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
