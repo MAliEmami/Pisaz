@@ -16,14 +16,20 @@ BEGIN
     END
 END;
 
--- CREATE TRIGGER BlockedCart
--- ON LockedShoppingCart
--- AFTER INSERT, UPDATE
--- AS
--- BEGIN
---     -- Check if ShoppingCart is blocked
---     IF EXISTS (
---         SELECT *
---         FROM INSERTED I, ShoppingCart S
---         WHERE I.Id = S.Id AND I.Id = S.Id
---     )
+CREATE TRIGGER BlockedCart
+ON LockedShoppingCart
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    -- Check if ShoppingCart is blocked
+    IF EXISTS (
+        SELECT *
+        FROM INSERTED I, ShoppingCart S
+        WHERE I.Id = S.Id AND I.CartNumber = S.CartNumber -- JOIN
+        AND I.CartStatus := 'blocked' -- condition
+    )
+    BEGIN
+        RAISERROR('blocked ShoppingCart cant submitted.', 16, 1);
+        ROLLBACK TRANSACTION;
+    END
+END;
