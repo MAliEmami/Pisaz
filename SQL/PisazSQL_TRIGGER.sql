@@ -16,10 +16,11 @@ AS
 BEGIN
     UPDATE Client
     SET C.WalletBalance = C.WalletBalance + (SUM(CurrentPrice) * 0.15)
-    FROM INSERTED I, LockedShoppingCart L, Client C, AddedTo A, Product P
+    FROM INSERTED I, LockedShoppingCart L, Client C, AddedTo A, Product P, VIPClients V
     WHERE
+        C.Id = V.Id
         -- JOIN IssuedFor with LockedShoppingCart
-            I.Id = L.Id 
+        AND I.Id = L.Id 
         AND I.CartNumber = L.CartNumber 
         AND I.LockedNumber = L.LockedNumber
         -- JOIN LockedShoppingCart with Client
@@ -33,3 +34,4 @@ BEGIN
     GROUP BY L.LockedNumber
 END;
 
+-- CREATE TRIGGER ChargeWallet
