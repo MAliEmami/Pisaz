@@ -33,3 +33,19 @@ BEGIN
         ROLLBACK TRANSACTION;
     END
 END;
+
+CREATE TRIGGER NotExistsProduct
+ON AddedTo
+AFTER INSERT, UPDATE
+AS
+BEGIN 
+    IF EXISTS (
+        SELECT 1
+        FROM INSERTED I JOIN Product P ON I.Id = P.Id
+        WHERE StockCount = 0
+    )
+    BEGIN
+        RAISERROR('Product is Not Exists in warehous.', 16, 1);
+        ROLLBACK TRANSACTION;
+    END
+END;
