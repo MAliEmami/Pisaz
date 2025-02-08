@@ -67,8 +67,21 @@ BEGIN
     END
 END;
 
-
-
+CREATE TRIGGER ExpDiscount
+ON AppliedTo
+AFTER INSERT, UPDATE
+AS
+BEGIN 
+    IF EXISTS (
+        SELECT 1
+        FROM INSERTED I JOIN DiscountCode D ON I.Code = D.Code
+        WHERE ExpirationDate < GETDATE()
+    )
+    BEGIN
+        RAISERROR('The Discount is Expire', 16, 4);
+        ROLLBACK TRANSACTION;
+    END
+END;
 
 -- syntax
 -- CREATE TRIGGER 
