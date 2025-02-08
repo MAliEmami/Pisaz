@@ -63,9 +63,9 @@ CREATE TABLE PublicCode
 CREATE TABLE Transactions
 (
     TrackingCode                INT         PRIMARY KEY     IDENTITY(1,1)   NOT NULL,
-    TransactionsStatus          VARCHAR(20)                                 NOT NULL CHECK(TransactionsStatus IN ('Successful',
-                                                                                                                  'SemiSuccessful',
-                                                                                                                  'Unsuccessful')),-- sql server dose no have enum -- TINYINT and (0:unsuccessful, 1:successful, 2:semi_successful)
+    TransactionsStatus          VARCHAR(20)                                 NOT NULL    CHECK(TransactionsStatus IN ('Successful',
+                                                                                                                     'SemiSuccessful',
+                                                                                                                     'Unsuccessful')),-- sql server dose no have enum
     TransactionTime             DATETIME    DEFAULT CURRENT_TIMESTAMP       NOT NULL
 );
 
@@ -102,10 +102,10 @@ CREATE TABLE DepositsIntoWallet
 CREATE TABLE ShoppingCart
 (
     Id                            INT                                       NOT NULL,
-    CartNumber                    TINYINT                   IDENTITY(1,1)   NOT NULL, -- check
-    CartStatus                    VARCHAR(20)                               NOT NULL CHECK (CartStatus IN ('locked',
-                                                                                                           'blocked',
-                                                                                                           'active')),
+    CartNumber                    TINYINT                                   NOT NULL    CHECK (CartNumber IN (1, 2, 3, 4, 5)),
+    CartStatus                    VARCHAR(20)                               NOT NULL    CHECK (CartStatus IN ('locked',
+                                                                                                              'blocked',
+                                                                                                              'active')),
     PRIMARY KEY(Id,CartNumber),
     FOREIGN KEY(Id) REFERENCES Client(Id) ON UPDATE CASCADE ON DELETE CASCADE
 );
