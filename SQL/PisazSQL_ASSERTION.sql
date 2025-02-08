@@ -45,7 +45,43 @@ BEGIN
         WHERE StockCount = 0
     )
     BEGIN
-        RAISERROR('Product is Not Exists in warehous.', 16, 1);
+        RAISERROR('Product is Not Exists in warehous.', 16, 2);
         ROLLBACK TRANSACTION;
     END
 END;
+
+CREATE TRIGGER MaxUseDiscount
+ON AppliedTo
+AFTER INSERT, UPDATE
+AS
+BEGIN 
+    IF EXISTS (
+        SELECT 1
+        FROM INSERTED I JOIN DiscountCode D ON I.Code = D.Code
+        GROUP BY Id
+        HAVING COUNT(*) > UsageCount
+    )
+    BEGIN
+        RAISERROR('You use this discount more than you could', 16, 3);
+        ROLLBACK TRANSACTION;
+    END
+END;
+
+
+
+
+-- syntax
+-- CREATE TRIGGER 
+-- ON 
+-- AFTER INSERT, UPDATE
+-- AS
+-- BEGIN 
+--     IF EXISTS (
+--         SELECT 1
+--         FROM INSERTED I
+--     )
+--     BEGIN
+--         RAISERROR('', 16, );
+--         ROLLBACK TRANSACTION;
+--     END
+-- END;

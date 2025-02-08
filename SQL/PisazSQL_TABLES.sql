@@ -287,7 +287,7 @@ CREATE TABLE Cooler
     FOREIGN KEY (Id) REFERENCES Product(Id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE connector_compatiba_leWith
+CREATE TABLE ConnectorCompatibaLeWith
 (
 	GPUId	    				INT,
 	PowerId						INT,
@@ -296,7 +296,7 @@ CREATE TABLE connector_compatiba_leWith
 	FOREIGN KEY (PowerId) REFERENCES PowerSupply(Id),
 );
 
-CREATE TABLE sm_slot_compatibale_with
+CREATE TABLE SmSlotCompatibaleWith
 (
 	MotherboardId				INT,
 	SSDId						INT,
@@ -305,7 +305,7 @@ CREATE TABLE sm_slot_compatibale_with
 	FOREIGN KEY (SSDId) REFERENCES SSD(Id),
 );
 
-CREATE TABLE gm_slot_compatibale_with
+CREATE TABLE GmSlotCompatibaleWith
 (
 	MotherboardId				INT,
 	GPUId						INT,
@@ -314,7 +314,7 @@ CREATE TABLE gm_slot_compatibale_with
 	FOREIGN KEY (GPUId) REFERENCES GPU(Id),
 );
 
-CREATE TABLE rm_slot_compatibale_with
+CREATE TABLE RmSlotCompatibaleWith
 (
 	MotherboardId				INT,
 	RAMID						INT,
@@ -323,7 +323,7 @@ CREATE TABLE rm_slot_compatibale_with
 	FOREIGN KEY (RAMID) REFERENCES RAM_Stick(Id),
 );
 
-CREATE TABLE mc_slot_compatibale_with
+CREATE TABLE McSlotCompatibaleWith
 (
 	MotherboardId				INT,
 	CPUID						INT,
@@ -332,7 +332,7 @@ CREATE TABLE mc_slot_compatibale_with
 	FOREIGN KEY (CPUID) REFERENCES CPU(Id),
 );
 
-CREATE TABLE cc_slot_compatibale_with
+CREATE TABLE CcSlotCompatibaleWith
 (
 	CoolerId				INT,
 	CPUID					INT,
