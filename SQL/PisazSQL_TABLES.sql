@@ -7,15 +7,15 @@ CREATE TABLE Client
     PhoneNumber                 CHAR(11)    UNIQUE                          NOT NULL    CHECK (PhoneNumber LIKE '09%'),
     FirstName                   VARCHAR(40)                                 NOT NULL,
     LastName                    VARCHAR(40)                                 NOT NULL,
-    WalletBalance               INT         DEFAULT 0                       NOT NULL    CHECK (WalletBalance >= 0),
-    ReferralCode                INT         UNIQUE                          NOT NULL    CHECK(LEN(ReferralCode) = 10), -- Chang it
+    WalletBalance               DECIMAL     DEFAULT 0                       NOT NULL    CHECK (WalletBalance >= 0),
+    ReferralCode                CHAR(10)    UNIQUE,
     SignUpDate                  DATETIME    DEFAULT CURRENT_TIMESTAMP       NOT NULL, 
 );
 
 CREATE TABLE Address
 (
     Id                          INT                                         NOT NULL,
-    Province                    VARCHAR(20) DEFAULT 'Theran'                NOT NULL, -- province code??
+    Province                    VARCHAR(20) DEFAULT 'Theran'                NOT NULL,
     Remainder                   VARCHAR(255)                                NOT NULL,
     PRIMARY KEY(Id,Province,Remainder),
     FOREIGN KEY(Id) REFERENCES Client(Id) ON UPDATE CASCADE ON DELETE CASCADE
@@ -340,3 +340,11 @@ CREATE TABLE CcSlotCompatibaleWith
 	FOREIGN KEY (CoolerId) REFERENCES cooler(Id),
 	FOREIGN KEY (CPUID) REFERENCES CPU(Id),
 );
+
+
+-- BAXI --> هزینه ارسال به سبد خرید قفل شده
+    -- Province
+    -- Remainder
+    -- PhoneNumber
+    -- FirstName
+    -- LastName
