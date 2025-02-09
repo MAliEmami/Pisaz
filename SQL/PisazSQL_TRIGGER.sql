@@ -44,9 +44,9 @@ BEGIN
         -- JOIN IssuedFor with Client
         AND I.Id = C.Id
         -- for SUM of Product price JOIN LockedShoppingCart with AddedTo
-        AND I.Id = A.Id 
-        AND I.CartNumber = A.CartNumber 
-        AND I.LockedNumber = A.LockedNumber 
+        AND I.Id = A.Id
+        AND I.CartNumber = A.CartNumber
+        AND I.LockedNumber = A.LockedNumber
         -- for price of each product
         AND A.Id = P.Id
     GROUP BY A.LockedNumber
@@ -77,6 +77,7 @@ ON IssuedFor
 BEFORE INSERT
 AS
 BEGIN
+    
 END;
 
 
@@ -98,3 +99,20 @@ END;
 --     DELETE FROM VIPClients
 --     WHERE DATEDIFF(DAY, SubscriptionExpirationTime, GETDATE()) > 30;
 -- END;
+
+
+
+
+
+
+
+-- CREATE TRIGGER AddToBAXITable
+-- ON IssuedFor
+-- AFTER INSERT
+-- AS
+-- BEGIN
+--     SET NOCOUNT ON;
+--     INSERT INTO BAXI (Id, FirstName, LastName, PhoneNumber, Province, Remainder)
+--     SELECT c.Id, c.FirstName, c.LastName, c.PhoneNumber, a.Province, a.Remainder
+--     FROM inserted i JOIN Client c ON i.Id = c.Id JOIN Address a ON i.Id = a.Id;
+-- END; I dont know

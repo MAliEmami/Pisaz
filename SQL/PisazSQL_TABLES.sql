@@ -341,10 +341,12 @@ CREATE TABLE CcSlotCompatibaleWith
 	FOREIGN KEY (CPUID) REFERENCES CPU(Id),
 );
 
-
--- BAXI --> هزینه ارسال به سبد خرید قفل شده
-    -- Province
-    -- Remainder
-    -- PhoneNumber
-    -- FirstName
-    -- LastName
+-- CREATE TABLE BAXI (
+--     Id                          INT         PRIMARY KEY                     NOT NULL,
+--     FirstName                   VARCHAR(40)                                 NOT NULL,
+--     LastName                    VARCHAR(40)                                 NOT NULL,
+--     PhoneNumber                 CHAR(11)                                    NOT NULL,
+--     Province                    VARCHAR(20)                                 NOT NULL,
+--     Remainder                   VARCHAR(255)                                NOT NULL,
+--     FOREIGN KEY(Id) REFERENCES Client(Id) ON UPDATE CASCADE ON DELETE CASCADE
+-- ); I dont know
