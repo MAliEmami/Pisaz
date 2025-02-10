@@ -95,7 +95,7 @@ BEGIN
   END
 END
 
-TRIGGER BuyProduct 
+CREATE TRIGGER BuyProduct --this trigger needs to be tested on sql server
 ON IssuedFor
 AFTER INSERT
 AS
@@ -117,7 +117,7 @@ BEGIN
   ON i.Id = a.Id AND i.CartNumber = a.CartNumber AND i.LockedNumber = a.LockedNumber;
   
   --Apply Discount Codes on TotalPrice
-  SELECT ApplyDiscount(TotalPrice, amount, limit) INTO TotalPrice
+  SELECT ApplyDiscount(TotalPrice, amount, limit) INTO TotalPrice --Im not sure about this line
   FROM Inserted AS i, AppliedTo AS a, DiscountCode AS d
   WHERE 
     i.Id = a.Id
