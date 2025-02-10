@@ -72,12 +72,71 @@ BEGIN
     FROM (INSERTED I JOIN DepositsIntoWallet D) JOIN Client C
 END;
 
-CREATE TRIGGER BuyProduct
-ON IssuedFor
-BEFORE INSERT
+CREATE FUNCTION ApplyDiscount(
+  @Price INT,
+  @Amount INT,
+  @Limit INT
+)
+RETURNS INT
 AS
 BEGIN
+  IF(limit = 0)
+    RETURN @Price - @Amount;
+  ELSE
+  BEGIN
     
+    DECLARE @DiscountPrice INT;
+    SET @DiscountPrice = @price * @amount;
+
+    IF(@DiscountPrice > @Limit)
+      RETURN @Price - @Limit;
+    ELSE
+      RETURN @Price - @DiscountPrice;
+  END
+END
+
+TRIGGER BuyProduct 
+ON IssuedFor
+AFTER INSERT
+AS
+BEGIN
+  IF NOT EXISTS(SELECT 1
+                FROM Inserted AS i
+                JOIN Transaction AS t
+                ON i.TrackingCode = t.TrackingCode AND t.Status = "Successfull")
+    BEGIN
+    RAISERROR('transaction is''nt successfull', 2, 1);
+    ROLLBACK TRANSACTION;
+    END
+  
+  DECLARE TotalPrice INT;
+  
+  SELECT SUM(CartPrice) INTO TotalPrice
+  FROM Inserted AS i
+  JOIN AddedTo AS a
+  ON i.Id = a.Id AND i.CartNumber = a.CartNumber AND i.LockedNumber = a.LockedNumber;
+  
+  --Apply Discount Codes on TotalPrice
+  SELECT ApplyDiscount(TotalPrice, amount, limit) INTO TotalPrice
+  FROM Inserted AS i, AppliedTo AS a, DiscountCode AS d
+  WHERE 
+    i.Id = a.Id
+    AND i.CartNumber = a.CartNumber
+    AND i.LockedNumber = a.LockedNumber
+    
+    AND a.Code = d.Code;
+
+  IF EXISTS (SELECT 1
+            FROM WalletTransaction AS w
+            JOIN Inserted AS i
+            ON w.TrackingCode = i.TrackingCode)
+  BEGIN
+    UPDATE Client
+    SET WalletBalance = WalletBalance - TotalPrice
+    FROM Inserted AS i
+    JOIN Client AS c
+    ON i.Id = c.Id;
+  END
 END;
 
 
