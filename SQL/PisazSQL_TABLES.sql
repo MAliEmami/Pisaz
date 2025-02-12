@@ -1,4 +1,4 @@
-CREATE DATABASE Pisaz
+CREATE DATABASE Pisaz;
 USE Pisaz;
 
 CREATE TABLE Client
@@ -15,30 +15,31 @@ CREATE TABLE Client
 CREATE TABLE Addresses
 (
     ID                          INT                                         NOT NULL,
-    Province                    VARCHAR(20) DEFAULT 'Tehran'                NOT NULL,
+    Province                    VARCHAR(20)                                 NOT NULL,
     Remainder                   VARCHAR(255)                                NOT NULL,
     PRIMARY KEY(ID,Province,Remainder),
-    FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 CREATE TABLE VIPClient
 (
     ID                          INT         PRIMARY KEY                     NOT NULL,
     SubsctiptionExpirationTime  DATETIME                                    NOT NULL,
-    FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 CREATE TABLE Refers
 (
     Referee                     INT         PRIMARY KEY                     NOT NULL,
     Referrer                    INT                                         NOT NULL,
-    FOREIGN KEY(Referee) REFERENCES Client(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY(Referrer) REFERENCES Client(ID) ON UPDATE CASCADE ON DELETE CASCADE
+	CHECK(Referee != Referrer),
+    FOREIGN KEY(Referee) REFERENCES Client(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
+    FOREIGN KEY(Referrer) REFERENCES Client(ID) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 CREATE TABLE DiscountCode
 (
-    Code                        INT         PRIMARY KEY     IDENTITY(1,1)   NOT NULL,
+    Code                        INT         PRIMARY KEY					    NOT NULL,
     Amount                      INT                                         NOT NULL     CHECK(Amount > 0),
     DiscounLimit                INT                                                      CHECK(DiscounLimit > 0),-- NOT Null = percentage, Null = Value
     UsageCount                  SMALLINT    DEFAULT 1                       NOT NULL     CHECK(UsageCount >= 1),
@@ -51,7 +52,7 @@ CREATE TABLE PrivateCode
     ID                          INT                                         NOT NULL,
     UsageTimestamp              DATETIME                                    NOT NULL,
     FOREIGN KEY(Code) REFERENCES DiscountCode(Code) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 CREATE TABLE PublicCode
@@ -79,7 +80,7 @@ CREATE TABLE BankTransaction
 CREATE TABLE WalletTransaction
 (
     TrackingCode                VARCHAR(20)         PRIMARY KEY             NOT NULL,
-    FOREIGN KEY(TrackingCode) REFERENCES Transactions(TrackingCode) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(TrackingCode) REFERENCES Transactions(TrackingCode) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 CREATE TABLE Subscribes
@@ -87,7 +88,7 @@ CREATE TABLE Subscribes
     TrackingCode                VARCHAR(20)         PRIMARY KEY             NOT NULL,
     ID                          INT                                         NOT NULL,
     FOREIGN KEY(TrackingCode) REFERENCES Transactions(TrackingCode) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 CREATE TABLE DepositsIntoWallet
@@ -96,7 +97,7 @@ CREATE TABLE DepositsIntoWallet
     ID                          INT                                         NOT NULL,
     Amount                      INT                                         NOT NULL    CHECK (Amount > 0),
     FOREIGN KEY(TrackingCode) REFERENCES BankTransaction(TrackingCode) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 CREATE TABLE ShoppingCart
@@ -107,7 +108,7 @@ CREATE TABLE ShoppingCart
                                                                                                               'blocked',
                                                                                                               'active')),
     PRIMARY KEY(ID,CartNumber),
-    FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 CREATE TABLE LockedShoppingCart
@@ -118,7 +119,7 @@ CREATE TABLE LockedShoppingCart
 
     LockTimestamp    DATETIME   DEFAULT CURRENT_TIMESTAMP,			-- NULL : active cart , NOT NULL : locked cart
     PRIMARY KEY(ID, CartNumber, LockedNumber),
-    FOREIGN KEY(ID, CartNumber) REFERENCES ShoppingCart(ID, CartNumber) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(ID, CartNumber) REFERENCES ShoppingCart(ID, CartNumber) ON UPDATE CASCADE ON DELETE NO ACTION,
 );
 
 CREATE TABLE AppliedTo
@@ -139,8 +140,8 @@ CREATE TABLE IssuedFor
     ID                              INT                                     NOT NULL,
     CartNumber                      TINYINT                                 NOT NULL,
     LockedNumber                    INT                                     NOT NULL,
-    FOREIGN KEY(TrackingCode) REFERENCES Transactions(TrackingCode) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY(ID, CartNumber, LockedNumber) REFERENCES LockedShoppingCart(ID, CartNumber, LockedNumber) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(TrackingCode) REFERENCES Transactions(TrackingCode) ON UPDATE CASCADE ON DELETE NO ACTION,
+    FOREIGN KEY(ID, CartNumber, LockedNumber) REFERENCES LockedShoppingCart(ID, CartNumber, LockedNumber) ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
 CREATE TABLE Products
@@ -172,7 +173,7 @@ CREATE TABLE AddedTo
     CartPrice                       INT                                                CHECK (CartPrice >= 0),
     PRIMARY KEY (ID, CartNumber, LockedNumber, ProductID),
     FOREIGN KEY(ID, CartNumber, LockedNumber) REFERENCES LockedShoppingCart(ID, CartNumber, LockedNumber) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY(ProductID) REFERENCES Products(ID) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(ProductID) REFERENCES Products(ID) ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
 
@@ -200,7 +201,7 @@ CREATE TABLE "Case"
     Depth                           DECIMAL(6,2)                                        CHECK (Depth > 0),
     Height                          DECIMAL(6,2)                                        CHECK (Height > 0),
     Width                           DECIMAL(6,2)                                        CHECK (Width > 0),
-    FOREIGN KEY(ID) REFERENCES Product(ID) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(ID) REFERENCES Products(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE PowerSupply
@@ -210,7 +211,7 @@ CREATE TABLE PowerSupply
     Depth                           DECIMAL(6,2)                                        CHECK (Depth > 0), 
     Height                          DECIMAL(6,2)                                        CHECK (Height > 0),
     Width                           DECIMAL(6,2)                                        CHECK (Width > 0),
-    FOREIGN KEY(ID) REFERENCES Product(ID) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(ID) REFERENCES Products(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE GPU
@@ -223,7 +224,7 @@ CREATE TABLE GPU
     Depth                           DECIMAL(6,2)                                        CHECK (Depth > 0),
     Height                          DECIMAL(6,2)                                        CHECK (Height > 0),
     Width                           DECIMAL(6,2)                                        CHECK (Width > 0) 
-    FOREIGN KEY(ID) REFERENCES Product(ID) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(ID) REFERENCES Products(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE SSD
@@ -231,7 +232,7 @@ CREATE TABLE SSD
     ID                              INT     PRIMARY KEY                     NOT NULL,
     Wattage                         INT                                     NOT NULL    CHECK (Wattage > 0),
     Capacity                        INT                                     NOT NULL    CHECK (Capacity > 0),
-    FOREIGN KEY(ID) REFERENCES Product(ID) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(ID) REFERENCES Products(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE RAM_Stick
@@ -244,7 +245,7 @@ CREATE TABLE RAM_Stick
     Depth                           DECIMAL(6,2)                                        CHECK (Depth > 0),
     Height                          DECIMAL(6,2) CHECK (Height > 0),
     Width                           DECIMAL(6,2) CHECK (Width > 0),
-    FOREIGN KEY (ID) REFERENCES Product(ID) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (ID) REFERENCES Products(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE Motherboard
@@ -257,7 +258,7 @@ CREATE TABLE Motherboard
     Depth                           DECIMAL(6,2)                                        CHECK (Depth > 0),
     Height                          DECIMAL(6,2)                                        CHECK (Height > 0),
     Width                           DECIMAL(6,2)                                        CHECK (Width > 0),
-    FOREIGN KEY (ID) REFERENCES Product(ID) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (ID) REFERENCES Products(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE CPU
@@ -267,11 +268,12 @@ CREATE TABLE CPU
     BoostFrequency                  DECIMAL(6,2)                                        CHECK (BoostFrequency > 0),
     BaseFrequency                   DECIMAL(6,2)                                        CHECK (BaseFrequency > 0),
     NumOfCores                      INT                                                 CHECK (NumOfCores > 0),
-    NumOfThreads                    INT                                                 CHECK (NumOfThreads >= NumOfCores),
+    NumOfThreads                    INT,
     Microarchitecture               VARCHAR(50)                             NOT NULL,
     Generation                      VARCHAR(10)                             NOT NULL,
     Wattage                         DECIMAL(5,2)                                        CHECK (Wattage > 0),
-    FOREIGN KEY (ID) REFERENCES Product(ID) ON UPDATE CASCADE ON DELETE CASCADE
+	CHECK (NumOfThreads >= NumOfCores),
+    FOREIGN KEY (ID) REFERENCES Products(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE Cooler
@@ -284,7 +286,7 @@ CREATE TABLE Cooler
     Depth                           DECIMAL(6,2)                                        CHECK (Depth > 0),
     Height                          DECIMAL(6,2)                                        CHECK (Height > 0),
     Width                           DECIMAL(6,2)                                        CHECK (Width > 0),
-    FOREIGN KEY (ID) REFERENCES Product(ID) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (ID) REFERENCES Products(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE ConnectorCompatibleWith
@@ -292,8 +294,8 @@ CREATE TABLE ConnectorCompatibleWith
 	GPUID	    				INT,
 	PowerID						INT,
 	PRIMARY KEY (GPUID, PowerID),
-	FOREIGN KEY (GPUID) REFERENCES GPU(ID),
-	FOREIGN KEY (PowerID) REFERENCES PowerSupply(ID),
+	FOREIGN KEY (GPUID) REFERENCES GPU(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	FOREIGN KEY (PowerID) REFERENCES PowerSupply(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
 );
 
 CREATE TABLE SmSlotCompatibleWith
@@ -301,8 +303,8 @@ CREATE TABLE SmSlotCompatibleWith
 	MotherboardID				INT,
 	SSDID						INT,
 	PRIMARY KEY (MotherboardID, SSDID),
-	FOREIGN KEY (MotherboardID) REFERENCES Motherboard(ID),
-	FOREIGN KEY (SSDID) REFERENCES SSD(ID),
+	FOREIGN KEY (MotherboardID) REFERENCES Motherboard(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	FOREIGN KEY (SSDID) REFERENCES SSD(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
 );
 
 CREATE TABLE GmSlotCompatibleWith
@@ -310,8 +312,8 @@ CREATE TABLE GmSlotCompatibleWith
 	MotherboardID				INT,
 	GPUID						INT,
 	PRIMARY KEY (MotherboardID, GPUID),
-	FOREIGN KEY (MotherboardID) REFERENCES Motherboard(ID),
-	FOREIGN KEY (GPUID) REFERENCES GPU(ID),
+	FOREIGN KEY (MotherboardID) REFERENCES Motherboard(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	FOREIGN KEY (GPUID) REFERENCES GPU(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
 );
 
 CREATE TABLE RmSlotCompatibleWith
@@ -319,8 +321,8 @@ CREATE TABLE RmSlotCompatibleWith
 	MotherboardID				INT,
 	RAMID						INT,
 	PRIMARY KEY (MotherboardID, RAMID),
-	FOREIGN KEY (MotherboardID) REFERENCES Motherboard(ID),
-	FOREIGN KEY (RAMID) REFERENCES RAM_Stick(ID),
+	FOREIGN KEY (MotherboardID) REFERENCES Motherboard(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	FOREIGN KEY (RAMID) REFERENCES RAM_Stick(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
 );
 
 CREATE TABLE McSlotCompatibleWith
@@ -328,8 +330,8 @@ CREATE TABLE McSlotCompatibleWith
 	MotherboardID				INT,
 	CPUID						INT,
 	PRIMARY KEY (MotherboardID, CPUID),
-	FOREIGN KEY (MotherboardID) REFERENCES Motherboard(ID),
-	FOREIGN KEY (CPUID) REFERENCES CPU(ID),
+	FOREIGN KEY (MotherboardID) REFERENCES Motherboard(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	FOREIGN KEY (CPUID) REFERENCES CPU(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
 );
 
 CREATE TABLE CcSlotCompatibleWith
@@ -337,6 +339,6 @@ CREATE TABLE CcSlotCompatibleWith
 	CoolerID				INT,
 	CPUID					INT,
 	PRIMARY KEY (CoolerID, CPUID),
-	FOREIGN KEY (CoolerID) REFERENCES Cooler(ID),
-	FOREIGN KEY (CPUID) REFERENCES CPU(ID),
+	FOREIGN KEY (CoolerID) REFERENCES Cooler(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	FOREIGN KEY (CPUID) REFERENCES CPU(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
 );
