@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Pisaz.Backend.API.Entities.Base
+namespace Pisaz.Backend.API.Repositories
 {
-    public class GeneralEntiti
+    public class GeneralRopositor
     {
-        public int Id { get; set; }
+        
     }
 }
