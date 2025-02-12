@@ -7,15 +7,26 @@ CREATE TABLE Client
     PhoneNumber                 CHAR(11)    UNIQUE                          NOT NULL    CHECK (PhoneNumber LIKE '09%'),
     FirstName                   VARCHAR(40)                                 NOT NULL,
     LastName                    VARCHAR(40)                                 NOT NULL,
+<<<<<<< HEAD
     WalletBalance               INT         DEFAULT 0                       NOT NULL    CHECK (WalletBalance >= 0),
     ReferralCode                INT         UNIQUE                          NOT NULL    CHECK(LEN(ReferralCode) = 10),
     SignUpDate                  DATETIME    DEFAULT CURRENT_TIMESTAMP       NOT NULL,
+=======
+    WalletBalance               DECIMAL     DEFAULT 0                       NOT NULL    CHECK (WalletBalance >= 0),
+    ReferralCode                CHAR(10)    UNIQUE,
+    SignUpDate                  DATETIME    DEFAULT CURRENT_TIMESTAMP       NOT NULL, 
+>>>>>>> 74d6c0e0665cc7ae57df2049e22789915888d495
 );
 
 CREATE TABLE Addresses
 (
+<<<<<<< HEAD
     ID                          INT                                         NOT NULL,
     Province                    VARCHAR(20)                                 NOT NULL,
+=======
+    Id                          INT                                         NOT NULL,
+    Province                    VARCHAR(20) DEFAULT 'Theran'                NOT NULL,
+>>>>>>> 74d6c0e0665cc7ae57df2049e22789915888d495
     Remainder                   VARCHAR(255)                                NOT NULL,
     PRIMARY KEY(ID,Province,Remainder),
     FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE NO ACTION ON DELETE CASCADE
@@ -338,7 +349,24 @@ CREATE TABLE CcSlotCompatibleWith
 (
 	CoolerID				INT,
 	CPUID					INT,
+<<<<<<< HEAD
 	PRIMARY KEY (CoolerID, CPUID),
 	FOREIGN KEY (CoolerID) REFERENCES Cooler(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
 	FOREIGN KEY (CPUID) REFERENCES CPU(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
 );
+=======
+	PRIMARY KEY (CoolerId, CPUID),
+	FOREIGN KEY (CoolerId) REFERENCES cooler(Id),
+	FOREIGN KEY (CPUID) REFERENCES CPU(Id),
+);
+
+-- CREATE TABLE BAXI (
+--     Id                          INT         PRIMARY KEY                     NOT NULL,
+--     FirstName                   VARCHAR(40)                                 NOT NULL,
+--     LastName                    VARCHAR(40)                                 NOT NULL,
+--     PhoneNumber                 CHAR(11)                                    NOT NULL,
+--     Province                    VARCHAR(20)                                 NOT NULL,
+--     Remainder                   VARCHAR(255)                                NOT NULL,
+--     FOREIGN KEY(Id) REFERENCES Client(Id) ON UPDATE CASCADE ON DELETE CASCADE
+-- ); I dont know
+>>>>>>> 74d6c0e0665cc7ae57df2049e22789915888d495
