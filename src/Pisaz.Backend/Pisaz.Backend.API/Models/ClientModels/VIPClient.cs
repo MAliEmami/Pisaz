@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Pisaz.Backend.API.Models.Base;
 
 namespace Pisaz.Backend.API.Models.ClientModels
 {
-    public class VIPClient
+    public class VIPClient : GeneralModel
     {
-        public int Id { get; set; } // its should be remove
         public required Client Client { get; set; }
         public required DateTime SubscriptionExpirationTime { get; set; }
         

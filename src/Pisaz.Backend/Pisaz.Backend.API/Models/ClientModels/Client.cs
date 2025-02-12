@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Pisaz.Backend.API.Models.Base;
 
 namespace Pisaz.Backend.API.Models.ClientModels
 {
-    public class Client : IdentityUser
+    public class Client : GeneralModel
     {
-        // public int Id { get; set; }
-        // public required string PhoneNumber { get; set; }
+        public required string PhoneNumber { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public required decimal WalletBalance { get; set; }

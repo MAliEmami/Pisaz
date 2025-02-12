@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Pisaz.Backend.API.Infrastructure.EntityConfigurations;
@@ -9,7 +10,7 @@ using Pisaz.Backend.API.Models.ClientModels;
 
 namespace Pisaz.Backend.API.DbContextes
 {
-    public class PisazDB(DbContextOptions options) : IdentityDbContext<Client>(options)
+    public class PisazDB(DbContextOptions options) : IdentityDbContext<IdentityUser>(options)
     {
         public DbSet<Client> Clients { get; set; }
         public DbSet<Address> Addresses { get; set; }
