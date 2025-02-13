@@ -31,7 +31,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
 
         public async Task<IEnumerable<ClientDTO>> ListAsync(int id)
         {
-            return await _clients
+            return _clients
                 .GetAll()
                 .Where(c => c.Id == id)
                 .Select(c => new ClientDTO
@@ -43,7 +43,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
                     ReferralCode = c.ReferralCode,
                     SignUpDate = c.SignUpDate
                 })
-                .ToListAsync();
+                .ToList();
         }
 
         public async Task<int> UpdateAsync(int id, ClientUpdateDTO entity)
