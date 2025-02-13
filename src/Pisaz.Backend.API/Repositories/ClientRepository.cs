@@ -18,18 +18,10 @@ namespace Pisaz.Backend.API.Repositories
             _dbConnection = unitOfWork.Connection;
         }
 
-        public IQueryable<Client> GetAll()
-        {
-            var sql = "SELECT * FROM Client";
-            var clients = _dbConnection.Query<Client>(sql).AsQueryable();
-            return clients;
-        }
-
-        public async Task<Client?> GetByIdAsync(int id)
+        public async Task<IEnumerable<Client>> GetByIdAsync(int id)
         {
             var sql = "SELECT * FROM Client WHERE Id = @Id";
-            var client = await _dbConnection.QuerySingleOrDefaultAsync<Client>(sql, new { Id = id });
-            return client;
+            return await _dbConnection.QueryAsync<Client>(sql, new { Id = id });
         }
 
         public async Task<int> AddAsync(Client entity)

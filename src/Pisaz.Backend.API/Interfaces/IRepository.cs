@@ -7,8 +7,9 @@ namespace Pisaz.Backend.API.Interfaces
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        IQueryable<TEntity> GetAll();
-        Task<TEntity?> GetByIdAsync(int id);
+        Task<IEnumerable<TEntity>> GetByIdAsync(int id);
+        //IQueryable<TEntity> GetAllAsync();
+        //Task<TEntity?> GetByIdAsync(int id);
         Task<int> AddAsync(TEntity entity);
         Task<int> UpdateAsync(TEntity entity);
         Task<int> RemoveAsync(TEntity entity); 
