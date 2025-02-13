@@ -255,10 +255,8 @@ BEGIN
 
 	DECLARE @TotalPrice INT;
   
-	SELECT @TotalPrice = SUM(CartPrice)
-	FROM INSERTED AS I
-	JOIN AddedTo AS A
-	ON I.ID = A.ID AND I.CartNumber = A.CartNumber AND I.LockedNumber = A.LockedNumber;
+	SELECT @TotalPrice = dbo.CalculateFinalPrice(ID, CartNumber, LockedNumber)
+	FROM INSERTED;
 
 	SELECT
     D.Amount,
@@ -326,3 +324,43 @@ BEGIN
 	SET CartStatus = 'locked'
 	FROM INSERTED AS I JOIN ShoppingCart AS S ON I.ID = S.ID AND I.CartNumber = S.CartNumber;
 END
+
+
+
+
+DECLARE @MyCursor CURSOR;
+DECLARE @MyField INT;
+BEGIN
+    SET @MyCursor = CURSOR FOR SELECT ID FROM VIPClient;
+
+    OPEN @MyCursor 
+    FETCH NEXT FROM @MyCursor
+    INTO @MyField
+
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        --MY ALGORITHM GOES HERE
+		DECLARE @TotalPayment BIGINT;
+		SELECT @TotalPayment = dbo.CalculateFinalPrice(L.ID, L.CartNumber, L.LockedNumber)
+		FROM IssuedFor AS I, Transactions AS T, LockedShoppingCart AS L
+		WHERE I.ID = @MyField AND 
+			  I.TrackingCode = T.TrackingCode AND 
+			  T.TransactionStatus = 'Successfull' AND
+			  T.TransactionTime > (DATEADD(MONTH, -1, CURRENT_TIMESTAMP)) AND
+			  L.ID = I.ID AND
+			  L.CartNumber = I.CartNumber AND
+			  L.LockedNumber = I.CartNumber
+		GROUP BY L.ID, L.CartNumber, L.LockedNumber;
+		
+		UPDATE Client
+		SET WalletBalance = WalletBalance - @TotalPayment*0.15
+		FROM Client
+		WHERE ID = @MyField;
+
+		FETCH NEXT FROM @MyCursor 
+		INTO @MyField 
+    END; 
+
+    CLOSE @MyCursor ;
+    DEALLOCATE @MyCursor;
+END;
