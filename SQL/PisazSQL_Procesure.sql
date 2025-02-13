@@ -1,5 +1,6 @@
 USE msdb ;
 
+-- creates a job to payback an specific percent of payments
 GO
 EXEC dbo.sp_add_job @job_name = N'VIPPayback' ;
 
@@ -53,7 +54,6 @@ EXEC sp_add_jobstep
     @retry_interval = 5 ;
 GO
 -- creates a schedule named VIPPayback.
--- Jobs that use this schedule execute every day when the time on the server is 01:00.
 EXEC sp_add_schedule
     @schedule_name = N'MonthlyJobs' ,
     @freq_type = 16, -- 16 : Monthly repeat
@@ -65,4 +65,38 @@ GO
 EXEC sp_attach_schedule
     @job_name = N'VIPPayback',
     @schedule_name = N'MonthlyJobs' ;
+GO
+
+
+-- creates a job to check vip expiration time
+GO
+EXEC dbo.sp_add_job @job_name = N'VIPValidation' ;
+
+GO
+EXEC sp_add_jobstep
+    @job_name = N'VIPValidation',
+	@step_id = 1,
+    @step_name = N'Validation',
+    @subsystem = N'TSQL',
+    @command = 
+	N'
+	DELETE VIPClient
+	WHERE ID IN (SELECT ID FROM Client WHERE SubsctiptionExpirationTime < GETDATE());
+	',
+	@database_name = N'Pisaz',
+    @retry_attempts = 5,
+    @retry_interval = 5 ;
+GO
+-- creates a schedule named DailyJobs
+EXEC sp_add_schedule
+    @schedule_name = N'DailyJobs' ,
+    @freq_type = 4, -- 4 : Daily repeat
+    @freq_interval = 1, -- 1 : Day 1 of each month
+	@freq_recurrence_factor = 1,
+    @active_start_time = 023400 ; -- Start at 02:34 AM
+GO
+-- attaches the schedule to the job
+EXEC sp_attach_schedule
+    @job_name = N'VIPValidation',
+    @schedule_name = N'DailyJobs' ;
 GO
