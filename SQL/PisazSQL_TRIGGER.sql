@@ -1,10 +1,12 @@
-CREATE TRIGGER GenerateUniqueReferralCode
+USE Pisaz;
+
+GO
+CREATE OR ALTER TRIGGER GenerateUniqueReferralCode
 ON Client
 AFTER INSERT
 AS
 BEGIN
     DECLARE @ReferralCode CHAR(10);
-    DECLARE @Id INT;
 
     WHILE 1 = 1
     BEGIN
@@ -17,161 +19,310 @@ BEGIN
     UPDATE Client
     SET ReferralCode = @ReferralCode
     FROM Client
-    INNER JOIN inserted i ON Client.Id = i.Id;
+    INNER JOIN inserted i ON Client.ID = i.ID;
 END;
 
-CREATE TRIGGER IncreaseProduct
-ON AddedTo
+
+
+GO
+CREATE OR ALTER TRIGGER RefersValidation
+ON Refers
 AFTER INSERT
 AS
 BEGIN
-    UPDATE Product
-    SET P.StockCount = P.StockCount - 1
-    FROM INSERTED I JOIN Product P ON I.Id = P.Id
+	DECLARE @ReferrerSignupDate	DATETIME;
+	DECLARE @RefereSignupDate DATETIME;
+
+	SELECT @RefereSignupDate = SignupDate
+	FROM Client JOIN INSERTED ON ID = Referee;
+	
+	SELECT @ReferrerSignupDate = SignupDate
+	FROM Client JOIN INSERTED ON ID = Referrer;
+
+	IF(@ReferrerSignupDate > @RefereSignupDate)
+	BEGIN
+		RAISERROR('Referee''s signup time can''t be before the referrer''s signup time.', 15, 1);
+		ROLLBACK TRANSACTION;
+		RETURN;
+	END
 END;
 
-CREATE TRIGGER VIPDepo --i think its dont work
-ON IssuedFor
+
+
+GO
+CREATE OR ALTER TRIGGER CreateCartForClient
+ON Client
 AFTER INSERT
 AS
 BEGIN
-    UPDATE Client
-    SET C.WalletBalance := C.WalletBalance + (SUM(CurrentPrice) * 0.15)
-    FROM INSERTED I, Client C, AddedTo A, Product P, VIPClients V
-    WHERE
-        -- VIP Client
-        C.Id = V.Id
-        -- JOIN IssuedFor with Client
-        AND I.Id = C.Id
-        -- for SUM of Product price JOIN LockedShoppingCart with AddedTo
-        AND I.Id = A.Id
-        AND I.CartNumber = A.CartNumber
-        AND I.LockedNumber = A.LockedNumber
-        -- for price of each product
-        AND A.Id = P.Id
-    GROUP BY A.LockedNumber
+	INSERT INTO ShoppingCart(ID)
+	SELECT ID FROM INSERTED;
+
+	INSERT INTO LockedShoppingCart(ID, LockedNumber)
+	SELECT ID, 1 FROM INSERTED;
 END;
 
-CREATE TRIGGER ChargeWallet
+
+
+GO
+CREATE OR ALTER TRIGGER CreateCartForVIPClient
+ON VIPClient
+AFTER INSERT
+AS
+BEGIN
+	DECLARE @ID	INT;
+	SELECT @ID = ID
+	FROM INSERTED;
+
+	INSERT INTO ShoppingCart(ID, CartNumber)
+	VALUES (@ID, 2),
+		   (@ID, 3),
+		   (@ID, 4),
+		   (@ID, 5);
+END;
+
+
+
+GO
+CREATE OR ALTER TRIGGER ChargeWallet
 ON DepositsIntoWallet 
 AFTER INSERT
 AS
 BEGIN
     UPDATE Client
-    SET C.WalletBalance := C.WalletBalance + I.Amount
-    FROM INSERTED I JOIN Client C ON I.Id = C.Id
+    SET WalletBalance = C.WalletBalance + I.Amount
+    FROM INSERTED I JOIN Client C ON I.ID = C.ID
 END;
 
-CREATE TRIGGER BuyVIPAccount
+
+
+GO
+CREATE OR ALTER TRIGGER BuyVIPAccount
 ON Subscribes
-BEFORE INSERT
+INSTEAD OF INSERT
 AS
 BEGIN
-    UPDATE Client
-    SET C.WalletBalance := C.WalletBalance - 300000
-    FROM (INSERTED I JOIN DepositsIntoWallet D) JOIN Client C
-END;
-
-CREATE FUNCTION ApplyDiscount(
-  @Price INT,
-  @Amount INT,
-  @Limit INT
-)
-RETURNS INT
-AS
-BEGIN
-  IF(limit = 0)
-    RETURN @Price - @Amount;
-  ELSE
-  BEGIN
-    
-    DECLARE @DiscountPrice INT;
-    SET @DiscountPrice = @price * @amount;
-
-    IF(@DiscountPrice > @Limit)
-      RETURN @Price - @Limit;
-    ELSE
-      RETURN @Price - @DiscountPrice;
-  END
-END
-
-CREATE TRIGGER BuyProduct --this trigger needs to be tested on sql server
-ON IssuedFor
-AFTER INSERT
-AS
-BEGIN
-  IF NOT EXISTS(SELECT 1
-                FROM Inserted AS i
-                JOIN Transaction AS t
-                ON i.TrackingCode = t.TrackingCode AND t.Status = "Successfull")
+	IF NOT EXISTS (SELECT 1 FROM INSERTED AS I JOIN WalletTransaction AS W ON I.TrackingCode = W.TrackingCode)
+		RETURN;
+    IF( (SELECT WalletBalance FROM Client AS c JOIN Inserted AS i ON c.ID = i.ID) < 300000)
     BEGIN
-    RAISERROR('transaction is''nt successfull', 2, 1);
-    ROLLBACK TRANSACTION;
-    END
-  
-  DECLARE TotalPrice INT;
-  
-  SELECT SUM(CartPrice) INTO TotalPrice
-  FROM Inserted AS i
-  JOIN AddedTo AS a
-  ON i.Id = a.Id AND i.CartNumber = a.CartNumber AND i.LockedNumber = a.LockedNumber;
-  
-  --Apply Discount Codes on TotalPrice
-  SELECT ApplyDiscount(TotalPrice, amount, limit) INTO TotalPrice --Im not sure about this line
-  FROM Inserted AS i, AppliedTo AS a, DiscountCode AS d
-  WHERE 
-    i.Id = a.Id
-    AND i.CartNumber = a.CartNumber
-    AND i.LockedNumber = a.LockedNumber
-    
-    AND a.Code = d.Code;
+		RAISERROR('Wallet balance is not enough.', 20, 2);
+		RETURN;
+    END;
 
-  IF EXISTS (SELECT 1
-            FROM WalletTransaction AS w
-            JOIN Inserted AS i
-            ON w.TrackingCode = i.TrackingCode)
-  BEGIN
     UPDATE Client
-    SET WalletBalance = WalletBalance - TotalPrice
-    FROM Inserted AS i
-    JOIN Client AS c
-    ON i.Id = c.Id;
-  END
+    SET WalletBalance = C.WalletBalance - 300000
+    FROM INSERTED AS I JOIN Client C ON I.ID = C.ID
+
+    INSERT INTO VIPClient(ID, SubsctiptionExpirationTime)
+    SELECT C.ID, DATEADD(DAY, 30, GETDATE())
+    FROM INSERTED I JOIN Client C ON I.ID = C.ID
 END;
 
 
-CREATE TRIGGER ToBeVIP
-ON Subscribes
+
+GO
+CREATE OR ALTER TRIGGER GiveDiscountsToReferrers
+ON Refers
 AFTER INSERT
 AS
 BEGIN
-    INSERT INTO VIPClients(Id, SubsctiptionExpirationTime)
-    SELECT C.Id, DATEADD(DAY, 30, GETDATE())
-    FROM INSERTED I JOIN Client C ON I.Id = C.Id
+	
+	DECLARE @ID INT;
+	SELECT @ID = Referee
+	FROM INSERTED;
+	DECLARE @DiscountAmount INT;
+	DECLARE @DiscountType VARCHAR(7);
+	DECLARE @DiscountCode CHAR(10);
+	DECLARE @DiscountLimit INT;
+	SET @DiscountAmount = 50;
+	SET @DiscountType = 'Percent';
+	SET @DiscountLimit = 10000000;
+	
+	WHILE 1=1
+	BEGIN
+		--give discount code to @ID
+		WHILE 1 = 1
+		BEGIN
+			SET @DiscountCode = CAST(ABS(CHECKSUM(NEWID())) % 10000000000 AS CHAR(10));
+
+			IF NOT EXISTS (SELECT 1 FROM DiscountCode WHERE Code = @DiscountCode)
+				BREAK;
+		END
+
+		INSERT INTO DiscountCode(Code, Amount, DiscountLimit, UsageCount, ExpirationDate)
+		SELECT @DiscountCode, @DiscountAmount, @DiscountLimit, 1, DATEADD(DAY, 7, GETDATE());
+
+		INSERT INTO PrivateCode(Code, ID)
+		SELECT @DiscountCode, @ID;
+
+		--find next @ID
+		IF NOT EXISTS(SELECT 1
+					  FROM Refers
+					  WHERE Referee = @ID)
+		BREAK;
+
+		SELECT @ID = Referrer
+		FROM Refers
+		WHERE Referee = @ID;
+		
+		IF(@DiscountType = 'Percent')
+		BEGIN
+			SET @DiscountAmount = @DiscountAmount / 2;
+
+			IF(@DiscountAmount < 1)
+			BEGIN
+				SET @DiscountType = 'Amount';
+				SET @DiscountAmount = 500000;
+				SET @DiscountLimit = NULL;
+			END
+		END
+	END
 END;
 
--- CREATE TRIGGER RemoveExpiredVIP -its dont work
--- ON Vip
--- AFTER INSERT, UPDATE -- its should be change to period time
--- AS
--- BEGIN
---     DELETE FROM VIPClients
---     WHERE DATEDIFF(DAY, SubscriptionExpirationTime, GETDATE()) > 30;
--- END;
+
+
+GO
+CREATE OR ALTER TRIGGER NotExistsProduct
+ON AddedTo
+AFTER INSERT, UPDATE
+AS
+BEGIN 
+    IF EXISTS (
+        SELECT 1
+        FROM INSERTED I JOIN Products P ON I.Id = P.Id
+        WHERE StockCount = 0
+    )
+    BEGIN
+        RAISERROR('Product not exists in warehouse.', 15, 2);
+        ROLLBACK TRANSACTION;
+    END
+END;
 
 
 
+GO
+CREATE OR ALTER TRIGGER MaxUseDiscount
+ON AppliedTo
+AFTER INSERT, UPDATE
+AS
+BEGIN 
+	DECLARE @UsageCount SMALLINT;
+	DECLARE @MaxUsageCount SMALLINT;
+
+	SELECT @UsageCount = COUNT(*), @MaxUsageCount = D.UsageCount
+    FROM INSERTED I JOIN DiscountCode D ON I.Code = D.Code
+	GROUP BY UsageCount;
+
+    IF (@UsageCount > @MaxUsageCount)
+    BEGIN
+        RAISERROR('You can''t use this discount more than you could.', 15, 3);
+        ROLLBACK TRANSACTION;
+    END
+END;
 
 
 
+GO
+CREATE OR ALTER TRIGGER ExpDiscount
+ON AppliedTo
+AFTER INSERT, UPDATE
+AS
+BEGIN 
+    IF NOT EXISTS(SELECT 1
+				  FROM INSERTED I JOIN DiscountCode D ON I.Code = D.Code
+				  WHERE D.ExpirationDate > CURRENT_TIMESTAMP)
+    BEGIN
+        RAISERROR('This discount is expired.', 15, 3);
+        ROLLBACK TRANSACTION;
+    END
+END;
 
--- CREATE TRIGGER AddToBAXITable
--- ON IssuedFor
--- AFTER INSERT
--- AS
--- BEGIN
---     SET NOCOUNT ON;
---     INSERT INTO BAXI (Id, FirstName, LastName, PhoneNumber, Province, Remainder)
---     SELECT c.Id, c.FirstName, c.LastName, c.PhoneNumber, a.Province, a.Remainder
---     FROM inserted i JOIN Client c ON i.Id = c.Id JOIN Address a ON i.Id = a.Id;
--- END; I dont know
+
+
+GO
+CREATE OR ALTER TRIGGER BuyProcess --Works only for wallet
+ON IssuedFor
+AFTER INSERT, UPDATE
+AS
+BEGIN 
+    IF NOT EXISTS (SELECT 1
+				   FROM INSERTED AS I 
+						JOIN WalletTransaction AS W ON I.TrackingCode = W.TrackingCode
+						JOIN Transactions AS T ON I.TrackingCode = T.TrackingCode
+				   WHERE T.TransactionStatus = 'Successful') 
+	RETURN;
+
+	DECLARE @TotalPrice INT;
+  
+	SELECT @TotalPrice = SUM(CartPrice)
+	FROM INSERTED AS I
+	JOIN AddedTo AS A
+	ON I.ID = A.ID AND I.CartNumber = A.CartNumber AND I.LockedNumber = A.LockedNumber;
+
+	SELECT
+    D.Amount,
+	D.DiscountLimit,
+    ROW_NUMBER() OVER (ORDER BY A.ApplyTimestamp DESC) AS RANK
+	INTO #Discounts
+	FROM INSERTED AS I 
+		 JOIN AppliedTo AS A ON I.ID = A.ID AND I.CartNumber = A.CartNumber AND I.LockedNumber = A.LockedNumber
+		 JOIN DiscountCode AS D ON A.Code = D.Code;
+
+	DECLARE @Count INT;
+	DECLARE @Index INT;
+
+	SELECT @Count = Count(*)
+	FROM #Discounts;
+	SET @Index = 1;
+
+	DECLARE @Amount INT, @Limit INT;
+	WHILE @Index <= @Count
+	BEGIN
+		SELECT @Amount = D.Amount, @Limit = D.DiscountLimit
+		FROM #Discounts AS D
+		WHERE D.rank = 1;
+
+		IF( @Limit = NULL)
+		BEGIN
+			SET @TotalPrice = @TotalPrice - @Amount;
+		END
+		ELSE
+		BEGIN
+			IF (@TotalPrice - @TotalPrice * @Amount > @Limit)
+				SET @TotalPrice = @TotalPrice - @Limit;
+			ELSE
+				SET @TotalPrice = @TotalPrice * @Amount;
+		END
+	END
+
+	UPDATE Client
+	SET WalletBalance = C.WalletBalance - @TotalPrice
+	FROM Client AS C JOIN INSERTED AS I ON C.ID = I.ID;
+
+	--unlock shopping cart
+	UPDATE ShoppingCart
+	SET CartStatus = 'active'
+	FROM INSERTED AS I
+	JOIN ShoppingCart AS C
+	ON I.ID = C.ID AND I.CartNumber = C.CartNumber;
+END;
+
+GO
+CREATE OR ALTER TRIGGER ApplyCart
+ON LockedShoppingCart
+AFTER INSERT
+AS
+BEGIN
+	IF NOT EXISTS(SELECT 1
+				  FROM INSERTED AS I JOIN ShoppingCart AS S ON I.ID = S.ID AND I.CartNumber = S.CartNumber
+				  WHERE S.CartStatus = 'active')
+	BEGIN
+		RAISERROR('You can''t apply a locked or blocked cart.', 20, 2);
+        ROLLBACK TRANSACTION;
+	END
+	
+	UPDATE ShoppingCart
+	SET CartStatus = 'locked'
+	FROM INSERTED AS I JOIN ShoppingCart AS S ON I.ID = S.ID AND I.CartNumber = S.CartNumber;
+END

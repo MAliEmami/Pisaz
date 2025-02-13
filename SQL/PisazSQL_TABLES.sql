@@ -9,7 +9,7 @@ CREATE TABLE Client
     LastName                    VARCHAR(40)                                 NOT NULL,
     WalletBalance               DECIMAL     DEFAULT 0                       NOT NULL    CHECK (WalletBalance >= 0),
     ReferralCode                CHAR(10)    UNIQUE,
-    SignUpDate                  DATETIME    DEFAULT CURRENT_TIMESTAMP       NOT NULL, 
+    SignupDate                  DATETIME    DEFAULT CURRENT_TIMESTAMP       NOT NULL, 
 );
 
 CREATE TABLE Addresses
@@ -41,16 +41,16 @@ CREATE TABLE DiscountCode
 (
     Code                        INT         PRIMARY KEY					    NOT NULL,
     Amount                      INT                                         NOT NULL     CHECK(Amount > 0),
-    DiscounLimit                INT                                                      CHECK(DiscounLimit > 0),-- NOT Null = percentage, Null = Value
+    DiscountLimit               INT                                                      CHECK(DiscountLimit > 0),-- NOT Null = percentage, Null = Value
     UsageCount                  SMALLINT    DEFAULT 1                       NOT NULL     CHECK(UsageCount >= 1),
-    ExpirationDate              DATE                                        NOT NULL,            
+    ExpirationDate              DATETIME                                    NOT NULL,            
 );
 
 CREATE TABLE PrivateCode
 (
     Code                        INT         PRIMARY KEY                     NOT NULL,
     ID                          INT                                         NOT NULL,
-    UsageTimestamp              DATETIME                                    NOT NULL,
+    UsageTimestamp              DATETIME,
     FOREIGN KEY(Code) REFERENCES DiscountCode(Code) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
@@ -103,8 +103,8 @@ CREATE TABLE DepositsIntoWallet
 CREATE TABLE ShoppingCart
 (
     ID                            INT                                       NOT NULL,
-    CartNumber                    TINYINT                                   NOT NULL    CHECK (CartNumber IN (1, 2, 3, 4, 5)),
-    CartStatus                    VARCHAR(7)                                NOT NULL    CHECK (CartStatus IN ('locked',
+    CartNumber                    TINYINT           DEFAULT 1               NOT NULL    CHECK (CartNumber IN (1, 2, 3, 4, 5)),
+    CartStatus                    VARCHAR(7)        DEFAULT 'active'        NOT NULL    CHECK (CartStatus IN ('locked',
                                                                                                               'blocked',
                                                                                                               'active')),
     PRIMARY KEY(ID,CartNumber),
@@ -114,10 +114,10 @@ CREATE TABLE ShoppingCart
 CREATE TABLE LockedShoppingCart
 (
     ID                             INT                                    NOT NULL,
-    CartNumber                     TINYINT                                NOT NULL,
+    CartNumber                     TINYINT           DEFAULT 1            NOT NULL	    CHECK (CartNumber IN (1, 2, 3, 4, 5)),
     LockedNumber                   INT                                    NOT NULL,
 
-    LockTimestamp    DATETIME   DEFAULT CURRENT_TIMESTAMP,			-- NULL : active cart , NOT NULL : locked cart
+    LockTimestamp    DATETIME   DEFAULT CURRENT_TIMESTAMP				  NOT NULL,
     PRIMARY KEY(ID, CartNumber, LockedNumber),
     FOREIGN KEY(ID, CartNumber) REFERENCES ShoppingCart(ID, CartNumber) ON UPDATE CASCADE ON DELETE NO ACTION,
 );

@@ -1,19 +1,22 @@
-CREATE VIEW SimpleUserID AS
-  SELECT Id
+USE Pisaz;
+
+GO
+CREATE OR ALTER VIEW SimpleUserID AS
+  SELECT ID
   From Client
   EXCEPT
-  SELECT Id
+  SELECT ID
   From VIPClient;
-
-CREATE VIEW FilteredShoppingCart AS
-  SELECT ShoppingCart.*
-  FROM VIPClient AS v
-  JOIN ShoppingCart AS c
-  ON v.Id = c.Id
-  WHERE c.Status != 'blocked'
+GO
+CREATE OR ALTER VIEW FilteredShoppingCart AS
+  SELECT C.*
+  FROM VIPClient AS V
+  JOIN ShoppingCart AS C
+  ON V.ID = C.ID
+  WHERE C.CartStatus != 'blocked'
   UNION
-  SELECT ShoppingCart.*
-  FROM SimpleUserID AS s
-  JOIN ShoppingCart AS c
-  ON s.Id = c.Id
-  WHERE (c.Number = 1 AND c.Status != 'blocked') OR c.Status = 'locked';
+  SELECT C.*
+  FROM SimpleUserID AS S
+  JOIN ShoppingCart AS C
+  ON S.ID = C.ID
+  WHERE (C.CartNumber = 1 AND C.CartStatus != 'blocked') OR C.CartStatus = 'locked';
