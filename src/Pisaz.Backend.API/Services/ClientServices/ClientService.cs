@@ -22,8 +22,8 @@ namespace Pisaz.Backend.API.Services.ClientServices
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
                 PhoneNumber = entity.PhoneNumber,
-                WalletBalance = 0,
-                ReferralCode = "",
+                WalletBalance = default,
+                ReferralCode = default,
                 SignupDate = DateTime.Now
             };
             return await _clients.AddAsync(c);
