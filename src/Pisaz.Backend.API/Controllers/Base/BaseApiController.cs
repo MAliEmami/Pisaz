@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Pisaz.Backend.API.Interfaces;
-using Pisaz.Backend.API.Models.Base;
+// using Pisaz.Backend.API.Models.Base;
 
 namespace Pisaz.Backend.API.Controllers.Base
 {
     // [ApiController]
     // [Route("api/[controller]")]
-    public class BaseApiController<TEntity, TEntityDTO, TAddDTO, TUpdateDTO> : ControllerBase where TEntity : GeneralModel
+    public class BaseApiController<TEntity, TEntityDTO, TAddDTO, TUpdateDTO> : ControllerBase where TEntity : class// GeneralModel
     {
         protected readonly IService<TEntity, TEntityDTO, TAddDTO, TUpdateDTO> _servise;
 
