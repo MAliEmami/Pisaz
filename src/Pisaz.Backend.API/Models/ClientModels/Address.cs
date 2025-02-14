@@ -9,10 +9,8 @@ namespace Pisaz.Backend.API.Models.ClientModels
 {
     public class Address //: GeneralModel
     {
-        public int Id { get; set; }
-        public required Client Client { get; set; }
-        public required string Province { get; set; } = "Theran";
+        public int ID { get; set; }
+        public required string Province { get; set; }
         public required string Remainder { get; set; }
-        
     }
 }

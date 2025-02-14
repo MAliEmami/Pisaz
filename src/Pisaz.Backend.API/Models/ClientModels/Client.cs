@@ -10,13 +10,13 @@ namespace Pisaz.Backend.API.Models.ClientModels
 {
     public class Client //: GeneralModel
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
         public required string PhoneNumber { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public required decimal WalletBalance { get; set; }
         public string? ReferralCode { get; set; }
-        public required DateTime SignUpDate { get; set; } = DateTime.Now;
+        public required DateTime SignupDate { get; set; } = DateTime.Now;
 
     }
 }

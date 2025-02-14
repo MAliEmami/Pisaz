@@ -8,8 +8,7 @@ namespace Pisaz.Backend.API.Models.ClientModels
 {
     public class VIPClient //: GeneralModel
     {
-        public int Id { get; set; }
-        public required Client Client { get; set; }
+        public int ID { get; set; }
         public required DateTime SubscriptionExpirationTime { get; set; }
         
     }
