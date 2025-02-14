@@ -12,7 +12,7 @@ namespace Pisaz.Backend.API.DTOs.Clients
         public required string PhoneNumber { get; set; }
         public required decimal WalletBalance { get; set; }
         public string? ReferralCode { get; set; }
-        public required DateTime SignUpDate { get; set; }
+        public required DateTime SignupDate { get; set; }
 
         // VIPClient
         // public required string VIPClientID { get; set; }

@@ -24,7 +24,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
                 PhoneNumber = entity.PhoneNumber,
                 WalletBalance = 0,
                 ReferralCode = "",
-                SignUpDate = DateTime.Now
+                SignupDate = DateTime.Now
             };
             return await _clients.AddAsync(c);
         }
@@ -40,7 +40,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
                     PhoneNumber = c.PhoneNumber,
                     WalletBalance = c.WalletBalance,
                     ReferralCode = c.ReferralCode,
-                    SignUpDate = c.SignUpDate
+                    SignupDate = c.SignupDate
                 })
                 .ToList();
         }

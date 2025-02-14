@@ -20,8 +20,8 @@ namespace Pisaz.Backend.API.Repositories
 
         public async Task<IEnumerable<Client>> GetByIdAsync(int id)
         {
-            var sql = "SELECT * FROM Client WHERE Id = @Id";
-            return await _dbConnection.QueryAsync<Client>(sql, new { Id = id });
+            var sql = "SELECT * FROM Client WHERE ID = @Id";
+            return await _dbConnection.QueryAsync<Client>(sql, new { ID = id });
         }
 
         public async Task<int> AddAsync(Client entity)
@@ -53,8 +53,8 @@ namespace Pisaz.Backend.API.Repositories
 
         public async Task<int> RemoveAsync(Client entity)
         {
-            var sql = "DELETE FROM Client WHERE Id = @Id";
-            var affectedRows = await _dbConnection.ExecuteAsync(sql, new { Id = entity.Id });
+            var sql = "DELETE FROM Client WHERE ID = @Id";
+            var affectedRows = await _dbConnection.ExecuteAsync(sql, new { Id = entity.ID });
             return affectedRows;
         }
 

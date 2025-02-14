@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Pisaz.Backend.API.Infrastructure.EntityConfigurations;
+//using Pisaz.Backend.API.Infrastructure.EntityConfigurations;
 using Pisaz.Backend.API.Models.ClientModels;
 using Pisaz.Backend.API.Models.Discount;
 using Pisaz.Backend.API.Models.Product.Cart;
