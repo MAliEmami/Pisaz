@@ -31,22 +31,23 @@ namespace Pisaz.Backend.API.Repositories
         public async Task<int> AddAsync(Address entity)
         {
             const string sql = @"
-                                INSERT INTO Client (Province, Remainder)
-                                VALUES (@Province, @Remainder);";
+                                INSERT INTO Address (ID, Province, Remainder)
+                                VALUES (@ID, @Province, @Remainder);";
             var parameters = new[]
             {
+                new SqlParameter("@ID", entity.ID),
                 new SqlParameter("@Province", entity.Province),
                 new SqlParameter("@Remainder", entity.Remainder)
             };
 
-            int id = await _db.Database.ExecuteSqlRawAsync(sql, parameters);
+            await _db.Database.ExecuteSqlRawAsync(sql, parameters);
 
-            return id;
+            return 1;
         }
         public async Task<int> UpdateAsync(Address entity)
         {
             var sql = @"
-                UPDATE Client 
+                UPDATE Address 
                 SET Province = @Province, 
                     Remainder = @Remainder, 
                 WHERE Id = @Id";

@@ -45,9 +45,9 @@ namespace Pisaz.Backend.API.Repositories
                 new SqlParameter("@LastName", entity.LastName)
             };
 
-            int id = await _db.Database.ExecuteSqlRawAsync(sql, parameters);
+            await _db.Database.ExecuteSqlRawAsync(sql, parameters);
 
-            return id;
+            return 1;
         }
 
         public async Task<int> UpdateAsync(Client entity)
