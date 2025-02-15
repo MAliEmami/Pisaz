@@ -11,23 +11,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class ClientService(IRepository<Client> clients) : IService<Client, ClientDTO, ClientSignInDTO, ClientUpdateDTO>
+    public class ClientService(IRepository<Client> clients) : IService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>
     {
         private readonly IRepository<Client> _clients = clients;
 
-        public async Task<int> AddAsync(ClientSignInDTO entity)
-        {
-            var c = new Client
-            {
-                FirstName = entity.FirstName,
-                LastName = entity.LastName,
-                PhoneNumber = entity.PhoneNumber,
-                WalletBalance = default,
-                ReferralCode = default,
-                SignupDate = DateTime.Now
-            };
-            return await _clients.AddAsync(c);
-        }
 
         public async Task<IEnumerable<ClientDTO>> ListAsync(int id)
         {
@@ -44,7 +31,19 @@ namespace Pisaz.Backend.API.Services.ClientServices
                 })
                 .ToList();
         }
-
+        public async Task<int> AddAsync(ClientAddDTO entity)
+        {
+            var c = new Client
+            {
+                FirstName = entity.FirstName,
+                LastName = entity.LastName,
+                PhoneNumber = entity.PhoneNumber,
+                WalletBalance = default,
+                ReferralCode = default,
+                SignupDate = DateTime.Now
+            };
+            return await _clients.AddAsync(c);
+        }
         public async Task<int> UpdateAsync(int id, ClientUpdateDTO entity)
         {
             // var dbClient = await _clients.GetByIdAsync(id);

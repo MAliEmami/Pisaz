@@ -27,7 +27,7 @@ builder.Services.AddDbContext<PisazDB>(oprions =>
 builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
 
 // Servise
-builder.Services.AddScoped<IService<Client, ClientDTO, ClientSignInDTO, ClientUpdateDTO>, ClientService>();
+builder.Services.AddScoped<IService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>, ClientService>();
 
 var app = builder.Build();
 app.MapControllers();

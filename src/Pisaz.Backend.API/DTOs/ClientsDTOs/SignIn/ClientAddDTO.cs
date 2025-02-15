@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Pisaz.Backend.API.DTOs.Clients.SignIn
 {
-    public class ClientSignInDTO
+    public class ClientAddDTO
     {
         public required string PhoneNumber { get; set; }
         public required string FirstName { get; set; }

@@ -9,7 +9,7 @@ using Pisaz.Backend.API.Interfaces;
 using Pisaz.Backend.API.Models.ClientModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
-//using System.Data.SqlClient;
+
 
 namespace Pisaz.Backend.API.Repositories
 {
@@ -25,13 +25,16 @@ namespace Pisaz.Backend.API.Repositories
         public async Task<IEnumerable<Client>> GetByIdAsync(int id)
         {
             const string sql = "SELECT * FROM Client WHERE ID = @Id";
-            return await _db.Clients.FromSqlRaw(sql, new SqlParameter("@Id",id))
+            var parameters = new[]
+            {
+                new SqlParameter("@Id", id)
+            };
+            return await _db.Clients.FromSqlRaw(sql, parameters)
                                     .ToListAsync();
         }
 
         public async Task<int> AddAsync(Client entity)
         {
-            int a = entity.ID;
             const string sql = @"
                                 INSERT INTO Client (PhoneNumber, FirstName, LastName)
                                 VALUES (@PhoneNumber, @FirstName, @LastName);";
