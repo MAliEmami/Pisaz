@@ -44,26 +44,18 @@ namespace Pisaz.Backend.API.Services.ClientServices
                 })
                 .ToList();
         }
-        // public async Task<IEnumerable<ClientDTO>> ListAsync(int id)
-        // {
-        //     return _clients
-        //         .GetAll()
-        //         .Where(c => c.Id == id)
-        //         .Select(c => new ClientDTO
-        //         {
-        //             FirstName = c.FirstName,
-        //             LastName = c.LastName,
-        //             PhoneNumber = c.PhoneNumber,
-        //             WalletBalance = c.WalletBalance,
-        //             ReferralCode = c.ReferralCode,
-        //             SignUpDate = c.SignUpDate
-        //         })
-        //         .ToList();
-        // }
 
         public async Task<int> UpdateAsync(int id, ClientUpdateDTO entity)
         {
-            throw new NotImplementedException();
+            // var dbClient = await _clients.GetByIdAsync(id);
+            // if (dbClient != null)
+            // {
+            //     dbClient.FirstName = entity.FirstName;
+            //     dbClient.LastName = entity.LastName;
+            //     dbClient.PhoneNumber = entity.PhoneNumber;
+            //     return await _clients.UpdateAsync(dbClient);
+            // }
+            return 0;
         }
     }
 }

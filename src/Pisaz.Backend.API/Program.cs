@@ -6,7 +6,7 @@ using Pisaz.Backend.API.Interfaces;
 using Pisaz.Backend.API.Models.ClientModels;
 using Pisaz.Backend.API.Repositories;
 using Pisaz.Backend.API.Services.ClientServices;
-using Pisaz.Backend.API.UnitOfWorks;
+//using Pisaz.Backend.API.UnitOfWorks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +23,7 @@ builder.Services.AddDbContext<PisazDB>(oprions =>
 });
 
 // UnitOfWork
-builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+//builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 // Repository
 builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
