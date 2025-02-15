@@ -17,10 +17,12 @@ namespace Pisaz.Backend.API.Infrastructure.EntityConfigurations
 
             builder.HasKey(c => c.Code);
 
+            /*
             builder.HasOne<DiscountCode>()
                    .WithMany()
                    .HasForeignKey(r => r.Code)
                    .OnDelete(DeleteBehavior.NoAction);
+            */
         }
         
     }

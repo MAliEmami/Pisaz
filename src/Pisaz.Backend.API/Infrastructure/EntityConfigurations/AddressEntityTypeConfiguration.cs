@@ -16,7 +16,7 @@ namespace Pisaz.Backend.API.Infrastructure.EntityConfigurations
 
             builder.HasKey(a => new { a.ID, a.Province, a.Remainder });
 
-
+            /*
             builder.HasOne<Client>()
                 .WithMany()
                 .HasForeignKey(a => a.ID)
@@ -30,6 +30,7 @@ namespace Pisaz.Backend.API.Infrastructure.EntityConfigurations
             builder.Property(a => a.Remainder)
                 .HasMaxLength(255)
                 .IsRequired();
+            */
 
         }
     }

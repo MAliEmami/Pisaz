@@ -22,8 +22,6 @@ builder.Services.AddDbContext<PisazDB>(oprions =>
     oprions.UseSqlServer(builder.Configuration.GetConnectionString("Pisaz"));
 });
 
-// UnitOfWork
-//builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 // Repository
 builder.Services.AddScoped<IRepository<Client>, ClientRepository>();

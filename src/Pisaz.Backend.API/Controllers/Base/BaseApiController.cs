@@ -10,7 +10,7 @@ namespace Pisaz.Backend.API.Controllers.Base
 {
     // [ApiController]
     // [Route("api/[controller]")]
-    public class BaseApiController<TEntity, TEntityDTO, TAddDTO, TUpdateDTO> : ControllerBase where TEntity : class// GeneralModel
+    public class BaseApiController<TEntity, TEntityDTO, TAddDTO, TUpdateDTO> : ControllerBase where TEntity : class
     {
         protected readonly IService<TEntity, TEntityDTO, TAddDTO, TUpdateDTO> _servise;
 

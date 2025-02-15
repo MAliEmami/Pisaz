@@ -15,6 +15,7 @@ namespace Pisaz.Backend.API.Infrastructure.EntityConfigurations
             builder.ToTable("Client");
 
             builder.HasKey(c => c.ID);
+            /*
 
             builder.Property(c => c.ID)
                 .ValueGeneratedOnAdd();
@@ -55,6 +56,7 @@ namespace Pisaz.Backend.API.Infrastructure.EntityConfigurations
                 .IsRequired();
 
             builder.HasCheckConstraint("CK_Client_PhoneNumber", "PhoneNumber LIKE '09%'");
+            */
         }
     }
         
