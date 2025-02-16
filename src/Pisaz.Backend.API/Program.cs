@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Pisaz.Backend.API.DbContextes;
 using Pisaz.Backend.API.DTOs.Clients;
 using Pisaz.Backend.API.DTOs.Clients.SignIn;
+using Pisaz.Backend.API.DTOs.ClientsDTOs.Dashboard;
 using Pisaz.Backend.API.Interfaces;
 using Pisaz.Backend.API.Models.ClientModels;
 using Pisaz.Backend.API.Repositories;
@@ -25,9 +26,11 @@ builder.Services.AddDbContext<PisazDB>(oprions =>
 
 // Repository
 builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
+builder.Services.AddScoped<IRepository<Address>, AddressRepository>();
 
 // Servise
 builder.Services.AddScoped<IService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>, ClientService>();
+builder.Services.AddScoped<IService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>, AddressService>();
 
 var app = builder.Build();
 app.MapControllers();
