@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Pisaz.Backend.API.Models.ClientModels
 {
-    public class Client //: GeneralModel
+    public class Client
     {
         public int ID { get; set; }
         public required string PhoneNumber { get; set; }

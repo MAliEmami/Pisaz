@@ -23,54 +23,105 @@ namespace Pisaz.Backend.API.Services.ClientServices
 
         public async Task<IEnumerable<ClientDTO>> ListAsync(int id)
         {
-            const string sql = @"
+            const string ClientInfoQuery = @"
                 SELECT 
-                    C.FirstName, 
-                    C.LastName, 
-                    C.PhoneNumber, 
-                    C.WalletBalance, 
-                    C.ReferralCode, 
-                    C.SignupDate, 
-                    A.Province, 
-                    A.Remainder 
-                FROM Client C JOIN Address A ON C.ID = A.ID 
+                    FirstName,     
+                    LastName,     
+                    PhoneNumber,   
+                    WalletBalance, 
+                    ReferralCode, 
+                    SignupDate, 
+                    Province,
+                    Remainder
+                FROM Client C 
+                JOIN Address A ON C.ID = A.ID
                 WHERE C.ID = @id";
 
-            var clients = new List<ClientDTO>();
 
-            using (var connection = _db.Database.GetDbConnection())
+            var clientInfoList = await _db.Database
+                                        .SqlQueryRaw<ClientDTO>(ClientInfoQuery, new SqlParameter("@id", id))
+                                        .ToListAsync();
+
+            return clientInfoList
+            .Select(c => new ClientDTO
             {
-                await connection.OpenAsync();
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = sql;
-                    command.Parameters.Add(new SqlParameter("@id", id));
-
-                    using (var reader = await command.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            clients.Add(new ClientDTO
-                            {
-                                FirstName     = reader["FirstName"].ToString()!,
-                                LastName      = reader["LastName"].ToString()!,
-                                PhoneNumber   = reader["PhoneNumber"].ToString()!,
-                                WalletBalance = Convert.ToDecimal(reader["WalletBalance"]),
-                                ReferralCode  = reader["ReferralCode"] as string,
-                                SignupDate    = Convert.ToDateTime(reader["SignupDate"]),
-                                Address       = new AddressDTO
-                                {
-                                    Province  = reader["Province"].ToString()!,
-                                    Remainder = reader["Remainder"].ToString()!
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-
-            return clients;
+                FirstName = c.FirstName,
+                LastName = c.LastName,
+                PhoneNumber = c.PhoneNumber,
+                WalletBalance = c.WalletBalance,
+                ReferralCode = c.ReferralCode,
+                SignupDate = c.SignupDate,
+                Province = c.Province,
+                Remainder = c.Remainder
+            }).ToList();
         }
+
+
+            // const string sql = @"
+            //     SELECT 
+            //         C.FirstName, 
+            //         C.LastName, 
+            //         C.PhoneNumber, 
+            //         C.WalletBalance, 
+            //         C.ReferralCode, 
+            //         C.SignupDate, 
+            //         A.Province, 
+            //         A.Remainder 
+            //     FROM Client C JOIN Address A ON C.ID = A.ID
+            //     WHERE C.ID = @id";
+
+            // var clients = new List<ClientDTO>();
+
+            // using (var connection = _db.Database.GetDbConnection())
+            // {
+            //     await connection.OpenAsync();
+            //     using var command = connection.CreateCommand();
+
+            //     command.CommandText = sql;
+            //     command.Parameters.Add(new SqlParameter("@id", id));
+
+            //     using var reader = await command.ExecuteReaderAsync();
+            //     while (await reader.ReadAsync())
+            //     {
+            //         clients.Add(new ClientDTO
+            //         {
+            //             FirstName = reader["FirstName"].ToString()!,
+            //             LastName = reader["LastName"].ToString()!,
+            //             PhoneNumber = reader["PhoneNumber"].ToString()!,
+            //             WalletBalance = Convert.ToDecimal(reader["WalletBalance"]),
+            //             ReferralCode = reader["ReferralCode"] as string,
+            //             SignupDate = Convert.ToDateTime(reader["SignupDate"]),
+            //             Address = new AddressDTO
+            //             {
+            //                 Province = reader["Province"].ToString()!,
+            //                 Remainder = reader["Remainder"].ToString()!
+            //             },
+            //         });
+            //     }
+
+            //     command.CommandText = sql;
+            //     command.Parameters.Add(new SqlParameter("@id", 2));
+            //     //using var reader = await command.ExecuteReaderAsync();
+            //     while (await reader.ReadAsync())
+            //     {
+            //         clients.Add(new ClientDTO
+            //         {
+            //             FirstName = reader["FirstName"].ToString()!,
+            //             LastName = reader["LastName"].ToString()!,
+            //             PhoneNumber = reader["PhoneNumber"].ToString()!,
+            //             WalletBalance = Convert.ToDecimal(reader["WalletBalance"]),
+            //             ReferralCode = reader["ReferralCode"] as string,
+            //             SignupDate = Convert.ToDateTime(reader["SignupDate"]),
+            //             Address = new AddressDTO
+            //             {
+            //                 Province = reader["Province"].ToString()!,
+            //                 Remainder = reader["Remainder"].ToString()!
+            //             },
+            //         });
+            //     }
+            // }
+
+            // return clients;
 
 
         // public async Task<IEnumerable<ClientDTO>> ListAsync(int id)

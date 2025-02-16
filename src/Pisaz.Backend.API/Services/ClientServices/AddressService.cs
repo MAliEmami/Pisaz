@@ -27,13 +27,13 @@ namespace Pisaz.Backend.API.Services.ClientServices
 
         public async Task<int> AddAsync(AddressAddDTO entity)
         {
-            // var a = new Address
-            // {
-            //     ID = entity.ID,
-            //     Province = entity.Province,
-            //     Remainder = entity.Remainder
-            // };
-            // return await _addresses.AddAsync(a);
+            var a = new Address
+            {
+                ID = entity.ID,
+                Province = entity.Province,
+                Remainder = entity.Remainder
+            };
+            return await _addresses.AddAsync(a);
             return 0;
         }
 
