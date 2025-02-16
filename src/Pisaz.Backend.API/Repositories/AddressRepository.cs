@@ -13,7 +13,7 @@ namespace Pisaz.Backend.API.Repositories
     public class AddressRepository : IRepository<Address>
     {
         private readonly PisazDB _db;
-
+    
         public AddressRepository(PisazDB db)
         {
             _db = db;

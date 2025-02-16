@@ -7,30 +7,136 @@ using Pisaz.Backend.API.DTOs.Clients.SignIn;
 using Pisaz.Backend.API.Interfaces;
 using Pisaz.Backend.API.Models.ClientModels;
 using Microsoft.EntityFrameworkCore;
+using Pisaz.Backend.API.DTOs.ClientsDTOs.Dashboard;
+using Microsoft.Data.SqlClient;
+using Pisaz.Backend.API.DbContextes;
 
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class ClientService(IRepository<Client> clients) : IService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>
+    public class ClientService(IRepository<Client> clients, IRepository<Address> address, PisazDB db) 
+    : IService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>
     {
+        private readonly PisazDB _db = db;
         private readonly IRepository<Client> _clients = clients;
-
+        private readonly IRepository<Address> _address = address;
 
         public async Task<IEnumerable<ClientDTO>> ListAsync(int id)
         {
-            var clients = await _clients.GetByIdAsync(id);
-            return clients
-                .Select(c => new ClientDTO
+            const string sql = @"
+                SELECT 
+                    C.FirstName, 
+                    C.LastName, 
+                    C.PhoneNumber, 
+                    C.WalletBalance, 
+                    C.ReferralCode, 
+                    C.SignupDate, 
+                    A.Province, 
+                    A.Remainder 
+                FROM Client C JOIN Address A ON C.ID = A.ID 
+                WHERE C.ID = @id";
+
+            var clients = new List<ClientDTO>();
+
+            using (var connection = _db.Database.GetDbConnection())
+            {
+                await connection.OpenAsync();
+                using (var command = connection.CreateCommand())
                 {
-                    FirstName = c.FirstName,
-                    LastName = c.LastName,
-                    PhoneNumber = c.PhoneNumber,
-                    WalletBalance = c.WalletBalance,
-                    ReferralCode = c.ReferralCode,
-                    SignupDate = c.SignupDate
-                })
-                .ToList();
+                    command.CommandText = sql;
+                    command.Parameters.Add(new SqlParameter("@id", id));
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            clients.Add(new ClientDTO
+                            {
+                                FirstName     = reader["FirstName"].ToString()!,
+                                LastName      = reader["LastName"].ToString()!,
+                                PhoneNumber   = reader["PhoneNumber"].ToString()!,
+                                WalletBalance = Convert.ToDecimal(reader["WalletBalance"]),
+                                ReferralCode  = reader["ReferralCode"] as string,
+                                SignupDate    = Convert.ToDateTime(reader["SignupDate"]),
+                                Address       = new AddressDTO
+                                {
+                                    Province  = reader["Province"].ToString()!,
+                                    Remainder = reader["Remainder"].ToString()!
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+            return clients;
         }
+
+
+        // public async Task<IEnumerable<ClientDTO>> ListAsync(int id)
+        // {
+        //     const string sql = @"
+        //         SELECT 
+        //             C.ID AS ClientID, 
+        //             C.FirstName, 
+        //             C.LastName, 
+        //             C.PhoneNumber, 
+        //             C.WalletBalance, 
+        //             C.ReferralCode, 
+        //             C.SignupDate, 
+        //             A.ID AS AddressID, 
+        //             A.Province, 
+        //             A.Remainder 
+        //         FROM Client C 
+        //         JOIN Address A ON C.ID = A.ClientID 
+        //         WHERE C.ID = @id";
+
+        //     var clients = await _clients
+        //         .FromSqlRaw(sql, new SqlParameter("@id", id))
+        //         .Select(c => new ClientDTO
+        //         {
+        //             FirstName = c.FirstName,
+        //             LastName = c.LastName,
+        //             PhoneNumber = c.PhoneNumber,
+        //             WalletBalance = c.WalletBalance,
+        //             ReferralCode = c.ReferralCode,
+        //             SignupDate = c.SignupDate,
+        //             Address = new AddressDTO
+        //             {
+        //                 Province = c.Address.Province,
+        //                 Remainder = c.Address.Remainder
+        //             }
+        //         })
+        //         .ToListAsync();
+
+        //     return clients;
+        // }
+
+        // public async Task<IEnumerable<ClientDTO>> ListAsync(int id)
+        // {
+        //     const string sql = "SELECT * FROM Client C JOIN Address A ON C.ID = A.ID";
+            
+        //     return await _clients
+        //         .GetByIdAsync(id)
+        //         .FromSqlRaw(sql, id)
+        //         .Select(c => new ClientDTO
+        //         {
+        //             FirstName = c.FirstName,
+        //             LastName = c.LastName,
+        //             PhoneNumber = c.PhoneNumber,
+        //             WalletBalance = c.WalletBalance,
+        //             ReferralCode = c.ReferralCode,
+        //             SignupDate = c.SignupDate,
+
+        //             Address = new AddressDTO
+        //             {
+        //                 ID = c.Address.ID,
+        //                 Province = c.Address.Province,
+        //                 Remainder = c.Address.Remainder
+        //             }
+        //         })
+        //         .ToList();
+        // }
         public async Task<int> AddAsync(ClientAddDTO entity)
         {
             var c = new Client

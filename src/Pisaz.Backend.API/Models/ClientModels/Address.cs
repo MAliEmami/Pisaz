@@ -12,5 +12,6 @@ namespace Pisaz.Backend.API.Models.ClientModels
         public int ID { get; set; }
         public required string Province { get; set; }
         public required string Remainder { get; set; }
+        public required Client Client;
     }
 }

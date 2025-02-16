@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Pisaz.Backend.API.DTOs.ClientsDTOs.Dashboard;
+using Pisaz.Backend.API.Models.ClientModels;
 
 namespace Pisaz.Backend.API.DTOs.Clients
 {
@@ -13,5 +15,6 @@ namespace Pisaz.Backend.API.DTOs.Clients
         public required decimal WalletBalance { get; set; }
         public string? ReferralCode { get; set; }
         public required DateTime SignupDate { get; set; }
+        public required AddressDTO Address  { get; set; }
     }
 }
