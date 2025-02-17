@@ -14,7 +14,7 @@ namespace Pisaz.Backend.API.Infrastructure.EntityConfigurations
         {
             builder.ToTable("DiscountCode");
 
-            builder.HasKey(c => c.Code);
+            builder.HasNoKey();
         }
     }
 }

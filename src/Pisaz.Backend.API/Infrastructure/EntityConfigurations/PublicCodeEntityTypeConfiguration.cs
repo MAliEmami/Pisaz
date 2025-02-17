@@ -15,14 +15,7 @@ namespace Pisaz.Backend.API.Infrastructure.EntityConfigurations
         {
             builder.ToTable("PublicCode");
 
-            builder.HasKey(c => c.Code);
-
-            /*
-            builder.HasOne<DiscountCode>()
-                   .WithMany()
-                   .HasForeignKey(r => r.Code)
-                   .OnDelete(DeleteBehavior.NoAction);
-            */
+            builder.HasNoKey();
         }
         
     }

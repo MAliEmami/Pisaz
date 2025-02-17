@@ -14,49 +14,7 @@ namespace Pisaz.Backend.API.Infrastructure.EntityConfigurations
         {
             builder.ToTable("Client");
 
-            builder.HasKey(c => c.ID);
-            /*
-
-            builder.Property(c => c.ID)
-                .ValueGeneratedOnAdd();
-
-            builder.Property(c => c.PhoneNumber)
-                .HasColumnType("CHAR(11)")
-                .IsRequired()
-                .IsUnicode(false);
-
-            builder.HasIndex(c => c.PhoneNumber)
-                .IsUnique();
-
-            builder.Property(c => c.FirstName)
-                .HasMaxLength(40)
-                .IsRequired();
-
-            builder.Property(c => c.LastName)
-                .HasMaxLength(40)
-                .IsRequired();
-
-            builder.Property(c => c.WalletBalance)
-                .HasColumnType("DECIMAL")
-                .HasDefaultValue(0)
-                .IsRequired()
-                .HasAnnotation("CheckConstraint", "WalletBalance >= 0");
-
-
-            builder.Property(c => c.ReferralCode)
-                .HasColumnType("CHAR(10)")
-                .IsUnicode(false);
-
-            builder.HasIndex(c => c.ReferralCode)
-                .IsUnique();
-
-            builder.Property(c => c.SignupDate)
-                .HasColumnType("DATETIME")
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .IsRequired();
-
-            builder.HasCheckConstraint("CK_Client_PhoneNumber", "PhoneNumber LIKE '09%'");
-            */
+            builder.HasNoKey();
         }
     }
         

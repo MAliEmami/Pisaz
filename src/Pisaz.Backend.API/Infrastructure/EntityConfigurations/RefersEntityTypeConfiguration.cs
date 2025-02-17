@@ -14,19 +14,7 @@ namespace Pisaz.Backend.API.Infrastructure.EntityConfigurations
 
             builder.ToTable("Refers");
 
-            builder.HasKey(c => c.Referee);
-
-            /*
-            builder.HasOne<Client>()
-                   .WithMany()
-                   .HasForeignKey(r => r.Referee)
-                   .OnDelete(DeleteBehavior.NoAction);
-
-            builder.HasOne<Client>()
-                   .WithMany()
-                   .HasForeignKey(r => r.Referrer)
-                   .OnDelete(DeleteBehavior.NoAction);
-            */
+            builder.HasNoKey();
         }
     }
 }

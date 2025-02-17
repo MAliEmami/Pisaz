@@ -15,17 +15,7 @@ namespace Pisaz.Backend.API.Infrastructure.EntityConfigurations
 
             builder.ToTable("VIPClients");
 
-            builder.HasKey(v => v.ID);
-
-            /*
-            builder.HasOne<Client>()
-                .WithOne()
-                .HasForeignKey<VIPClient>(v => v.ClientId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Property(v => v.SubscriptionExpirationTime)
-                .IsRequired();
-            */
+            builder.HasNoKey();
         }
     
     }
