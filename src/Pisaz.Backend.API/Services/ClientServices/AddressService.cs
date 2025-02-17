@@ -8,7 +8,7 @@ using Pisaz.Backend.API.Models.ClientModels;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class AddressService(IRepository<Address> addresses) : IService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>
+    public class AddressService(IRepository<Address> addresses) : IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>
     {
         private readonly IRepository<Address> _addresses = addresses;
 
@@ -34,7 +34,6 @@ namespace Pisaz.Backend.API.Services.ClientServices
                 Remainder = entity.Remainder
             };
             return await _addresses.AddAsync(a);
-            return 0;
         }
 
 

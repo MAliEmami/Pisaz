@@ -23,14 +23,13 @@ builder.Services.AddDbContext<PisazDB>(oprions =>
     oprions.UseSqlServer(builder.Configuration.GetConnectionString("Pisaz"));
 });
 
-
 // Repository
 builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
 builder.Services.AddScoped<IRepository<Address>, AddressRepository>();
 
 // Servise
-builder.Services.AddScoped<IService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>, ClientService>();
-builder.Services.AddScoped<IService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>, AddressService>();
+builder.Services.AddScoped<IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>, ClientService>();
+builder.Services.AddScoped<IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>, AddressService>();
 
 var app = builder.Build();
 app.MapControllers();

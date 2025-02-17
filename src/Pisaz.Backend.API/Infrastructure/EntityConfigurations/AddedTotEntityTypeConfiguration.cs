@@ -14,7 +14,7 @@ namespace Pisaz.Backend.API.Infrastructure.EntityConfigurations
         {
             builder.ToTable("AddedTo");
 
-            builder.HasKey(c => c.ID);
+            builder.HasNoKey();
         }
     }
 }

@@ -14,12 +14,11 @@ using Pisaz.Backend.API.DbContextes;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class ClientService(IRepository<Client> clients, IRepository<Address> address, PisazDB db) 
-    : IService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>
+    public class ClientService(IRepository<Client> clients, PisazDB db) 
+    : IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>
     {
         private readonly PisazDB _db = db;
         private readonly IRepository<Client> _clients = clients;
-        private readonly IRepository<Address> _address = address;
 
         public async Task<IEnumerable<ClientDTO>> ListAsync(int id)
         {

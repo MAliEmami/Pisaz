@@ -11,15 +11,10 @@ namespace Pisaz.Backend.API.Controllers
 {
     [ApiController]
     [Route("Adderss")]
-    public class AddressApiController(IService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO> servise) : ControllerBase 
-        //: BaseApiController<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>(servise)
+    public class AddressApiController(IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO> servise) : ControllerBase 
     {
-        protected readonly IService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO> _servise = servise;
+        protected readonly IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO> _servise = servise;
 
-        // public AddressApiController(IService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO> servise)
-        // {
-        //     _servise = servise;
-        // }
 
         [HttpPost("add")]
         public async Task<int> Add(AddressAddDTO entity)

@@ -14,23 +14,7 @@ namespace Pisaz.Backend.API.Infrastructure.EntityConfigurations
         {
             builder.ToTable("Address");
 
-            builder.HasKey(a => new { a.ID, a.Province, a.Remainder });
-
-            /*
-            builder.HasOne<Client>()
-                .WithMany()
-                .HasForeignKey(a => a.ID)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Property(a => a.Province)
-                .HasMaxLength(20)
-                .HasDefaultValue("Theran")
-                .IsRequired();
-
-            builder.Property(a => a.Remainder)
-                .HasMaxLength(255)
-                .IsRequired();
-            */
+            builder.HasNoKey();
 
         }
     }
