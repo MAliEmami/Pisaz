@@ -18,14 +18,14 @@ namespace Pisaz.Backend.API.Services.ClientServices
         {
             const string DiscountCodeIsGoingToExpList = @"
                 SELECT 
-                    D.Code AS DiscountCodeIsGoingToExp,     
+                    D.Code AS DiscountCodeIsGoingToExp,
                     D.Amount AS Amount,
-                    D.DiscountLimit AS DiscountLimit,     
-                    D.UsageCount AS UsageCount,   
+                    D.DiscountLimit AS DiscountLimit,
+                    D.UsageCount AS UsageCount,
                     D.ExpirationDate AS ExpirationDate
                 FROM DiscountCode D JOIN PrivateCode P ON D.Code = P.Code
                 WHERE P.ID = @id 
-                ADNAND ExpirationDate BETWEEN GETDATE() AND DATEADD(DAY, 7, GETDATE())";
+                AND ExpirationDate BETWEEN GETDATE() AND DATEADD(DAY, 7, GETDATE())";
 
 
             var clientInfoList = await _db.Database

@@ -9,8 +9,8 @@ namespace Pisaz.Backend.API.DTOs.ClientsDTOs.Discount
     {
         public int DiscountCodeIsGoingToExp { get; set; }
         public int Amount { get; set; }
-        public int DiscountLimit { get; set; }
-        public int UsageCount { get; set; }
-        public int ExpirationDate { get; set; }
+        public int? DiscountLimit { get; set; }
+        public Int16 UsageCount { get; set; }
+        public DateTime ExpirationDate { get; set; }
     }
 }
