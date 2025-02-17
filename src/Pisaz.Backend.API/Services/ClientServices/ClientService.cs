@@ -33,8 +33,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
                     SignupDate, 
                     Province,
                     Remainder
-                FROM Client C 
-                JOIN Address A ON C.ID = A.ID
+                FROM Client C JOIN Address A ON C.ID = A.ID
                 WHERE C.ID = @id";
 
 
@@ -55,139 +54,6 @@ namespace Pisaz.Backend.API.Services.ClientServices
                 Remainder = c.Remainder
             }).ToList();
         }
-
-
-            // const string sql = @"
-            //     SELECT 
-            //         C.FirstName, 
-            //         C.LastName, 
-            //         C.PhoneNumber, 
-            //         C.WalletBalance, 
-            //         C.ReferralCode, 
-            //         C.SignupDate, 
-            //         A.Province, 
-            //         A.Remainder 
-            //     FROM Client C JOIN Address A ON C.ID = A.ID
-            //     WHERE C.ID = @id";
-
-            // var clients = new List<ClientDTO>();
-
-            // using (var connection = _db.Database.GetDbConnection())
-            // {
-            //     await connection.OpenAsync();
-            //     using var command = connection.CreateCommand();
-
-            //     command.CommandText = sql;
-            //     command.Parameters.Add(new SqlParameter("@id", id));
-
-            //     using var reader = await command.ExecuteReaderAsync();
-            //     while (await reader.ReadAsync())
-            //     {
-            //         clients.Add(new ClientDTO
-            //         {
-            //             FirstName = reader["FirstName"].ToString()!,
-            //             LastName = reader["LastName"].ToString()!,
-            //             PhoneNumber = reader["PhoneNumber"].ToString()!,
-            //             WalletBalance = Convert.ToDecimal(reader["WalletBalance"]),
-            //             ReferralCode = reader["ReferralCode"] as string,
-            //             SignupDate = Convert.ToDateTime(reader["SignupDate"]),
-            //             Address = new AddressDTO
-            //             {
-            //                 Province = reader["Province"].ToString()!,
-            //                 Remainder = reader["Remainder"].ToString()!
-            //             },
-            //         });
-            //     }
-
-            //     command.CommandText = sql;
-            //     command.Parameters.Add(new SqlParameter("@id", 2));
-            //     //using var reader = await command.ExecuteReaderAsync();
-            //     while (await reader.ReadAsync())
-            //     {
-            //         clients.Add(new ClientDTO
-            //         {
-            //             FirstName = reader["FirstName"].ToString()!,
-            //             LastName = reader["LastName"].ToString()!,
-            //             PhoneNumber = reader["PhoneNumber"].ToString()!,
-            //             WalletBalance = Convert.ToDecimal(reader["WalletBalance"]),
-            //             ReferralCode = reader["ReferralCode"] as string,
-            //             SignupDate = Convert.ToDateTime(reader["SignupDate"]),
-            //             Address = new AddressDTO
-            //             {
-            //                 Province = reader["Province"].ToString()!,
-            //                 Remainder = reader["Remainder"].ToString()!
-            //             },
-            //         });
-            //     }
-            // }
-
-            // return clients;
-
-
-        // public async Task<IEnumerable<ClientDTO>> ListAsync(int id)
-        // {
-        //     const string sql = @"
-        //         SELECT 
-        //             C.ID AS ClientID, 
-        //             C.FirstName, 
-        //             C.LastName, 
-        //             C.PhoneNumber, 
-        //             C.WalletBalance, 
-        //             C.ReferralCode, 
-        //             C.SignupDate, 
-        //             A.ID AS AddressID, 
-        //             A.Province, 
-        //             A.Remainder 
-        //         FROM Client C 
-        //         JOIN Address A ON C.ID = A.ClientID 
-        //         WHERE C.ID = @id";
-
-        //     var clients = await _clients
-        //         .FromSqlRaw(sql, new SqlParameter("@id", id))
-        //         .Select(c => new ClientDTO
-        //         {
-        //             FirstName = c.FirstName,
-        //             LastName = c.LastName,
-        //             PhoneNumber = c.PhoneNumber,
-        //             WalletBalance = c.WalletBalance,
-        //             ReferralCode = c.ReferralCode,
-        //             SignupDate = c.SignupDate,
-        //             Address = new AddressDTO
-        //             {
-        //                 Province = c.Address.Province,
-        //                 Remainder = c.Address.Remainder
-        //             }
-        //         })
-        //         .ToListAsync();
-
-        //     return clients;
-        // }
-
-        // public async Task<IEnumerable<ClientDTO>> ListAsync(int id)
-        // {
-        //     const string sql = "SELECT * FROM Client C JOIN Address A ON C.ID = A.ID";
-            
-        //     return await _clients
-        //         .GetByIdAsync(id)
-        //         .FromSqlRaw(sql, id)
-        //         .Select(c => new ClientDTO
-        //         {
-        //             FirstName = c.FirstName,
-        //             LastName = c.LastName,
-        //             PhoneNumber = c.PhoneNumber,
-        //             WalletBalance = c.WalletBalance,
-        //             ReferralCode = c.ReferralCode,
-        //             SignupDate = c.SignupDate,
-
-        //             Address = new AddressDTO
-        //             {
-        //                 ID = c.Address.ID,
-        //                 Province = c.Address.Province,
-        //                 Remainder = c.Address.Remainder
-        //             }
-        //         })
-        //         .ToList();
-        // }
         public async Task<int> AddAsync(ClientAddDTO entity)
         {
             var c = new Client
