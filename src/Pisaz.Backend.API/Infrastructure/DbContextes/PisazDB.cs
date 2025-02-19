@@ -15,7 +15,7 @@ using Pisaz.Backend.API.Models.Transactions;
 
 namespace Pisaz.Backend.API.DbContextes
 {
-    public class PisazDB(DbContextOptions options) : IdentityDbContext<IdentityUser>(options)
+    public class PisazDB(DbContextOptions<PisazDB> options) : DbContext(options)
     {
         public DbSet<Client>                  Clients                  { get; set; }
         public DbSet<Address>                 Addresses                { get; set; }

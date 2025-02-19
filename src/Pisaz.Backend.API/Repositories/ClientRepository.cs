@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using Dapper;
 using Pisaz.Backend.API.DbContextes;
 using Pisaz.Backend.API.Interfaces;
 using Pisaz.Backend.API.Models.ClientModels;

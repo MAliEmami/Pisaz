@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Pisaz.Backend.API.DbContextes;
 using Pisaz.Backend.API.DTOs.Clients;
@@ -9,6 +10,7 @@ using Pisaz.Backend.API.Models.ClientModels;
 using Pisaz.Backend.API.Models.Discount;
 using Pisaz.Backend.API.Repositories;
 using Pisaz.Backend.API.Services.ClientServices;
+using Pisaz.Backend.API.Validations.ClientValidations;
 
 namespace Pisaz.Backend.API.Extensions
 {
@@ -27,6 +29,15 @@ namespace Pisaz.Backend.API.Extensions
             {
                 oprions.UseSqlServer(configuration.GetConnectionString("Pisaz"));
             });
+        }
+        public static IServiceCollection AddMyControllers(this IServiceCollection services)
+        {
+            services.AddControllers();
+
+            services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
+
+            return services;
         }
     }
 }
