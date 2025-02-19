@@ -16,14 +16,14 @@ namespace Pisaz.Backend.API.Services.ClientServices
         
         public async Task<IEnumerable<AddressDTO>> ListAsync(int id)
         {
-            var addresses = await _addresses.GetByIdAsync(id);
-            return addresses
-                .Select(a => new AddressDTO
-                {
-                    Province = a.Province,
-                    Remainder = a.Remainder
-                })
-                .ToList();
+            // var addresses = await _addresses.GetByIdAsync(id);
+            // return addresses
+            //     .Select(a => new AddressDTO
+            //     {
+            //         Province = a.Province,
+            //         Remainder = a.Remainder
+            //     }).ToList();
+                return null;
         }
 
         public async Task<Address> AddAsync(AddressAddDTO entity)
@@ -38,16 +38,16 @@ namespace Pisaz.Backend.API.Services.ClientServices
         }
 
 
-        public async Task<AddressUpdateDTO> UpdateAsync(int id, AddressUpdateDTO entity)
+        public async Task<Address?> UpdateAsync(int id, AddressUpdateDTO entity)
         {
-            // var dbAddress = await _addresses.GetByIdAsync(id);
-            // if (dbAddress != null)
-            // {
-            //     dbAddress.Province = entity.Province;
-            //     dbAddress.Remainder = entity.Remainder;
-            //     return await _addresses.UpdateAsync(dbAddress);
-            // }
-            return entity;
+            var dbAddress = await _addresses.GetByIdAsync(id);
+            if (dbAddress != null)
+            {
+                dbAddress.Province = entity.Province;
+                dbAddress.Remainder = entity.Remainder;
+                return await _addresses.UpdateAsync(dbAddress);
+            }
+            return dbAddress;
         }
 
     }

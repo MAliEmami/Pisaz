@@ -67,17 +67,17 @@ namespace Pisaz.Backend.API.Services.ClientServices
             return await _clients.AddAsync(c);
         }
 
-        public async Task<ClientUpdateDTO> UpdateAsync(int id, ClientUpdateDTO entity)
+        public async Task<Client?> UpdateAsync(int id, ClientUpdateDTO entity)
          {
-        //     // var dbClient = await _clients.GetByIdAsync(id);
-        //     // if (dbClient != null)
-        //     // {
-        //     //     dbClient.FirstName = entity.FirstName;
-        //     //     dbClient.LastName = entity.LastName;
-        //     //     dbClient.PhoneNumber = entity.PhoneNumber;
-        //     //     return await _clients.UpdateAsync(dbClient);
-        //     // }
-             return entity;
+            var dbClient = await _clients.GetByIdAsync(id);
+            if (dbClient != null)
+            {
+                dbClient.FirstName = entity.FirstName;
+                dbClient.LastName = entity.LastName;
+                dbClient.PhoneNumber = entity.PhoneNumber;
+                return await _clients.UpdateAsync(dbClient);
+            }
+             return dbClient;
          }
     }
 }

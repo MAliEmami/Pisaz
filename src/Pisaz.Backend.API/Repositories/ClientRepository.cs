@@ -22,7 +22,7 @@ namespace Pisaz.Backend.API.Repositories
             _db = db;
         }
 
-        public async Task<IEnumerable<Client>> GetByIdAsync(int id)
+        public async Task<Client?> GetByIdAsync(int id)
         {
             const string sql = "SELECT * FROM Client WHERE ID = @Id";
             var parameters = new[]
@@ -30,7 +30,7 @@ namespace Pisaz.Backend.API.Repositories
                 new SqlParameter("@Id", id)
             };
             return await _db.Clients.FromSqlRaw(sql, parameters)
-                                    .ToListAsync();
+                                    .FirstOrDefaultAsync();
         }
 
         public async Task<Client> AddAsync(Client entity)
@@ -50,7 +50,7 @@ namespace Pisaz.Backend.API.Repositories
             return entity;
         }
 
-        public async Task<Client> UpdateAsync(Client entity)
+        public async Task<Client?> UpdateAsync(Client entity)
         {
             var sql = @"
                 UPDATE Client 
