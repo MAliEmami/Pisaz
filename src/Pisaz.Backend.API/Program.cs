@@ -9,7 +9,6 @@ using Pisaz.Backend.API.Models.ClientModels;
 using Pisaz.Backend.API.Models.Discount;
 using Pisaz.Backend.API.Repositories;
 using Pisaz.Backend.API.Services.ClientServices;
-//using Pisaz.Backend.API.UnitOfWorks;
 
 var builder = WebApplication.CreateBuilder(args);
 

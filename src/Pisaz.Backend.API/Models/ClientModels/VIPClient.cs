@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pisaz.Backend.API.Models.ClientModels
 {
-    public class VIPClient //: GeneralModel
+    public class VIPClient
     {
         public int ID { get; set; }
         public required DateTime SubscriptionExpirationTime { get; set; }

@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace Pisaz.Backend.API.Interfaces
 {
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IClientRepository<TEntity> where TEntity : class
     {
-        // Task<IEnumerable<ClientDTO>> GetClientInfoAsync(int id);
         Task<IEnumerable<TEntity>> GetByIdAsync(int id);
         Task<int> AddAsync(TEntity entity);
         Task<int> UpdateAsync(TEntity entity);
