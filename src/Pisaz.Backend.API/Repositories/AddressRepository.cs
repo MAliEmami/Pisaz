@@ -20,7 +20,7 @@ namespace Pisaz.Backend.API.Repositories
         }
         public async Task<Address?> GetByIdAsync(int id)
         {
-            const string sql = "SELECT Province, Remainder FROM Address WHERE ID = @Id";
+            const string sql = "SELECT * FROM Address WHERE ID = @Id";
             var parameters = new[]
             {
                 new SqlParameter("@Id", id)
@@ -44,7 +44,7 @@ namespace Pisaz.Backend.API.Repositories
 
             return entity;
         }
-        public async Task<Address> UpdateAsync(Address entity)
+        public async Task<Address?> UpdateAsync(Address entity)
         {
             var sql = @"
                 UPDATE Address 

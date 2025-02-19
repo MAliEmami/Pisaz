@@ -8,22 +8,28 @@ using Pisaz.Backend.API.Models.ClientModels;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class AddressService(IRepository<Address> addresses) 
+    public class AddressService(IRepository<Address> addresses)
     : IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>
     {
         private readonly IRepository<Address> _addresses = addresses;
 
-        
+
         public async Task<IEnumerable<AddressDTO>> ListAsync(int id)
         {
-            // var addresses = await _addresses.GetByIdAsync(id);
-            // return addresses
-            //     .Select(a => new AddressDTO
-            //     {
-            //         Province = a.Province,
-            //         Remainder = a.Remainder
-            //     }).ToList();
-                return null;
+            var addresses = await _addresses.GetByIdAsync(id);
+            if (addresses == null)
+            {
+                return new List<AddressDTO>();
+            }
+            
+            return new List<AddressDTO>
+            {
+                new AddressDTO
+                {
+                    Province = addresses.Province,
+                    Remainder = addresses.Remainder
+                }
+            };
         }
 
         public async Task<Address> AddAsync(AddressAddDTO entity)
