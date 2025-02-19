@@ -44,7 +44,7 @@ namespace Pisaz.Backend.API.Repositories
 
             return entity;
         }
-        public async Task<int> UpdateAsync(Address entity)
+        public async Task<Address> UpdateAsync(Address entity)
         {
             var sql = @"
                 UPDATE Address 
@@ -59,7 +59,7 @@ namespace Pisaz.Backend.API.Repositories
             };
 
             int id = await _db.Database.ExecuteSqlRawAsync(sql, parameters);
-            return id;
+            return entity;
         }
     }
 }

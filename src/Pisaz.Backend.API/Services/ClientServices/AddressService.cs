@@ -8,7 +8,8 @@ using Pisaz.Backend.API.Models.ClientModels;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class AddressService(IRepository<Address> addresses) : IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>
+    public class AddressService(IRepository<Address> addresses) 
+    : IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>
     {
         private readonly IRepository<Address> _addresses = addresses;
 
@@ -37,7 +38,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
         }
 
 
-        public async Task<int> UpdateAsync(int id, AddressUpdateDTO entity)
+        public async Task<AddressUpdateDTO> UpdateAsync(int id, AddressUpdateDTO entity)
         {
             // var dbAddress = await _addresses.GetByIdAsync(id);
             // if (dbAddress != null)
@@ -46,7 +47,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
             //     dbAddress.Remainder = entity.Remainder;
             //     return await _addresses.UpdateAsync(dbAddress);
             // }
-            return 0;
+            return entity;
         }
 
     }

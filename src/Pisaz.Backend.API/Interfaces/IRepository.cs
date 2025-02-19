@@ -10,6 +10,6 @@ namespace Pisaz.Backend.API.Interfaces
         // Task<IEnumerable<ClientDTO>> GetClientInfoAsync(int id);
         Task<IEnumerable<TEntity>> GetByIdAsync(int id);
         Task<TEntity> AddAsync(TEntity entity);
-        Task<int> UpdateAsync(TEntity entity);
+        Task<TEntity> UpdateAsync(TEntity entity);
     }
 }

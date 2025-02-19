@@ -50,7 +50,7 @@ namespace Pisaz.Backend.API.Repositories
             return entity;
         }
 
-        public async Task<int> UpdateAsync(Client entity)
+        public async Task<Client> UpdateAsync(Client entity)
         {
             var sql = @"
                 UPDATE Client 
@@ -67,7 +67,7 @@ namespace Pisaz.Backend.API.Repositories
             };
 
             int id = await _db.Database.ExecuteSqlRawAsync(sql, parameters);
-            return id;
+            return entity;
         }
     }
 }
