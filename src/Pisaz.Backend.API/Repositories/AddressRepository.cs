@@ -28,7 +28,7 @@ namespace Pisaz.Backend.API.Repositories
             return await _db.Addresses.FromSqlRaw(sql, parameters)
                                       .ToListAsync();
         }
-        public async Task<int> AddAsync(Address entity)
+        public async Task<Address> AddAsync(Address entity)
         {
             const string sql = @"
                                 INSERT INTO Address (ID, Province, Remainder)
@@ -42,7 +42,7 @@ namespace Pisaz.Backend.API.Repositories
 
             await _db.Database.ExecuteSqlRawAsync(sql, parameters);
 
-            return 1;
+            return entity;
         }
         public async Task<int> UpdateAsync(Address entity)
         {

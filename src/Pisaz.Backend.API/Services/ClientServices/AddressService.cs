@@ -25,7 +25,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
                 .ToList();
         }
 
-        public async Task<int> AddAsync(AddressAddDTO entity)
+        public async Task<Address> AddAsync(AddressAddDTO entity)
         {
             var a = new Address
             {

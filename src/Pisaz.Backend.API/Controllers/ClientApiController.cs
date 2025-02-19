@@ -18,7 +18,7 @@ namespace Pisaz.Backend.API.Controllers
         protected readonly IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO> _service = service;
 
         [HttpPost("add")]
-        public async Task<int> Add(ClientAddDTO entity)
+        public async Task<Client> Add(ClientAddDTO entity)
         {
             return await _service.AddAsync(entity);
         }

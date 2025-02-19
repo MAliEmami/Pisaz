@@ -17,7 +17,7 @@ namespace Pisaz.Backend.API.Controllers
 
 
         [HttpPost("add")]
-        public async Task<int> Add(AddressAddDTO entity)
+        public async Task<Address> Add(AddressAddDTO entity)
         {
             return await _servise.AddAsync(entity);
         }

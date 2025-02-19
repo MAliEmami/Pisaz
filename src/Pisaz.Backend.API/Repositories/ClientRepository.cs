@@ -33,7 +33,7 @@ namespace Pisaz.Backend.API.Repositories
                                     .ToListAsync();
         }
 
-        public async Task<int> AddAsync(Client entity)
+        public async Task<Client> AddAsync(Client entity)
         {
             const string sql = @"
                                 INSERT INTO Client (PhoneNumber, FirstName, LastName)
@@ -47,7 +47,7 @@ namespace Pisaz.Backend.API.Repositories
 
             await _db.Database.ExecuteSqlRawAsync(sql, parameters);
 
-            return 1;
+            return entity;
         }
 
         public async Task<int> UpdateAsync(Client entity)

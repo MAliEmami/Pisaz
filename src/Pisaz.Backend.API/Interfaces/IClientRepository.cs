@@ -8,7 +8,7 @@ namespace Pisaz.Backend.API.Interfaces
     public interface IClientRepository<TEntity> where TEntity : class
     {
         Task<IEnumerable<TEntity>> GetByIdAsync(int id);
-        Task<int> AddAsync(TEntity entity);
+        Task<TEntity> AddAsync(TEntity entity);
         Task<int> UpdateAsync(TEntity entity);
     }
 }

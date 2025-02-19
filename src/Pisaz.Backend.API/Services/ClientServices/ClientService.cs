@@ -53,7 +53,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
                 Remainder = c.Remainder
             }).ToList();
         }
-        public async Task<int> AddAsync(ClientAddDTO entity)
+        public async Task<Client> AddAsync(ClientAddDTO entity)
         {
             var c = new Client
             {
