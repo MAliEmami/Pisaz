@@ -15,7 +15,6 @@ namespace Pisaz.Backend.API.DTOs.Clients
         public required decimal WalletBalance { get; set; }
         public string? ReferralCode { get; set; }
         public required DateTime SignupDate { get; set; }
-        //public required AddressDTO Address  { get; set; }
         public required string Province { get; set; }
         public required string Remainder { get; set; }
     }
