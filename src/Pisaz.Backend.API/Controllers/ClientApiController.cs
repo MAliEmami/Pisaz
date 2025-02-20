@@ -18,15 +18,28 @@ namespace Pisaz.Backend.API.Controllers
         protected readonly IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO> _service = service;
 
         [HttpPost("add")]
-        public async Task<Client> Add(ClientAddDTO entity)
+        public async Task<IActionResult> Add(ClientAddDTO entity)
         {
-            return await _service.AddAsync(entity);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _service.AddAsync(entity);
+            return Ok(result);
         }
 
         [HttpPost("list")]
-        public async Task<IEnumerable<ClientDTO>> List(int id)
+        public async Task<IActionResult> List(int id)
         {
-            return await _service.ListAsync(id);
+            var clients = await _service.ListAsync(id);
+
+            if (clients == null || !clients.Any())
+            {
+                return NotFound("No clients found.");
+            }
+
+            return Ok(clients);
         }
     }
 }

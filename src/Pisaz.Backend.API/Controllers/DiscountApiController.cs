@@ -16,9 +16,16 @@ namespace Pisaz.Backend.API.Controllers
         protected readonly IListService<DiscountCode ,DiscountCodeDTO> _service = service;
 
         [HttpPost("list")]
-        public async Task<IEnumerable<DiscountCodeDTO>> List(int id)
+        public async Task<IActionResult> List(int id)
         {
-            return await _service.ListAsync(id);
+            var discountCodes = await _service.ListAsync(id);
+
+            if (discountCodes == null || !discountCodes.Any())
+            {
+                return NotFound("No discount codes found.");
+            }
+
+            return Ok(discountCodes);
         }
     }
 }

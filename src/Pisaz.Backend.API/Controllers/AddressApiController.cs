@@ -13,19 +13,26 @@ namespace Pisaz.Backend.API.Controllers
     [Route("Adderss")]
     public class AddressApiController(IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO> servise) : ControllerBase 
     {
-        protected readonly IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO> _servise = servise;
+        protected readonly IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO> _service = servise;
 
 
         [HttpPost("add")]
         public async Task<Address> Add(AddressAddDTO entity)
         {
-            return await _servise.AddAsync(entity);
+            return await _service.AddAsync(entity);
         }
 
         [HttpPost("list")]
-        public async Task<IEnumerable<AddressDTO>> List(int id)
+        public async Task<IActionResult> List(int id)
         {
-            return await _servise.ListAsync(id);
+            var addresses = await _service.ListAsync(id);
+
+            if (addresses == null || !addresses.Any())
+            {
+                return NotFound("No addresses found.");
+            }
+
+            return Ok(addresses);
         }
 
     }

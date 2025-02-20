@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
+using Pisaz.Backend.API.DTOs.Clients.SignIn;
 using Pisaz.Backend.API.Models.ClientModels;
 
 namespace Pisaz.Backend.API.Validations.ClientValidations
 {
-    public class ClientValidator : AbstractValidator<Client>
+    public class ClientValidator : AbstractValidator<ClientAddDTO>
     {
         public ClientValidator()
         {
@@ -22,9 +23,6 @@ namespace Pisaz.Backend.API.Validations.ClientValidations
             RuleFor(client => client.LastName)
                 .NotEmpty().WithMessage("Last name is required.")
                 .MaximumLength(40).WithMessage("Last name cannot exceed 40 characters.");
-
-            RuleFor(client => client.WalletBalance)
-                .GreaterThanOrEqualTo(0).WithMessage("Wallet balance must be >0.");
         }
     }
 }
