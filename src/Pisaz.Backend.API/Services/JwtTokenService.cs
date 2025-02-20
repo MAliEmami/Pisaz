@@ -15,7 +15,9 @@ public class JwtTokenService
     public string GenerateToken(string phoneNumber)
     {
         var jwtSettings = _configuration.GetSection("JwtSettings");
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]));
+        var secretKey = jwtSettings["Secret"] ?? throw new InvalidOperationException("JWT Secret is missing in configuration.");
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+
 
         var claims = new List<Claim>
         {

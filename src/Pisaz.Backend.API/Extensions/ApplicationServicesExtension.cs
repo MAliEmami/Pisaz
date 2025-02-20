@@ -46,7 +46,10 @@ namespace Pisaz.Backend.API.Extensions
         public static IServiceCollection AddMyAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = configuration.GetSection("JwtSettings");
-            var key = Encoding.UTF8.GetBytes(jwtSettings["Secret"]);
+            
+            var secretKey = jwtSettings["Secret"] ?? throw new InvalidOperationException("JWT Secret is missing in configuration.");
+            var key = Encoding.UTF8.GetBytes(secretKey);
+
 
             services.AddAuthentication(options =>
             {
