@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-// using Pisaz.Backend.API.Models.Base;
 
 namespace Pisaz.Backend.API.Models.ClientModels
 {
@@ -19,4 +18,4 @@ namespace Pisaz.Backend.API.Models.ClientModels
         public required DateTime SignupDate { get; set; } = DateTime.Now;
 
     }
-}
+}   
