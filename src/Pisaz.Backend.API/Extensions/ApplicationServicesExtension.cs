@@ -23,10 +23,12 @@ namespace Pisaz.Backend.API.Extensions
         {
             services.AddScoped<IRepository<Client>, ClientRepository>();
             services.AddScoped<IRepository<Address>, AddressRepository>();
+            services.AddScoped<LoginRequestRepository>();
 
             services.AddScoped<IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>, ClientService>();
             services.AddScoped<IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>, AddressService>();
             services.AddScoped<IListService<DiscountCode, DiscountCodeDTO>, DiscountService>();
+            services.AddScoped<LoginRequestService>();
 
             services.AddDbContext<PisazDB>(oprions =>
             {
@@ -46,7 +48,7 @@ namespace Pisaz.Backend.API.Extensions
         public static IServiceCollection AddMyAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = configuration.GetSection("JwtSettings");
-            
+
             var secretKey = jwtSettings["Secret"] ?? throw new InvalidOperationException("JWT Secret is missing in configuration.");
             var key = Encoding.UTF8.GetBytes(secretKey);
 

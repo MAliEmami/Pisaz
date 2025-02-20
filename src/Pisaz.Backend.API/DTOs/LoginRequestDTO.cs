@@ -7,6 +7,10 @@ namespace Pisaz.Backend.API.DTOs
 {
     public class LoginRequestDTO
     {
-        public string? PhoneNumber { get; set; }
+        public required string PhoneNumber { get; set; }
+    }
+    public class LoginResponseDTO
+    {
+        public required string Token { get; set; }
     }
 }
