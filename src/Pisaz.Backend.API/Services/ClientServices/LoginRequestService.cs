@@ -25,7 +25,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
                 throw new UnauthorizedAccessException("User not found.");
             }
 
-            var token = _jwtTokenService.GenerateToken(client.PhoneNumber);
+            var token = _jwtTokenService.GenerateToken(client.ID);
             return new LoginResponseDTO { Token = token };
         }
     }

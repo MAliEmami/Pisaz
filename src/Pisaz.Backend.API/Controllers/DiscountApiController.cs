@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Discount;
 using Pisaz.Backend.API.Interfaces;
@@ -16,6 +17,7 @@ namespace Pisaz.Backend.API.Controllers
         protected readonly IListService<DiscountCode ,DiscountCodeDTO> _service = service;
 
         [HttpPost("list")]
+        //[Authorize]
         public async Task<IActionResult> List(int id)
         {
             var discountCodes = await _service.ListAsync(id);

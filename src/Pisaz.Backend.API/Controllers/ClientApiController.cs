@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pisaz.Backend.API.DTOs.Clients;
 using Pisaz.Backend.API.DTOs.Clients.SignIn;
@@ -30,6 +31,7 @@ namespace Pisaz.Backend.API.Controllers
         }
 
         [HttpPost("list")]
+        //[Authorize]
         public async Task<IActionResult> List(int id)
         {
             var clients = await _service.ListAsync(id);

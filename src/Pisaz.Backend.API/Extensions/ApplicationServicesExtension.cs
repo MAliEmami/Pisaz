@@ -30,6 +30,16 @@ namespace Pisaz.Backend.API.Extensions
             services.AddScoped<IListService<DiscountCode, DiscountCodeDTO>, DiscountService>();
             services.AddScoped<LoginRequestService>();
 
+            services.AddCors(options => 
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin();
+                });
+            });
+
             services.AddDbContext<PisazDB>(oprions =>
             {
                 oprions.UseSqlServer(configuration.GetConnectionString("Pisaz"));

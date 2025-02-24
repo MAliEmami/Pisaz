@@ -1,4 +1,5 @@
 using Pisaz.Backend.API.Extensions;
+using Pisaz.Backend.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ builder.Services.AddMyAuthentication(builder.Configuration);
 builder.Services.AddScoped<JwtTokenService>();
 
 var app = builder.Build();
+
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();

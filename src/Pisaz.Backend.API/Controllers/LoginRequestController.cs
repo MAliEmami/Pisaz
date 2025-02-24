@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pisaz.Backend.API.DbContextes;
@@ -12,6 +13,7 @@ public class LoginRequestController(LoginRequestService loginRequestService) : C
 {
     private readonly LoginRequestService _loginRequestService = loginRequestService;
 
+    //[Authorize]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDTO request)
     {
@@ -19,10 +21,6 @@ public class LoginRequestController(LoginRequestService loginRequestService) : C
         {
             var response = await _loginRequestService.AuthenticateAsync(request);
             return Ok(response);
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Unauthorized(ex.Message);
         }
         catch (ArgumentException ex)
         {
