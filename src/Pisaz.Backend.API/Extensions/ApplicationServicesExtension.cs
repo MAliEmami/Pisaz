@@ -12,6 +12,7 @@ using Pisaz.Backend.API.Interfaces;
 using Pisaz.Backend.API.Models.ClientModels;
 using Pisaz.Backend.API.Models.Discount;
 using Pisaz.Backend.API.Repositories;
+using Pisaz.Backend.API.Services;
 using Pisaz.Backend.API.Services.ClientServices;
 using Pisaz.Backend.API.Validations.ClientValidations;
 
@@ -28,9 +29,9 @@ namespace Pisaz.Backend.API.Extensions
             services.AddScoped<IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>, ClientService>();
             services.AddScoped<IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>, AddressService>();
             services.AddScoped<IListService<DiscountCode, DiscountCodeDTO>, DiscountService>();
-            services.AddScoped<LoginRequestService>();
+            services.AddScoped<AuthService>();
 
-            services.AddCors(options => 
+            services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
                 {
@@ -57,31 +58,36 @@ namespace Pisaz.Backend.API.Extensions
 
         public static IServiceCollection AddMyAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            var jwtSettings = configuration.GetSection("JwtSettings");
-
-            var secretKey = jwtSettings["Secret"] ?? throw new InvalidOperationException("JWT Secret is missing in configuration.");
-            var key = Encoding.UTF8.GetBytes(secretKey);
-
-
-            services.AddAuthentication(options =>
+            services.AddAuthentication(x =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
             {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
+                x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidIssuer = configuration["JwtSettings:Issuer"],
+                    ValidAudience = configuration["JwtSettings:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey
+                        (Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]!)),
                     ValidateIssuer = true,
-                    ValidIssuer = jwtSettings["Issuer"],
                     ValidateAudience = true,
-                    ValidAudience = jwtSettings["Audience"],
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
+                    ValidateIssuerSigningKey = true
+                };
+                x.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        Console.WriteLine("Authentication failed: " + context.Exception.Message);
+                        return Task.CompletedTask;
+                    },
+                    OnTokenValidated = context =>
+                    {
+                        Console.WriteLine("Token validated successfully.");
+                        return Task.CompletedTask;
+                    }
                 };
             });
 

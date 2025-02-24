@@ -12,9 +12,9 @@ namespace Pisaz.Backend.API.Repositories
     {
         private readonly PisazDB _db = db;
 
-        public async Task<Client?> GetClientByPhoneNumberAsync(string phoneNumber)
+        public Client? GetClientByPhoneNumber(string phoneNumber)
         {
-            return await _db.Clients.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            return _db.Clients.FirstOrDefault(c => c.PhoneNumber == phoneNumber);
         }
     }
 }

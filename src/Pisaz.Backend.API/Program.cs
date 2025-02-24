@@ -11,11 +11,12 @@ builder.Services.AddMyControllers();
 
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddMyAuthentication(builder.Configuration);
-builder.Services.AddScoped<JwtTokenService>();
 
 var app = builder.Build();
 
 app.UseCors();
+
+//app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
