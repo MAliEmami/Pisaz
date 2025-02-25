@@ -13,7 +13,7 @@ using Pisaz.Backend.API.Services;
 namespace Pisaz.Backend.API.Controllers
 {
     [ApiController]
-    [Route("Adderss")]
+    [Route("Address/v1")]
     public class AddressApiController(IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO> servise) : ControllerBase
     {
         protected readonly IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO> _service = servise;
@@ -30,45 +30,27 @@ namespace Pisaz.Backend.API.Controllers
         [HttpPost("list")]
         public async Task<IActionResult> List()
         {
-            // Extract the user ID from the token claims
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var clientIdClaim = User.FindFirst("ClientID")?.Value;
 
-            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int Id))
+            if (string.IsNullOrEmpty(clientIdClaim))
             {
-                return Unauthorized("Invalid token.");
+                return Unauthorized("User ID not found in token.");
             }
 
-            // Call your service with the extracted ID
-            var addresses = await _service.ListAsync(Id);
-
-            if (addresses == null || !addresses.Any())
+            // Parse the ID to an integer
+            if (!int.TryParse(clientIdClaim, out var id))
             {
-                return NotFound("No addresses found.");
+                return BadRequest("Invalid user ID in token.");
             }
 
-            return Ok(addresses);
+            // Use the ID to fetch the address
+            var address = await _service.ListAsync(id);
+            if (address == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(address);
         }
-
-
-        // //[Authorize]
-        // [HttpPost("list")]
-        // public async Task<IActionResult> List()
-        // {
-        //     Console.WriteLine("Before assign JWT");
-        //     int userId = jwtTokenService.GetUserId(HttpContext);
-
-        //     Console.WriteLine("this is my id: "); // check
-        //     Console.WriteLine(userId); // check
-        //     Console.WriteLine(" what fuchk"); // check
-
-        //     var addresses = await _service.ListAsync(userId);
-
-        //     if (addresses == null || !addresses.Any())
-        //     {
-        //         return NotFound("No addresses found.");
-        //     }
-
-        //     return Ok(addresses);
-        // }
     }
 }

@@ -11,7 +11,7 @@ using Pisaz.Backend.API.Models.Discount;
 namespace Pisaz.Backend.API.Controllers
 {
     [ApiController]
-    [Route("Discount")]
+    [Route("Discount/v1")]
     public class DiscountApiController(IListService<DiscountCode ,DiscountCodeDTO> service) : ControllerBase
     {
         protected readonly IListService<DiscountCode ,DiscountCodeDTO> _service = service;

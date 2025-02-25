@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Pisaz.Backend.API.DbContextes;
 using Pisaz.Backend.API.Models.ClientModels;
+using Microsoft.Data.SqlClient;
 
 namespace Pisaz.Backend.API.Repositories
 {
@@ -14,7 +15,14 @@ namespace Pisaz.Backend.API.Repositories
 
         public Client? GetClientByPhoneNumber(string phoneNumber)
         {
-            return _db.Clients.FirstOrDefault(c => c.PhoneNumber == phoneNumber);
+            var sql = $"SELECT * FROM Client WHERE PhoneNumber = @phoneNumber";
+
+            var parameters = new[]
+            {
+                new SqlParameter("@phoneNumber", phoneNumber)
+            };
+            return  _db.Clients.FromSqlRaw(sql, parameters)
+                               .FirstOrDefault();
         }
     }
 }

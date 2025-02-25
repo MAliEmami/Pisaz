@@ -23,11 +23,10 @@ namespace Pisaz.Backend.API.Services
 
         public string Authenticate(string phoneNumber)
         {
-            // Validate the phone number (you can add more logic here)
             var client = _loginRequestRepository.GetClientByPhoneNumber(phoneNumber);
             if (client == null)
             {
-                return null; // Or throw an exception
+                return null;
             }
 
             // Generate JWT token

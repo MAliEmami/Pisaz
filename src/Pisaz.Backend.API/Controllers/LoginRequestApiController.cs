@@ -8,7 +8,7 @@ using Pisaz.Backend.API.Services;
 namespace Pisaz.Backend.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("Auth/v1")]
     public class LoginRequestApiController : ControllerBase
     {
         private readonly AuthService _authService;

@@ -13,7 +13,7 @@ using Pisaz.Backend.API.Models.ClientModels;
 namespace Pisaz.Backend.API.Controllers
 {
     [ApiController]
-    [Route("Client")]
+    [Route("Client/v1")]
     public class ClientApiController(IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO> service) : ControllerBase 
     {
         protected readonly IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO> _service = service;
