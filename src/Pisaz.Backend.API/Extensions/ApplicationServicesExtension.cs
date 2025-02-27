@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Pisaz.Backend.API.DbContextes;
 using Pisaz.Backend.API.DTOs.Clients;
 using Pisaz.Backend.API.DTOs.Clients.SignIn;
+using Pisaz.Backend.API.DTOs.ClientsDTOs.Cart;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Dashboard;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Discount;
 using Pisaz.Backend.API.Interfaces;
@@ -30,7 +31,8 @@ namespace Pisaz.Backend.API.Extensions
             services.AddScoped<IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>, AddressService>();
             services.AddScoped<IListService<DiscountCode, DiscountCodeDTO>, DiscountService>();
             services.AddScoped<AuthService>();
-            services.AddScoped<RefersSystem>();
+            services.AddScoped<RefersSystemService>();
+            services.AddScoped<IQueryService<CartStatusDTO>, CartStatusService>();
 
 
             services.AddCors(options =>

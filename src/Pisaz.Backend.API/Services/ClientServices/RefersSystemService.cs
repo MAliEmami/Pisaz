@@ -9,7 +9,7 @@ using Pisaz.Backend.API.DTOs.ClientsDTOs.ReferalCode;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class RefersSystem(PisazDB db)
+    public class RefersSystemService(PisazDB db)
     {
         private readonly PisazDB _db = db;
         public async Task<IEnumerable<RefersDTO>> ListAsync(int id)

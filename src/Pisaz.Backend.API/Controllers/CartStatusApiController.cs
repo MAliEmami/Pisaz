@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Pisaz.Backend.API.Services.ClientServices;
+using Pisaz.Backend.API.DTOs.ClientsDTOs.Cart;
+using Pisaz.Backend.API.Interfaces;
 
 namespace Pisaz.Backend.API.Controllers
 {
     [ApiController]
-    [Route("RefersSystem/v1")]
-    public class RefersSystemApiController(RefersSystemService service) : ControllerBase
+    [Route("CastSatus/v1")]
+    public class CartStatusApiController(IQueryService<CartStatusDTO> service) : ControllerBase
     {
-        protected readonly RefersSystemService _service = service ;
-
+        protected readonly IQueryService<CartStatusDTO> _service = service;
+        
         [HttpPost("list")]
         public async Task<IActionResult> List(int id)
         {

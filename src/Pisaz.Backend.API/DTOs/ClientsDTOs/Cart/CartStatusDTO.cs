@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace Pisaz.Backend.API.DTOs.ClientsDTOs.Cart
 {
-    public class CartDTO
+    public class CartStatusDTO
     {
-        public required string Status { get; set; }
+        public Int16 CartNumber;
+        public required string CartStatus { get; set; }
         public int NumAvailableCart { get; set; }
     }
 }
