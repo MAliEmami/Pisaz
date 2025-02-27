@@ -30,6 +30,8 @@ namespace Pisaz.Backend.API.Extensions
             services.AddScoped<IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>, AddressService>();
             services.AddScoped<IListService<DiscountCode, DiscountCodeDTO>, DiscountService>();
             services.AddScoped<AuthService>();
+            services.AddScoped<RefersSystem>();
+
 
             services.AddCors(options =>
             {

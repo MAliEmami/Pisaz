@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Dashboard;
 using Pisaz.Backend.API.Interfaces;
 using Pisaz.Backend.API.Models.ClientModels;
@@ -26,11 +27,18 @@ namespace Pisaz.Backend.API.Controllers
             return await _service.AddAsync(entity);
         }
         
-        [Authorize]
+        //[Authorize]
         [HttpPost("list")]
         public async Task<IActionResult> List()
         {
-            var clientIdClaim = User.FindFirst("ClientID")?.Value;
+            //var clientIdClaim = User.FindFirst("ClientID")?.Value;
+            //var clientIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var clientIdClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+
+
+            Console.WriteLine("Check error: ");
+            Console.WriteLine(clientIdClaim);
+            Console.WriteLine("finish chkeck");
 
             if (string.IsNullOrEmpty(clientIdClaim))
             {

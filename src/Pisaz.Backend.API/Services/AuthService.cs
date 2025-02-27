@@ -37,13 +37,19 @@ namespace Pisaz.Backend.API.Services
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim("ClientPhoneNumber", phoneNumber), 
-                    new Claim("ClientID", client.ID.ToString())
+                    //new Claim("ClientID", client.ID.ToString())
+                    new Claim(JwtRegisteredClaimNames.Sub, client.ID.ToString())
+
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 Issuer = _configuration["JwtSettings:Issuer"],
                 Audience = _configuration["JwtSettings:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
+
+            Console.WriteLine("Client ID :");
+            Console.WriteLine(client.ID.ToString());
+
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
