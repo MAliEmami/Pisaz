@@ -14,7 +14,6 @@ namespace Pisaz.Backend.API.Services
     {
         private readonly LoginRequestRepository _loginRequestRepository;
         private readonly IConfiguration _configuration;
-
         public AuthService(LoginRequestRepository loginRequestRepository, IConfiguration configuration)
         {
             _loginRequestRepository = loginRequestRepository;
