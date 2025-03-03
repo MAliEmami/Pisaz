@@ -28,7 +28,7 @@ namespace Pisaz.Backend.API.Controllers
         }
         
         // [Authorize]
-        [HttpPost("list")]
+        [HttpGet("list")]
         public async Task<IActionResult> List()
         {
             var clientIdClaim = User.FindFirstValue("ClientID");
@@ -36,19 +36,18 @@ namespace Pisaz.Backend.API.Controllers
             Console.WriteLine("Check error: ");
             Console.WriteLine(clientIdClaim);
             Console.WriteLine("finish chkeck");
+            
 
             if (string.IsNullOrEmpty(clientIdClaim))
             {
                 return Unauthorized("User ID not found in token.");
             }
 
-            // Parse the ID to an integer
             if (!int.TryParse(clientIdClaim, out var id))
             {
                 return BadRequest("Invalid user ID in token.");
             }
 
-            // Use the ID to fetch the address
             var address = await _service.ListAsync(id);
             if (address == null)
             {
