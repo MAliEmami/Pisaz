@@ -37,9 +37,7 @@ namespace Pisaz.Backend.API.Services
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim("ClientPhoneNumber", phoneNumber), 
-                    //new Claim("ClientID", client.ID.ToString())
-                    new Claim(JwtRegisteredClaimNames.Sub, client.ID.ToString())
-
+                    new Claim("ClientID", client.ID.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 Issuer = _configuration["JwtSettings:Issuer"],

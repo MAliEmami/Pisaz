@@ -15,7 +15,7 @@ using Pisaz.Backend.API.Models.Discount;
 using Pisaz.Backend.API.Repositories;
 using Pisaz.Backend.API.Services;
 using Pisaz.Backend.API.Services.ClientServices;
-using Pisaz.Backend.API.Validations.ClientValidations;
+//using Pisaz.Backend.API.Validations.ClientValidations;
 
 namespace Pisaz.Backend.API.Extensions
 {

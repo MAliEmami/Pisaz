@@ -33,7 +33,6 @@ namespace Pisaz.Backend.API.Services.ClientServices
                 CartNumber = cs.CartNumber,
                 CartStatus = cs.CartStatus,
                 NumAvailableCart = cs.NumAvailableCart
-
             }).ToList();
         }
     }

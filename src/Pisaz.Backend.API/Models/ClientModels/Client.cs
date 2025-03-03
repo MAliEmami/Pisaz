@@ -18,4 +18,4 @@ namespace Pisaz.Backend.API.Models.ClientModels
         public required DateTime SignupDate { get; set; } = DateTime.Now;
 
     }
-}   
+}

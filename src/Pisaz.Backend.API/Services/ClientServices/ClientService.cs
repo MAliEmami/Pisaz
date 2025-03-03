@@ -40,6 +40,8 @@ namespace Pisaz.Backend.API.Services.ClientServices
                                         .SqlQueryRaw<ClientDTO>(ClientInfoQuery, new SqlParameter("@id", id))
                                         .ToListAsync();
 
+            Console.WriteLine(clientInfoList.Count);
+
             return clientInfoList
             .Select(c => new ClientDTO
             {

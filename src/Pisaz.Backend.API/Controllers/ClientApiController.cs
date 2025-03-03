@@ -38,7 +38,7 @@ namespace Pisaz.Backend.API.Controllers
 
             if (clients == null || !clients.Any())
             {
-                return NotFound("No clients found.");
+                return NotFound($"No clients found.");
             }
 
             return Ok(clients);

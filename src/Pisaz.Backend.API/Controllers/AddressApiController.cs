@@ -27,14 +27,11 @@ namespace Pisaz.Backend.API.Controllers
             return await _service.AddAsync(entity);
         }
         
-        //[Authorize]
+        // [Authorize]
         [HttpPost("list")]
         public async Task<IActionResult> List()
         {
-            //var clientIdClaim = User.FindFirst("ClientID")?.Value;
-            //var clientIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var clientIdClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
-
+            var clientIdClaim = User.FindFirstValue("ClientID");
 
             Console.WriteLine("Check error: ");
             Console.WriteLine(clientIdClaim);
