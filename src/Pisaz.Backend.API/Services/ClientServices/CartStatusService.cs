@@ -7,10 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using Pisaz.Backend.API.DbContextes;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Cart;
 using Pisaz.Backend.API.Interfaces;
+using Pisaz.Backend.API.Models.Product.Cart;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class CartStatusService(PisazDB db) : IQueryService<CartStatusDTO>
+    public class CartStatusService(PisazDB db) : IQueryService<ShoppingCart, CartStatusDTO>
     {
         private readonly PisazDB _db = db;
         public async Task<IEnumerable<CartStatusDTO>> ListAsync(int id)

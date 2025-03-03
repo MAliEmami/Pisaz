@@ -12,7 +12,7 @@ using Pisaz.Backend.API.Models.Discount;
 namespace Pisaz.Backend.API.Services.ClientServices
 {
     public class DiscountService(PisazDB db) 
-    : IListService<DiscountCode ,DiscountCodeDTO>
+    : IQueryService<DiscountCode ,DiscountCodeDTO>
     {
         private readonly PisazDB _db = db;
         public async Task<IEnumerable<DiscountCodeDTO>> ListAsync(int id)

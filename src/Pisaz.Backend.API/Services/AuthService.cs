@@ -25,7 +25,7 @@ namespace Pisaz.Backend.API.Services
             var client = _loginRequestRepository.GetClientByPhoneNumber(phoneNumber);
             if (client == null)
             {
-                return null;
+                Console.WriteLine("Invalid user ID in token.");
             }
 
             // Generate JWT token

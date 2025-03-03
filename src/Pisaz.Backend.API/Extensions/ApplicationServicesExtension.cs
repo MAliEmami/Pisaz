@@ -9,9 +9,11 @@ using Pisaz.Backend.API.DTOs.Clients.SignIn;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Cart;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Dashboard;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Discount;
+using Pisaz.Backend.API.DTOs.ClientsDTOs.ReferalCode;
 using Pisaz.Backend.API.Interfaces;
 using Pisaz.Backend.API.Models.ClientModels;
 using Pisaz.Backend.API.Models.Discount;
+using Pisaz.Backend.API.Models.Product.Cart;
 using Pisaz.Backend.API.Repositories;
 using Pisaz.Backend.API.Services;
 using Pisaz.Backend.API.Services.ClientServices;
@@ -29,10 +31,14 @@ namespace Pisaz.Backend.API.Extensions
 
             services.AddScoped<IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>, ClientService>();
             services.AddScoped<IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>, AddressService>();
-            services.AddScoped<IListService<DiscountCode, DiscountCodeDTO>, DiscountService>();
+
+            services.AddScoped<IQueryService<DiscountCode, DiscountCodeDTO>, DiscountService>();
+            services.AddScoped<IQueryService<ShoppingCart, CartStatusDTO>, CartStatusService>();
+            services.AddScoped<IQueryService<Refers, RefersDTO>, RefersSystemService>();
+            services.AddScoped<IQueryService<DiscountCode ,DiscountCodeDTO>, DiscountService>();
+            
             services.AddScoped<AuthService>();
-            services.AddScoped<RefersSystemService>();
-            services.AddScoped<IQueryService<CartStatusDTO>, CartStatusService>();
+            //services.AddScoped<RefersSystemService>();
 
 
             services.AddCors(options =>

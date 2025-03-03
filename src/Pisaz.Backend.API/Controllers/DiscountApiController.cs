@@ -12,9 +12,9 @@ namespace Pisaz.Backend.API.Controllers
 {
     [ApiController]
     [Route("Discount/v1")]
-    public class DiscountApiController(IListService<DiscountCode ,DiscountCodeDTO> service) : ControllerBase
+    public class DiscountApiController(IQueryService<DiscountCode ,DiscountCodeDTO> service) : ControllerBase
     {
-        protected readonly IListService<DiscountCode ,DiscountCodeDTO> _service = service;
+        protected readonly IQueryService<DiscountCode ,DiscountCodeDTO> _service = service;
 
         [HttpPost("list")]
         //[Authorize]
