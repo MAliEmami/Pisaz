@@ -10,47 +10,22 @@ using Pisaz.Backend.API.DTOs.ClientsDTOs.Discount;
 using Pisaz.Backend.API.Interfaces;
 using Pisaz.Backend.API.Models.Discount;
 using Pisaz.Backend.API.Models.Product.Cart;
+using Pisaz.Backend.API.Repositories;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class PurchaseHistoryService(PisazDB db) 
+    public class PurchaseHistoryService(PurchasehistoryRepository purchasehistory) 
     : IQueryService<Products ,PurchaseHistoryDTO>
     {
-        private readonly PisazDB _db = db;
+        private readonly PurchasehistoryRepository _purchasehistory = purchasehistory;
         public async Task<IEnumerable<PurchaseHistoryDTO>> ListAsync(int id)
         {
-            const string PurchaseHistoryQuery = @"
-                SELECT TOP 5
-                    STRING_AGG(P.Category + ' ' + P.Brand + ' ' + P.Model, ', ') AS ProductList,
-                    SUM(A.CartPrice * A.Quantity) AS TotalPrice,
-                    T.TransactionTime
-                FROM 
-                    AddedTo A
-                JOIN 
-                    Products P ON A.ProductID = P.ID
-                JOIN 
-                    IssuedFor I  ON A.ID = I.ID 
-                                AND A.CartNumber = I.CartNumber 
-                                AND A.LockedNumber = I.LockedNumber
-                JOIN 
-                    Transactions T ON I.TrackingCode = T.TrackingCode
-                JOIN 
-                    LockedShoppingCart LSC  ON A.ID = LSC.ID 
-                                            AND A.CartNumber = LSC.CartNumber 
-                                            AND A.LockedNumber = LSC.LockedNumber
-                WHERE 
-                    T.TransactionStatus = 'Successful'
-                    AND
-                    LSC.ID = @id
-                GROUP BY
-                    A.ID, A.CartNumber, A.LockedNumber, I.TrackingCode, T.TransactionStatus, T.TransactionTime
-                ORDER BY 
-                    T.TransactionTime DESC;";
-
-
-            var PurchaseHistoryList = await _db.Database
-                                        .SqlQueryRaw<PurchaseHistoryDTO>(PurchaseHistoryQuery, new SqlParameter("@id", id))
-                                        .ToListAsync();
+            var PurchaseHistoryList = await _purchasehistory.GetByIdAsync(id);
+            
+            if (PurchaseHistoryList == null) 
+            {
+                return new List<PurchaseHistoryDTO>();
+            }
 
             return PurchaseHistoryList
             .Select(ph => new PurchaseHistoryDTO
