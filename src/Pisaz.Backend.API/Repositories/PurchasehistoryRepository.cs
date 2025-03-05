@@ -52,7 +52,7 @@ namespace Pisaz.Backend.API.Repositories
                                     .ToList();
                                     
         }
-    {
+    
         
     }
 }

@@ -31,6 +31,7 @@ namespace Pisaz.Backend.API.Extensions
             services.AddScoped<LoginRequestRepository>();
             services.AddScoped<ShoppingCartRepository>();
             services.AddScoped<DiscountRepository>();
+            services.AddScoped<PurchasehistoryRepository>();
 
             services.AddScoped<IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>, ClientService>();
             //services.AddScoped<IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>, AddressService>();
