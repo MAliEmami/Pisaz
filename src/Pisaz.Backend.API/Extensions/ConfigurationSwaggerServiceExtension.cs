@@ -51,10 +51,6 @@ namespace Pisaz.Backend.API.Extensions
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-                // app.UseSwaggerUI(options =>
-                // {
-                //     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Pisaz API V1");
-                // });
             }
         }
     }

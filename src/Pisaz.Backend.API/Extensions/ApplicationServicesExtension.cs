@@ -30,15 +30,18 @@ namespace Pisaz.Backend.API.Extensions
             services.AddScoped<LoginRequestRepository>();
 
             services.AddScoped<IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>, ClientService>();
-            services.AddScoped<IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>, AddressService>();
+            //services.AddScoped<IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>, AddressService>();
+            
+            services.AddScoped<IQueryService<Address, AddressDTO>, AddressService>();
+            services.AddScoped<ICommandService<Address, AddressAddDTO, AddressUpdateDTO>, AddressService>();
 
             services.AddScoped<IQueryService<DiscountCode, DiscountCodeDTO>, DiscountService>();
             services.AddScoped<IQueryService<ShoppingCart, CartStatusDTO>, CartStatusService>();
             services.AddScoped<IQueryService<Refers, RefersDTO>, RefersSystemService>();
             services.AddScoped<IQueryService<DiscountCode ,DiscountCodeDTO>, DiscountService>();
+            services.AddScoped<IQueryService<Products ,PurchaseHistoryDTO>, PurchaseHistoryService>();
             
             services.AddScoped<AuthService>();
-            //services.AddScoped<RefersSystemService>();
 
 
             services.AddCors(options =>
@@ -75,8 +78,6 @@ namespace Pisaz.Backend.API.Extensions
                 x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
             {
-                // x.RequireHttpsMetadata = false;
-                // x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidIssuer = configuration["JwtSettings:Issuer"],

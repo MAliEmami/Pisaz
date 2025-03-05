@@ -21,15 +21,15 @@ namespace Pisaz.Backend.API.Repositories
             _db = db;
         }
 
-        public async Task<Client?> GetByIdAsync(int id)
+        public async Task<List<Client?>> GetByIdAsync(int id)
         {
             const string sql = "SELECT * FROM Client WHERE ID = @Id";
             var parameters = new[]
             {
                 new SqlParameter("@Id", id)
             };
-            return await _db.Clients.FromSqlRaw(sql, parameters)
-                                    .FirstOrDefaultAsync();
+            return (await _db.Clients.FromSqlRaw(sql, parameters).ToListAsync())
+                                    .Cast<Client?>().ToList();
         }
 
         public async Task<Client> AddAsync(Client entity)

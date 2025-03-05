@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +19,12 @@ namespace Pisaz.Backend.API.Controllers
 
         [HttpPost("list")]
         //[Authorize]
-        public async Task<IActionResult> List(int id)
+        public async Task<IActionResult> List()
         {
+            var clientIdClaim = User.FindFirstValue("ClientID");
+
+            int id = 1;
+
             var discountCodes = await _service.ListAsync(id);
 
             if (discountCodes == null || !discountCodes.Any())

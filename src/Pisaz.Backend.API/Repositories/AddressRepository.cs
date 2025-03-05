@@ -18,15 +18,15 @@ namespace Pisaz.Backend.API.Repositories
         {
             _db = db;
         }
-        public async Task<Address?> GetByIdAsync(int id)
+        public async Task<List<Address?>> GetByIdAsync(int id)
         {
             const string sql = "SELECT * FROM Address WHERE ID = @Id";
             var parameters = new[]
             {
                 new SqlParameter("@Id", id)
             };
-            return await _db.Addresses.FromSqlRaw(sql, parameters)
-                                       .FirstOrDefaultAsync();
+                return (await _db.Addresses.FromSqlRaw(sql, parameters).ToListAsync())
+                    .Cast<Address?>().ToList();
         }
         public async Task<Address> AddAsync(Address entity)
         {
