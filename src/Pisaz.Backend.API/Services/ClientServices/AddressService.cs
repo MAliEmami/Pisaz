@@ -9,7 +9,7 @@ using Pisaz.Backend.API.Models.ClientModels;
 namespace Pisaz.Backend.API.Services.ClientServices
 {
     public class AddressService(IRepository<Address> addresses)
-    : IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>
+    : IQueryService<Address, AddressDTO>, ICommandService<Address, AddressAddDTO, AddressUpdateDTO>
     {
         private readonly IRepository<Address> _addresses = addresses;
 
@@ -17,19 +17,17 @@ namespace Pisaz.Backend.API.Services.ClientServices
         public async Task<IEnumerable<AddressDTO>> ListAsync(int id)
         {
             var addresses = await _addresses.GetByIdAsync(id);
-            if (addresses == null)
+
+            if (addresses == null || !addresses.Any()) 
             {
                 return new List<AddressDTO>();
             }
-            
-            return new List<AddressDTO>
+
+            return addresses.Select(a => new AddressDTO
             {
-                new AddressDTO
-                {
-                    Province = addresses.Province,
-                    Remainder = addresses.Remainder
-                }
-            };
+                Province = a.Province,
+                Remainder = a.Remainder
+            }).ToList();
         }
 
         public async Task<Address> AddAsync(AddressAddDTO entity)
@@ -46,14 +44,15 @@ namespace Pisaz.Backend.API.Services.ClientServices
 
         public async Task<Address?> UpdateAsync(int id, AddressUpdateDTO entity)
         {
-            var dbAddress = await _addresses.GetByIdAsync(id);
-            if (dbAddress != null)
-            {
-                dbAddress.Province = entity.Province;
-                dbAddress.Remainder = entity.Remainder;
-                return await _addresses.UpdateAsync(dbAddress);
-            }
-            return dbAddress;
+            return null;
+            // var dbAddress = await _addresses.GetByIdAsync(id);
+            // if (dbAddress != null)
+            // {
+            //     dbAddress.Province = entity.Province;
+            //     dbAddress.Remainder = entity.Remainder;
+            //     return await _addresses.UpdateAsync(dbAddress);
+            // }
+            // return dbAddress;
         }
 
     }

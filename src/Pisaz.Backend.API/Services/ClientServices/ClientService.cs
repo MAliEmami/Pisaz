@@ -28,11 +28,8 @@ namespace Pisaz.Backend.API.Services.ClientServices
                     LastName,     
                     PhoneNumber,   
                     WalletBalance, 
-                    ReferralCode, 
-                    SignupDate, 
-                    Province,
-                    Remainder
-                FROM Client C JOIN Address A ON C.ID = A.ID
+                    SignupDate
+                FROM Client C 
                 WHERE C.ID = @id";
 
 
@@ -49,11 +46,8 @@ namespace Pisaz.Backend.API.Services.ClientServices
                 LastName = c.LastName,
                 PhoneNumber = c.PhoneNumber,
                 WalletBalance = c.WalletBalance,
-                ReferralCode = c.ReferralCode,
-                SignupDate = c.SignupDate,
-                Province = c.Province,
-                Remainder = c.Remainder
-            }).ToList();
+                SignupDate = c.SignupDate
+            });
         }
         public async Task<Client> AddAsync(ClientAddDTO entity)
         {
@@ -71,15 +65,16 @@ namespace Pisaz.Backend.API.Services.ClientServices
 
         public async Task<Client?> UpdateAsync(int id, ClientUpdateDTO entity)
          {
-            var dbClient = await _clients.GetByIdAsync(id);
-            if (dbClient != null)
-            {
-                dbClient.FirstName = entity.FirstName;
-                dbClient.LastName = entity.LastName;
-                dbClient.PhoneNumber = entity.PhoneNumber;
-                return await _clients.UpdateAsync(dbClient);
-            }
-             return dbClient;
+            return null;
+            // var dbClient = await _clients.GetByIdAsync(id);
+            // if (dbClient != null)
+            // {
+            //     dbClient.FirstName = entity.FirstName;
+            //     dbClient.LastName = entity.LastName;
+            //     dbClient.PhoneNumber = entity.PhoneNumber;
+            //     return await _clients.UpdateAsync(dbClient);
+            // }
+            //  return dbClient;
          }
     }
 }

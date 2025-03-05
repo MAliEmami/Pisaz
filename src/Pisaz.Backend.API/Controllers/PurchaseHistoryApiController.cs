@@ -4,19 +4,18 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Pisaz.Backend.API.DTOs.ClientsDTOs.ReferalCode;
+using Pisaz.Backend.API.DTOs.ClientsDTOs.Cart;
 using Pisaz.Backend.API.Interfaces;
-using Pisaz.Backend.API.Models.ClientModels;
-using Pisaz.Backend.API.Services.ClientServices;
+using Pisaz.Backend.API.Models.Product.Cart;
 
 namespace Pisaz.Backend.API.Controllers
 {
     [ApiController]
-    [Route("RefersSystem/v1")]
-    public class RefersSystemApiController(IQueryService<Refers, RefersDTO> service) : ControllerBase
+    [Route("PurchaseHistory/v1")]
+    public class PurchaseHistoryApiController(IQueryService<Products ,PurchaseHistoryDTO> service) : ControllerBase
     {
-        protected readonly IQueryService<Refers, RefersDTO> _service = service ;
-
+        protected readonly IQueryService<Products ,PurchaseHistoryDTO> _service = service ;
+        
         [HttpPost("list")]
         public async Task<IActionResult> List()
         {

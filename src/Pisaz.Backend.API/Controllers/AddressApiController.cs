@@ -15,16 +15,17 @@ namespace Pisaz.Backend.API.Controllers
 {
     [ApiController]
     [Route("Address/v1")]
-    public class AddressApiController(IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO> servise) : ControllerBase
+    public class AddressApiController(IQueryService<Address, AddressDTO> queryServise, ICommandService<Address, AddressAddDTO, AddressUpdateDTO> commandService) 
+    : ControllerBase
     {
-        protected readonly IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO> _service = servise;
+        protected readonly IQueryService<Address, AddressDTO> _queryServise = queryServise;
+        protected readonly ICommandService<Address, AddressAddDTO, AddressUpdateDTO> _commandService = commandService;
 
 
         [HttpPost("add")]
-        //[Authorize]
         public async Task<Address> Add(AddressAddDTO entity)
         {
-            return await _service.AddAsync(entity);
+            return await _commandService.AddAsync(entity);
         }
         
         // [Authorize]
@@ -38,17 +39,19 @@ namespace Pisaz.Backend.API.Controllers
             Console.WriteLine("finish chkeck");
             
 
-            if (string.IsNullOrEmpty(clientIdClaim))
-            {
-                return Unauthorized("User ID not found in token.");
-            }
+            // if (string.IsNullOrEmpty(clientIdClaim))
+            // {
+            //     return Unauthorized("User ID not found in token.");
+            // }
 
-            if (!int.TryParse(clientIdClaim, out var id))
-            {
-                return BadRequest("Invalid user ID in token.");
-            }
+            // if (!int.TryParse(clientIdClaim, out var id))
+            // {
+            //     return BadRequest("Invalid user ID in token.");
+            // }
 
-            var address = await _service.ListAsync(id);
+            int id = 1;
+
+            var address = await _queryServise.ListAsync(id);
             if (address == null)
             {
                 return NotFound();
