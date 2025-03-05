@@ -42,7 +42,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
                     T.TransactionStatus = 'Successful'
                     AND
                     LSC.ID = @id
-                GROUP BY 
+                GROUP BY
                     A.ID, A.CartNumber, A.LockedNumber, I.TrackingCode, T.TransactionStatus, T.TransactionTime
                 ORDER BY 
                     T.TransactionTime DESC;";
