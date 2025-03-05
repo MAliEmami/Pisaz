@@ -8,27 +8,24 @@ using Pisaz.Backend.API.DbContextes;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Cart;
 using Pisaz.Backend.API.Interfaces;
 using Pisaz.Backend.API.Models.Product.Cart;
+using Pisaz.Backend.API.Repositories;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class CartStatusService(PisazDB db) : IQueryService<ShoppingCart, CartStatusDTO>
+    public class CartStatusService(ShoppingCartRepository shoppingCart) 
+    : IQueryService<ShoppingCart, CartStatusDTO>
     {
-        private readonly PisazDB _db = db;
+        private readonly ShoppingCartRepository _shoppingCart = shoppingCart;
         public async Task<IEnumerable<CartStatusDTO>> ListAsync(int id)
         {
-            const string CartStatusQuery = @"
-                    SELECT 
-                            CartNumber,
-                            CartStatus,
-                            (SELECT COUNT(*) From ShoppingCart WHERE CartStatus = 'active') As NumAvailableCart
-                    FROM ShoppingCart 
-                    WHERE ID = @id";
+            var cartStatus = await _shoppingCart.GetByIdAsync(id);
+            
+            if (cartStatus == null) 
+            {
+                return new List<CartStatusDTO>();
+            }
 
-            var CartStatusList = await _db.Database
-                                        .SqlQueryRaw<CartStatusDTO>(CartStatusQuery, new SqlParameter("@id", id))
-                                        .ToListAsync();
-
-            return CartStatusList
+            return cartStatus
             .Select(cs => new CartStatusDTO
             {
                 CartNumber = cs.CartNumber,

@@ -18,7 +18,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
         {
             var addresses = await _addresses.GetByIdAsync(id);
 
-            if (addresses == null || !addresses.Any()) 
+            if (addresses == null) 
             {
                 return new List<AddressDTO>();
             }

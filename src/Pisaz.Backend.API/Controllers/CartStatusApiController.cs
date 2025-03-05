@@ -23,14 +23,14 @@ namespace Pisaz.Backend.API.Controllers
 
             int id = 1;
 
-            var refers = await _service.ListAsync(id);
+            var cartStatus = await _service.ListAsync(id);
 
-            if (refers == null || !refers.Any())
+            if (cartStatus == null)
             {
                 return NotFound("No clients found.");
             }
 
-            return Ok(refers);
+            return Ok(cartStatus);
         }
         
     }

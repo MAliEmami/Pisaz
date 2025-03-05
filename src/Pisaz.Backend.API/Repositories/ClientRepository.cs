@@ -12,14 +12,9 @@ using Microsoft.Data.SqlClient;
 
 namespace Pisaz.Backend.API.Repositories
 {
-    public class ClientRepository : IRepository<Client>
+    public class ClientRepository(PisazDB db) : IRepository<Client>
     {
-        private readonly PisazDB _db;
-
-        public ClientRepository(PisazDB db)
-        {
-            _db = db;
-        }
+        private readonly PisazDB _db = db;
 
         public async Task<List<Client?>> GetByIdAsync(int id)
         {
