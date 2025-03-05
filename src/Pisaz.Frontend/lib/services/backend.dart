@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:http/http.dart' as http;
 import 'package:pisaz/models/refereal_data.dart';
 import 'package:pisaz/models/user.dart';
 import 'package:pisaz/models/discount_code.dart';
@@ -22,10 +23,20 @@ class Backend {
   }
 
   static Future<User> getUser() async {
-    const jsonString =
-        '{"firstName": "علی", "lastName": "احمدی", "walletBalance": 0, "signupDate": "2025-03-04T22:32:52.46"}';
+    http.Request request =
+        http.Request("post", Uri.parse('http://localhost:5184/Client/v1/list'));
+    request.headers.clear();
+    request.headers.addAll({"phone_number": "09123456789"});
+    var response = await request.send();
 
-    final userMap = jsonDecode(jsonString) as Map<String, dynamic>;
+    //const jsonString =
+    // '{"firstName": "علی", "lastName": "احمدی", "walletBalance": 0, "signupDate": "2025-03-04T22:32:52.46"}';
+    print('json : $response');
+
+    if (response.statusCode != 200) {
+      print('faileedd!!!!');
+    }
+    final userMap = jsonDecode(response.toString()) as Map<String, dynamic>;
     final user = User.fromJson(userMap);
 
     return user;

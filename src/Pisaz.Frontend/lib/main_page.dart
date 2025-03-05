@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pisaz/discount_codes_page.dart';
 import 'package:pisaz/profile_page.dart';
 
 class MainPage extends StatefulWidget {

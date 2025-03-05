@@ -39,7 +39,7 @@ class CustomTextField extends StatelessWidget {
               FilteringTextInputFormatter(RegExp("[0-9]"), allow: true)
             else
               FilteringTextInputFormatter(
-                  RegExp("[ آابپتثجچحخدذرزژسشصضطظعغفقکگلمنوهیئ\s]"),
+                  RegExp("[ آابپتثجچحخدذرزژسشصضطظعغفقکگلمنوهیئs]"),
                   allow: true)
           ],
           decoration: InputDecoration(

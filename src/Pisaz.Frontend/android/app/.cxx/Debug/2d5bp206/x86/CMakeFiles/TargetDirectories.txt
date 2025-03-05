@@ -1,0 +1,2 @@
+D:/lessons/Database/Pisaz/Pisaz/src/Pisaz.Frontend/android/app/.cxx/Debug/2d5bp206/x86/CMakeFiles/edit_cache.dir
+D:/lessons/Database/Pisaz/Pisaz/src/Pisaz.Frontend/android/app/.cxx/Debug/2d5bp206/x86/CMakeFiles/rebuild_cache.dir
