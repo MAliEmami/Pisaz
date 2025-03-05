@@ -10,34 +10,24 @@ using Microsoft.EntityFrameworkCore;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Dashboard;
 using Microsoft.Data.SqlClient;
 using Pisaz.Backend.API.DbContextes;
+using Pisaz.Backend.API.Repositories;
 
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class ClientService(IRepository<Client> clients, PisazDB db) 
+    public class ClientService(ClientRepository clients) 
     : IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>
     {
-        private readonly PisazDB _db = db;
-        private readonly IRepository<Client> _clients = clients;
+        private readonly ClientRepository _clients = clients;
 
         public async Task<IEnumerable<ClientDTO>> ListAsync(int id)
         {
-            const string ClientInfoQuery = @"
-                SELECT 
-                    FirstName,     
-                    LastName,     
-                    PhoneNumber,   
-                    WalletBalance, 
-                    SignupDate
-                FROM Client C 
-                WHERE C.ID = @id";
-
-
-            var clientInfoList = await _db.Database
-                                        .SqlQueryRaw<ClientDTO>(ClientInfoQuery, new SqlParameter("@id", id))
-                                        .ToListAsync();
-
-            Console.WriteLine(clientInfoList.Count);
+            var clientInfoList = await _clients.GetByIdAsync(id);
+            
+            if (clientInfoList == null) 
+            {
+                return new List<ClientDTO>();
+            }
 
             return clientInfoList
             .Select(c => new ClientDTO

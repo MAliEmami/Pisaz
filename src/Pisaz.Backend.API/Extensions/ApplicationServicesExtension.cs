@@ -25,7 +25,8 @@ namespace Pisaz.Backend.API.Extensions
     {
         public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IRepository<Client>, ClientRepository>();
+            //services.AddScoped<IRepository<Client>, ClientRepository>();
+            services.AddScoped<ClientRepository>();
             services.AddScoped<IRepository<Address>, AddressRepository>();
             services.AddScoped<LoginRequestRepository>();
             services.AddScoped<ShoppingCartRepository>();
