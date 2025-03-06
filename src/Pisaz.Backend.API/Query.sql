@@ -76,7 +76,7 @@ ORDER BY
 
 -- VIP Profit
 SELECT 
-    COALESCE(SUM(ADT.CartPrice) * 0.15, 0),
+    COALESCE(SUM(ADT.CartPrice) * 0.15, 0) AS VIP_Profit,
     DATEDIFF(day, CURRENT_TIMESTAMP, SubsctiptionExpirationTime) AS DaysRemaining
 FROM 
     VIPClient VC

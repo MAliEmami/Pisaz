@@ -7,8 +7,7 @@ namespace Pisaz.Backend.API.DTOs.ClientsDTOs.Clients
 {
     public class VIPClientDTO
     {
-        public bool IsVIP { get; set; }
-        public DateTime VIPExpireTime { get; set; }
-        public int Profit { get; set; }
+        public decimal VIP_Profit { get; set; }
+        public int DaysRemaining { get; set; }
     }
 }

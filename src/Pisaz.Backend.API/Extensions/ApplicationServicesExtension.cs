@@ -7,6 +7,7 @@ using Pisaz.Backend.API.DbContextes;
 using Pisaz.Backend.API.DTOs.Clients;
 using Pisaz.Backend.API.DTOs.Clients.SignIn;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Cart;
+using Pisaz.Backend.API.DTOs.ClientsDTOs.Clients;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Dashboard;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Discount;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.ReferalCode;
@@ -36,6 +37,7 @@ namespace Pisaz.Backend.API.Extensions
             services.AddScoped<PurchasehistoryRepository>();
             services.AddScoped<RefersSystemRepository>();
             services.AddScoped<CompatibleWithRepository>();
+            services.AddScoped<VIPClientRepository>();
 
             services.AddScoped<IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>, ClientService>();
             //services.AddScoped<IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>, AddressService>();
@@ -49,6 +51,7 @@ namespace Pisaz.Backend.API.Extensions
             services.AddScoped<IQueryService<DiscountCode ,DiscountCodeDTO>, DiscountService>();
             services.AddScoped<IQueryService<Products ,PurchaseHistoryDTO>, PurchaseHistoryService>();
             services.AddScoped<IQueryCompatibleService<Products, CompatibleWithDTO>, CompatibleWithService>();
+            services.AddScoped<IQueryService<VIPClient, VIPClientDTO>, VIPClientService>();
             
             // services.AddScoped<CompatibleWithService>();
             services.AddScoped<AuthService>();
