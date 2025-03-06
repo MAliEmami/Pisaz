@@ -16,11 +16,11 @@ namespace Pisaz.Backend.API.Repositories
         {
             const string CompatibleWithQuery = @"
                 SELECT 
+                    P.Category,
+                    P.CurrentPrice, 
                     P.Brand, 
                     P.Model, 
-                    P.CurrentPrice, 
-                    P.StockCount,
-                    P.Category
+                    P.StockCount
                 FROM (
                     -- CPU-Cooler compatibility
                     SELECT CoolerID AS CompatibleID FROM CcSlotCompatibleWith WHERE CPUID = @id
@@ -62,7 +62,7 @@ namespace Pisaz.Backend.API.Repositories
                     UNION
                     SELECT GPUID FROM GmSlotCompatibleWith WHERE MotherboardID = @id
                 ) AS Compatible
-                JOIN Products P ON P.ID = Compatible.CompatibleID;";
+                JOIN Products P ON P.ID = Compatible.CompatibleID";
 
             var parameters = new[]
             {
@@ -72,7 +72,30 @@ namespace Pisaz.Backend.API.Repositories
                                     .ToListAsync())
                                     .Cast<CompatibleWithDTO?>()
                                     .ToList();
+                // return await _db.Database.SqlQueryRaw<CompatibleWithDTO>(CompatibleWithQuery, parameters)
+                //              .ToListAsync();
                                     
+        }
+        public async Task<int?> GetByModel(string model)
+        {
+            const string GetIdBymodelQuery = @"
+            SELECT 
+                    ID
+            FROM
+                    Products
+            WHERE 
+                    model = @model";
+
+            var parameters = new[]
+            {
+                new SqlParameter("@model", model)
+            };
+            // return await _db.Database.SqlQueryRaw<int?>(GetIdBymodelQuery, parameters)
+            //                          .FirstOrDefaultAsync();
+            return await _db.Products
+                            .FromSqlRaw(GetIdBymodelQuery, new SqlParameter("@model", model))
+                            .Select(p => p.ID)
+                            .FirstOrDefaultAsync();
         }
     }
 }

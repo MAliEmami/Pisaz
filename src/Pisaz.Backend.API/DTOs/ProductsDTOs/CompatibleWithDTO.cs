@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace Pisaz.Backend.API.DTOs.ProductsDTOs
 {
+    // [Serializable]
     public class CompatibleWithDTO
     {
         public required string Category { get; set; }
