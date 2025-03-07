@@ -22,12 +22,9 @@ class Backend {
   }
 
   static Future<dynamic> getDicountCodes() async {
-    const jsonString = '''
-    [{"code": 1234, "amount": 15000, "limit": 0, "usage_count": 2, "expiration": "2025-03-04T22:32:52.46"},
-    {"code": 1275, "amount": 50, "limit": 2000000, "usage_count": 1, "expiration": "2025-03-04T22:32:52.46"},
-    {"code": 5482, "amount": 10, "limit": 1000000, "usage_count": 4, "expiration": "2025-03-04T22:32:52.46"}]''';
+    String responseJson = await network.getDiscountCodes();
 
-    List<DiscountCode> discounts = (jsonDecode(jsonString) as List)
+    List<DiscountCode> discounts = (jsonDecode(responseJson) as List<dynamic>)
         .map((jsonString) => DiscountCode.fromJson(jsonString))
         .toList();
 
@@ -35,10 +32,9 @@ class Backend {
   }
 
   static Future<ReferralData> getReferralData() async {
-    const jsonString =
-        '{"referralCode": "1204793751", "numInvited": 4, "numDiscountGift": 1}';
+    String responseJson = await network.getReferralData();
 
-    final referralMap = jsonDecode(jsonString) as Map<String, dynamic>;
+    final referralMap = jsonDecode(responseJson) as Map<String, dynamic>;
     final referral = ReferralData.fromJson(referralMap);
 
     return referral;

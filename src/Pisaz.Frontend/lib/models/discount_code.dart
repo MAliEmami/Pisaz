@@ -1,7 +1,7 @@
 class DiscountCode {
   final int code;
   final int amount;
-  final int limit;
+  final int? limit;
   final int usageCount;
   final DateTime expirationTime;
 
@@ -14,10 +14,10 @@ class DiscountCode {
 
   factory DiscountCode.fromJson(Map<String, dynamic> json) {
     return DiscountCode(
-        code: json['code'] as int,
+        code: json['discountCodeIsGoingToExp'] as int,
         amount: json['amount'] as int,
-        limit: json['limit'] as int,
-        usageCount: json['usage_count'] as int,
-        expirationTime: DateTime.parse(json['expiration']));
+        limit: json['discountLimit'] as int?,
+        usageCount: json['usageCount'] as int,
+        expirationTime: DateTime.parse(json['expirationDate']));
   }
 }
