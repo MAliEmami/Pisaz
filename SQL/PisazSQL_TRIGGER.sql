@@ -255,10 +255,8 @@ BEGIN
 
 	DECLARE @TotalPrice INT;
   
-	SELECT @TotalPrice = SUM(CartPrice)
-	FROM INSERTED AS I
-	JOIN AddedTo AS A
-	ON I.ID = A.ID AND I.CartNumber = A.CartNumber AND I.LockedNumber = A.LockedNumber;
+	SELECT @TotalPrice = dbo.CalculateFinalPrice(ID, CartNumber, LockedNumber)
+	FROM INSERTED;
 
 	SELECT
     D.Amount,
@@ -281,7 +279,7 @@ BEGIN
 	BEGIN
 		SELECT @Amount = D.Amount, @Limit = D.DiscountLimit
 		FROM #Discounts AS D
-		WHERE D.rank = 1;
+		WHERE D.rank = @Index;
 
 		IF( @Limit = NULL)
 		BEGIN
@@ -321,8 +319,58 @@ BEGIN
 		RAISERROR('You can''t apply a locked or blocked cart.', 20, 2);
         ROLLBACK TRANSACTION;
 	END
+
+	IF EXISTS(SELECT 1 FROM INSERTED WHERE CartNumber  > 1) AND
+	   NOT EXISTS(SELECT 1 FROM VIPClient AS V JOIN INSERTED AS I ON V.ID = I.ID)
+	BEGIN
+		RAISERROR('You can''t apply more than one cart without VIP subscribtion.', 21, 2);
+        ROLLBACK TRANSACTION;
+	END
+END
+
+
+
+
+GO
+CREATE OR ALTER TRIGGER RestoreProductFromBlockedCart
+ON ShoppingCart
+AFTER UPDATE
+AS
+BEGIN
+	IF NOT EXISTS(SELECT 1 FROM INSERTED WHERE CartStatus = 'blocked')
+	AND NOT EXISTS(SELECT 1 FROM DELETED WHERE CartStatus = 'locked')
+	RETURN;
+
+	UPDATE LockedShoppingCart
+	SET LockTimestamp = GETDATE()
+	FROM INSERTED AS I JOIN LockedShoppingCart AS L ON I.ID = L.ID AND I.CartNumber = L.CartNumber;
+
+	SELECT 
+		A.ProductID, 
+		A.Quantity, 
+		ROW_NUMBER() OVER (ORDER BY A.Quantity DESC) AS RANK
+		INTO #NewQuantities
+	FROM INSERTED AS I 
+				JOIN LockedShoppingCart AS L ON I.ID = L.ID AND I.CartNumber = L.CartNumber
+				JOIN AddedTo AS A ON I.ID = A.ID AND I.CartNumber = A.CartNumber AND L.LockedNumber = A.LockedNumber;
+
 	
-	UPDATE ShoppingCart
-	SET CartStatus = 'locked'
-	FROM INSERTED AS I JOIN ShoppingCart AS S ON I.ID = S.ID AND I.CartNumber = S.CartNumber;
+	DECLARE @Count INT;
+	DECLARE @Index INT;
+
+	SELECT @Count = Count(*)
+	FROM #NewQuantities;
+	SET @Index = 1;
+
+	DECLARE @ID INT, @NewAmount INT;
+	WHILE @Index <= @Count
+	BEGIN
+		SELECT @ID = ProductID, @NewAmount = Quantity
+		FROM #NewQuantities AS D
+		WHERE rank = @Index;
+
+		UPDATE Products
+		SET StockCount = StockCount + @NewAmount
+		WHERE ID = @ID;
+	END
 END
