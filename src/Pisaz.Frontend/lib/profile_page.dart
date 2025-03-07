@@ -68,11 +68,23 @@ class Profile extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Text(
-                    '${user.firstname} ${user.lastname}',
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          fontSize: 17.0,
-                        ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${user.firstname} ${user.lastname}',
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontSize: 17.0,
+                            ),
+                      ),
+                      Text(
+                        user.phoneNumber,
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontSize: 15.0,
+                              color: Colors.grey,
+                            ),
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(

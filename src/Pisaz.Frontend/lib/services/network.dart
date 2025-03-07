@@ -37,4 +37,32 @@ class NetworkHelper {
       throw Exception(response.statusCode);
     }
   }
+
+  Future<String> getDiscountCodes() async {
+    var url = Uri.parse('$host/Discount/v1/list');
+    var response = await http.post(url, headers: <String, String>{
+      'Content-Type': 'application/json',
+      'Authorization': jwtToken!,
+    });
+
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      throw Exception(response.statusCode);
+    }
+  }
+
+  Future<String> getReferralData() async {
+    var url = Uri.parse('$host/RefersSystem/v1/list');
+    var response = await http.post(url, headers: <String, String>{
+      'Content-Type': 'application/json',
+      'Authorization': jwtToken!,
+    });
+
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      throw Exception(response.statusCode);
+    }
+  }
 }

@@ -10,7 +10,7 @@ class ReferralData {
 
   factory ReferralData.fromJson(Map<String, dynamic> json) {
     return ReferralData(
-        code: json['referralCode'] as String,
+        code: json['referalCode'] as String,
         numInvited: json['numInvited'] as int,
         numDiscountGift: json['numDiscountGift'] as int);
   }

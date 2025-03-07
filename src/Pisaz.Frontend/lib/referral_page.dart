@@ -23,7 +23,6 @@ class _ReferralPageState extends State<ReferralPage> {
       referralData = await Backend.getReferralData();
     } on Exception catch (e) {
       Fluttertoast.showToast(msg: e.toString());
-      print(e.toString());
       return;
     }
     setState(() {});
