@@ -7,7 +7,7 @@ namespace Pisaz.Backend.API.Interfaces
 {
     public interface ICommandService<TEntity, TAddDTO, TUpdateDTO> where TEntity : class
     {
-        Task<TEntity> AddAsync(TAddDTO entity);
+        Task<TEntity> AddAsync(TAddDTO entity, int id);
         Task<TEntity?> UpdateAsync(int id, TUpdateDTO entity);
     }
 }
