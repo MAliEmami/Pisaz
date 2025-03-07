@@ -39,7 +39,7 @@ namespace Pisaz.Backend.API.Extensions
             services.AddScoped<CompatibleWithRepository>();
             services.AddScoped<VIPClientRepository>();
 
-            services.AddScoped<IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>, ClientService>();
+            services.AddScoped<IClientService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>, ClientService>();
             //services.AddScoped<IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>, AddressService>();
             
             services.AddScoped<IQueryService<Address, AddressDTO>, AddressService>();

@@ -15,14 +15,26 @@ namespace Pisaz.Backend.API.Repositories
 
         public Client? GetClientByPhoneNumber(string phoneNumber)
         {
-            var sql = $"SELECT * FROM Client WHERE PhoneNumber = @phoneNumber";
+            var clientWithPhoneNumberQuery = $"SELECT * FROM Client WHERE PhoneNumber = @phoneNumber";
 
             var parameters = new[]
             {
                 new SqlParameter("@phoneNumber", phoneNumber)
             };
-            return  _db.Clients.FromSqlRaw(sql, parameters)
+            return  _db.Clients.FromSqlRaw(clientWithPhoneNumberQuery, parameters)
                                .FirstOrDefault();
+        }
+        public bool IsVIP(int id)
+        {
+            var isVIPQuery = $"SELECT 1 AS IsVIP FROM VIPClient WHERE ID = @id";
+
+            var parameters = new[]
+            {
+                new SqlParameter("@id", id)
+            };
+
+            return _db.VIPClients.FromSqlRaw(isVIPQuery, parameters)
+                                       .Any();
         }
     }
 }

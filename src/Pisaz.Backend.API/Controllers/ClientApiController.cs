@@ -15,9 +15,9 @@ namespace Pisaz.Backend.API.Controllers
 {
     [ApiController]
     [Route("Client/v1")]
-    public class ClientApiController(IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO> service) : ControllerBase 
+    public class ClientApiController(IClientService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO> service) : ControllerBase 
     {
-        protected readonly IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO> _service = service;
+        protected readonly IClientService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO> _service = service;
 
         [HttpPost("add")]
         public async Task<IActionResult> Add(ClientAddDTO entity)

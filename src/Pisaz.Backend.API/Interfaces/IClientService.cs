@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Pisaz.Backend.API.Interfaces
 {
-    public interface IGeneralService<TEntity, TEntityDTO, TAddDTO, TUpdateDTO> where TEntity : class
+    public interface IClientService<TEntity, TEntityDTO, TAddDTO, TUpdateDTO> where TEntity : class
     {
         Task<IEnumerable<TEntityDTO>> ListAsync(int id);
         Task<TEntity> AddAsync(TAddDTO entity);
+        // Task<bool> IsVIP(int id);
         Task<TEntity?> UpdateAsync(int id, TUpdateDTO entity);
     }
 }

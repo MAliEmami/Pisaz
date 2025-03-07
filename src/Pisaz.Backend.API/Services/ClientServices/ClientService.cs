@@ -16,7 +16,7 @@ using Pisaz.Backend.API.Repositories;
 namespace Pisaz.Backend.API.Services.ClientServices
 {
     public class ClientService(ClientRepository clients) 
-    : IGeneralService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>
+    : IClientService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>
     {
         private readonly ClientRepository _clients = clients;
 
