@@ -43,19 +43,40 @@ namespace Pisaz.Backend.API.Repositories
 
         public async Task<Client> AddAsync(Client entity)
         {
-            const string sql = @"
-                                INSERT INTO Client (PhoneNumber, FirstName, LastName)
-                                VALUES (@PhoneNumber, @FirstName, @LastName);";
-            var parameters = new[]
+            try
             {
-                new SqlParameter("@PhoneNumber", entity.PhoneNumber),
-                new SqlParameter("@FirstName", entity.FirstName),
-                new SqlParameter("@LastName", entity.LastName)
-            };
+                const string checkSql = "SELECT COUNT(1) FROM Client WHERE PhoneNumber = @PhoneNumber";
+                var checkParameters = new[]
+                {
+                    new SqlParameter("@id", entity.PhoneNumber)
+                };
 
-            await _db.Database.ExecuteSqlRawAsync(sql, parameters);
+                var exists = _db.Clients.FromSqlRaw(checkSql, checkParameters).Any();
 
-            return entity;
+                if (exists)
+                {
+                    throw new Exception("An Client already exists.");
+                }
+
+                const string sql = @"
+                                    INSERT INTO Client (PhoneNumber, FirstName, LastName)
+                                    VALUES (@PhoneNumber, @FirstName, @LastName);";
+                var parameters = new[]
+                {
+                    new SqlParameter("@PhoneNumber", entity.PhoneNumber),
+                    new SqlParameter("@FirstName", entity.FirstName),
+                    new SqlParameter("@LastName", entity.LastName)
+                };
+
+                await _db.Database.ExecuteSqlRawAsync(sql, parameters);
+
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<Client?> UpdateAsync(Client entity)
