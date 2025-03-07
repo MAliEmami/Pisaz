@@ -19,9 +19,17 @@ namespace Pisaz.Backend.API.Controllers
         [HttpPost("list")]
         public async Task<IActionResult> List(string model)
         {
-            var clientIdClaim = User.FindFirstValue("ClientID");
+            var clientIdClaim = User.FindFirst("ClientID")?.Value;            
 
-            int id = 1;
+            if (string.IsNullOrEmpty(clientIdClaim))
+            {
+                return Unauthorized("User ID not found in token.");
+            }
+
+            if (!int.TryParse(clientIdClaim, out var id))
+            {
+                return BadRequest("Invalid user ID in token.");
+            }
             
             var productsID = await _service.GetByModel(model);
 
