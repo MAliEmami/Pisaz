@@ -28,28 +28,21 @@ namespace Pisaz.Backend.API.Controllers
             return await _commandService.AddAsync(entity);
         }
         
-        // [Authorize]
+        [Authorize]
         [HttpGet("list")]
         public async Task<IActionResult> List()
         {
-            var clientIdClaim = User.FindFirstValue("ClientID");
+            var clientIdClaim = User.FindFirst("ClientID")?.Value;            
 
-            Console.WriteLine("Check error: ");
-            Console.WriteLine(clientIdClaim);
-            Console.WriteLine("finish chkeck");
-            
+            if (string.IsNullOrEmpty(clientIdClaim))
+            {
+                return Unauthorized("User ID not found in token.");
+            }
 
-            // if (string.IsNullOrEmpty(clientIdClaim))
-            // {
-            //     return Unauthorized("User ID not found in token.");
-            // }
-
-            // if (!int.TryParse(clientIdClaim, out var id))
-            // {
-            //     return BadRequest("Invalid user ID in token.");
-            // }
-
-            int id = 1;
+            if (!int.TryParse(clientIdClaim, out var id))
+            {
+                return BadRequest("Invalid user ID in token.");
+            }
 
             var address = await _queryServise.ListAsync(id);
             if (address == null)
