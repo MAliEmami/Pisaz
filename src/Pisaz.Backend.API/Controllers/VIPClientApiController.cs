@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Clients;
+using Pisaz.Backend.API.Filters;
 using Pisaz.Backend.API.Interfaces;
 using Pisaz.Backend.API.Models.ClientModels;
 
@@ -18,6 +19,7 @@ namespace Pisaz.Backend.API.Controllers
         protected readonly IQueryService<VIPClient, VIPClientDTO> _service = service ;
 
         [Authorize]
+        [VIP]
         [HttpPost("list")]
         public async Task<IActionResult> List()
         {

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pisaz.Backend.API.DTOs.ProductsDTOs;
+using Pisaz.Backend.API.Filters;
 using Pisaz.Backend.API.Interfaces;
 using Pisaz.Backend.API.Models.Product.Cart;
 using Pisaz.Backend.API.Services.ProductServices;
@@ -12,6 +14,8 @@ using Pisaz.Backend.API.Services.ProductServices;
 namespace Pisaz.Backend.API.Controllers
 {
     [ApiController]
+    [Authorize]
+    [VIP]
     [Route("Sazgaryab/v1")] 
     public class CompatibleWithApiController(IQueryCompatibleService<Products, CompatibleWithDTO> service) : ControllerBase
     {

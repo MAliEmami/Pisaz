@@ -24,10 +24,6 @@ namespace Pisaz.Backend.API.Services
         {
             var client = _loginRequestRepository.GetClientByPhoneNumber(phoneNumber);
             var amIVIP = _loginRequestRepository.IsVIP(client.ID);
-
-            Console.WriteLine("am i vip : ");
-            Console.WriteLine(amIVIP);
-            Console.WriteLine("am i vip : ");
             
             if (client == null)
             {
@@ -41,7 +37,7 @@ namespace Pisaz.Backend.API.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim("ClientPhoneNumber", phoneNumber),
+                    // new Claim("ClientPhoneNumber", phoneNumber),
                     new Claim("IsVIP", amIVIP.ToString()),
                     new Claim("ClientID", client.ID.ToString())
                 }),
@@ -55,15 +51,26 @@ namespace Pisaz.Backend.API.Services
             return tokenHandler.WriteToken(token);
         }
 
-        // public bool GetUserVIPStatus(HttpContext httpContext)
-        // {
-        //     var userVIPClaim = httpContext.User.FindFirst("isUserVIP")?.Value;
+        public bool GetUserVIPStatus(HttpContext httpContext)
+        {
+            var VIPClientClaim = httpContext.User.FindFirst("IsVIP")?.Value;
 
-        //     ArgumentNullException.ThrowIfNull(userVIPClaim, nameof(userVIPClaim));
+            ArgumentNullException.ThrowIfNull(VIPClientClaim, nameof(VIPClientClaim));
             
-        //     var isUserVIP = ConvertUserVIPStatusToBool(userVIPClaim);
+            var isUserVIP = ConvertUserVIPStatusToBool(VIPClientClaim);
 
-        //     return isUserVIP;
-        // }
+            return isUserVIP;
+        }
+
+        private bool ConvertUserVIPStatusToBool(string VIPClientClaim)
+        {
+            if (bool.TryParse(VIPClientClaim, out bool isVIP) is false)
+            {
+                throw new ArgumentException("Invalid isVIP format");
+            }
+
+            return isVIP;
+        }
+        
     }
 }
