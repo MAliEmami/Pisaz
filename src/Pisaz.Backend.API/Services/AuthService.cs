@@ -20,9 +20,11 @@ namespace Pisaz.Backend.API.Services
             _configuration = configuration;
         }
 
-        public string? Authenticate(string phoneNumber)
+        public async Task<string?> Authenticate(string phoneNumber)
         {
             var client = _loginRequestRepository.GetClientByPhoneNumber(phoneNumber);
+            var amIVIP = _loginRequestRepository.IsVIP(client.ID);
+            
             if (client == null)
             {
                 return null;
@@ -35,7 +37,8 @@ namespace Pisaz.Backend.API.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim("ClientPhoneNumber", phoneNumber), 
+                    // new Claim("ClientPhoneNumber", phoneNumber),
+                    new Claim("IsVIP", amIVIP.ToString()),
                     new Claim("ClientID", client.ID.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
@@ -47,5 +50,27 @@ namespace Pisaz.Backend.API.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+        public bool GetUserVIPStatus(HttpContext httpContext)
+        {
+            var VIPClientClaim = httpContext.User.FindFirst("IsVIP")?.Value;
+
+            ArgumentNullException.ThrowIfNull(VIPClientClaim, nameof(VIPClientClaim));
+            
+            var isUserVIP = ConvertUserVIPStatusToBool(VIPClientClaim);
+
+            return isUserVIP;
+        }
+
+        private bool ConvertUserVIPStatusToBool(string VIPClientClaim)
+        {
+            if (bool.TryParse(VIPClientClaim, out bool isVIP) is false)
+            {
+                throw new ArgumentException("Invalid isVIP format");
+            }
+
+            return isVIP;
+        }
+        
     }
 }
