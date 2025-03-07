@@ -30,11 +30,11 @@ namespace Pisaz.Backend.API.Services.ClientServices
             }).ToList();
         }
 
-        public async Task<Address> AddAsync(AddressAddDTO entity)
+        public async Task<Address> AddAsync(AddressAddDTO entity, int ClientID)
         {
             var a = new Address
             {
-                ID = entity.ID,
+                ID = ClientID,
                 Province = entity.Province,
                 Remainder = entity.Remainder
             };

@@ -17,13 +17,21 @@ namespace Pisaz.Backend.API.Controllers
     {
         protected readonly IQueryService<DiscountCode ,DiscountCodeDTO> _service = service;
 
+        [Authorize]
         [HttpPost("list")]
-        //[Authorize]
         public async Task<IActionResult> List()
         {
-            var clientIdClaim = User.FindFirstValue("ClientID");
+            var clientIdClaim = User.FindFirst("ClientID")?.Value;            
 
-            int id = 1;
+            if (string.IsNullOrEmpty(clientIdClaim))
+            {
+                return Unauthorized("User ID not found in token.");
+            }
+
+            if (!int.TryParse(clientIdClaim, out var id))
+            {
+                return BadRequest("Invalid user ID in token.");
+            }
 
             var discountCodes = await _service.ListAsync(id);
 
