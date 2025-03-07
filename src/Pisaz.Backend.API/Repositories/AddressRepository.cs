@@ -13,10 +13,12 @@ namespace Pisaz.Backend.API.Repositories
     public class AddressRepository : IRepository<Address>
     {
         private readonly PisazDB _db;
+        private readonly ILogger<AddressRepository> _logger;
     
-        public AddressRepository(PisazDB db)
+        public AddressRepository(PisazDB db, ILogger<AddressRepository> logger)
         {
             _db = db;
+            _logger = logger;
         }
         public async Task<List<Address?>> GetByIdAsync(int id)
         {
@@ -30,20 +32,35 @@ namespace Pisaz.Backend.API.Repositories
         }
         public async Task<Address> AddAsync(Address entity)
         {
-            const string sql = @"
-                                INSERT INTO Address (ID, Province, Remainder)
-                                VALUES (@ID, @Province, @Remainder);";
-            var parameters = new[]
+            try
             {
-                new SqlParameter("@ID", entity.ID),
-                new SqlParameter("@Province", entity.Province),
-                new SqlParameter("@Remainder", entity.Remainder)
-            };
+                const string sql = @"
+                                    INSERT INTO Address (ID, Province, Remainder)
+                                    VALUES (@ID, @Province, @Remainder);";
 
-            await _db.Database.ExecuteSqlRawAsync(sql, parameters);
+                var parameters = new[]
+                {
+                    new SqlParameter("@ID", entity.ID),
+                    new SqlParameter("@Province", entity.Province),
+                    new SqlParameter("@Remainder", entity.Remainder)
+                };
 
-            return entity;
+                await _db.Database.ExecuteSqlRawAsync(sql, parameters);
+
+                return entity;
+            }
+            catch (SqlException ex) // Handle database-related exceptions
+            {
+                _logger.LogError($"SQL Error: {ex.Message}", ex);
+                throw new Exception("An error occurred while adding the address to the database.", ex);
+            }
+            catch (Exception ex) // Handle general exceptions
+            {
+                _logger.LogError($"Unexpected Error: {ex.Message}", ex);
+                throw new Exception("An unexpected error occurred.", ex);
+            }
         }
+
         public async Task<Address?> UpdateAsync(Address entity)
         {
             var sql = @"

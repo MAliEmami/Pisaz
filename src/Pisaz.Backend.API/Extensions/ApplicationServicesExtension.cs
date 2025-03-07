@@ -56,6 +56,8 @@ namespace Pisaz.Backend.API.Extensions
             // services.AddScoped<CompatibleWithService>();
             services.AddScoped<AuthService>();
 
+            services.AddLogging();
+
 
             services.AddCors(options =>
             {
