@@ -1,13 +1,25 @@
 import 'dart:convert';
-
-import 'package:http/http.dart' as http;
 import 'package:pisaz/models/refereal_data.dart';
 import 'package:pisaz/models/user.dart';
 import 'package:pisaz/models/discount_code.dart';
+import 'package:pisaz/services/network.dart';
 
 class Backend {
-  late String apiToken;
-  final url = 'localhost:C/...';
+  static NetworkHelper network = NetworkHelper();
+
+  static Future<bool> login(String phoneNumber) async {
+    return await network.login(phoneNumber);
+  }
+
+  static Future<User> getUser() async {
+    //     '{"firstName": "علی", "lastName": "احمدی", "walletBalance": 0, "signupDate": "2025-03-04T22:32:52.46"}';
+    String responseJson = await network.getUser();
+
+    final userMap = jsonDecode(responseJson)[0] as Map<String, dynamic>;
+    final user = User.fromJson(userMap);
+
+    return user;
+  }
 
   static Future<dynamic> getDicountCodes() async {
     const jsonString = '''
@@ -20,26 +32,6 @@ class Backend {
         .toList();
 
     return discounts;
-  }
-
-  static Future<User> getUser() async {
-    http.Request request =
-        http.Request("post", Uri.parse('http://localhost:5184/Client/v1/list'));
-    request.headers.clear();
-    request.headers.addAll({"phone_number": "09123456789"});
-    var response = await request.send();
-
-    //const jsonString =
-    // '{"firstName": "علی", "lastName": "احمدی", "walletBalance": 0, "signupDate": "2025-03-04T22:32:52.46"}';
-    print('json : $response');
-
-    if (response.statusCode != 200) {
-      print('faileedd!!!!');
-    }
-    final userMap = jsonDecode(response.toString()) as Map<String, dynamic>;
-    final user = User.fromJson(userMap);
-
-    return user;
   }
 
   static Future<ReferralData> getReferralData() async {
