@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:pisaz/models/address.dart';
+import 'package:pisaz/models/cart_status.dart';
 import 'package:pisaz/models/refereal_data.dart';
 import 'package:pisaz/models/user.dart';
 import 'package:pisaz/models/discount_code.dart';
@@ -22,7 +24,12 @@ class Backend {
   }
 
   static Future<dynamic> getDicountCodes() async {
-    String responseJson = await network.getDiscountCodes();
+    String responseJson;
+    try {
+      responseJson = await network.getDiscountCodes();
+    } on Exception catch (e) {
+      return Future<List<DiscountCode>>.value([]);
+    }
 
     List<DiscountCode> discounts = (jsonDecode(responseJson) as List<dynamic>)
         .map((jsonString) => DiscountCode.fromJson(jsonString))
@@ -31,10 +38,40 @@ class Backend {
     return discounts;
   }
 
+  static Future<dynamic> getAddresses() async {
+    String responseJson;
+    try {
+      responseJson = await network.getAddresses();
+    } on Exception catch (e) {
+      return Future<List<Address>>.value([]);
+    }
+
+    List<Address> addresses = (jsonDecode(responseJson) as List<dynamic>)
+        .map((jsonString) => Address.fromJson(jsonString))
+        .toList();
+
+    return addresses;
+  }
+
+  static Future<dynamic> getCarts() async {
+    String responseJson;
+    try {
+      responseJson = await network.getCarts();
+    } on Exception catch (e) {
+      return;
+    }
+
+    List<Cart> carts = (jsonDecode(responseJson) as List<dynamic>)
+        .map((jsonString) => Cart.fromJson(jsonString))
+        .toList();
+
+    return carts;
+  }
+
   static Future<ReferralData> getReferralData() async {
     String responseJson = await network.getReferralData();
 
-    final referralMap = jsonDecode(responseJson) as Map<String, dynamic>;
+    final referralMap = jsonDecode(responseJson)[0] as Map<String, dynamic>;
     final referral = ReferralData.fromJson(referralMap);
 
     return referral;
