@@ -1,4 +1,4 @@
-CREATE DATABASE Pisaz;
+--CREATE DATABASE Pisaz;
 USE Pisaz;
 
 IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Client')
@@ -99,7 +99,7 @@ BEGIN
     CREATE TABLE BankTransaction
     (
         TrackingCode                NVARCHAR(20)         PRIMARY KEY             NOT NULL,
-        CardNumber                  INT                                         NOT NULL    CHECK(LEN(CardNumber) = 16),
+        CardNumber                  BIGINT                                       NOT NULL    CHECK(LEN(CardNumber) = 16),
         FOREIGN KEY(TrackingCode) REFERENCES Transactions(TrackingCode) ON UPDATE CASCADE ON DELETE CASCADE
     );
 END;

@@ -57,9 +57,6 @@ AS
 BEGIN
 	INSERT INTO ShoppingCart(ID)
 	SELECT ID FROM INSERTED;
-
-	INSERT INTO LockedShoppingCart(ID, LockedNumber)
-	SELECT ID, 1 FROM INSERTED;
 END;
 
 
@@ -106,7 +103,7 @@ BEGIN
 		RETURN;
     IF( (SELECT WalletBalance FROM Client AS c JOIN Inserted AS i ON c.ID = i.ID) < 300000)
     BEGIN
-		RAISERROR('Wallet balance is not enough.', 20, 2);
+		RAISERROR('Wallet balance is not enough.', 15, 1);
 		RETURN;
     END;
 
@@ -181,7 +178,7 @@ BEGIN
 END;
 
 
-
+ 
 GO
 CREATE OR ALTER TRIGGER NotExistsProduct
 ON AddedTo
@@ -190,8 +187,8 @@ AS
 BEGIN 
     IF EXISTS (
         SELECT 1
-        FROM INSERTED I JOIN Products P ON I.Id = P.Id
-        WHERE StockCount = 0
+        FROM INSERTED I JOIN Products P ON I.ProductID = P.Id
+        WHERE P.StockCount < I.Quantity
     )
     BEGIN
         RAISERROR('Product not exists in warehouse.', 15, 2);
@@ -199,7 +196,7 @@ BEGIN
     END
 END;
 
-
+ 
 
 GO
 CREATE OR ALTER TRIGGER MaxUseDiscount
