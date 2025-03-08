@@ -54,7 +54,7 @@ BEGIN
     CREATE TABLE DiscountCode
     (
         Code                        INT         PRIMARY KEY	 IDENTITY(1,1)		NOT NULL,
-        Amount                      INT                                         NOT NULL     CHECK(Amount > 0),
+        Amount                      DECIMAL                                     NOT NULL     CHECK(Amount > 0),
         DiscountLimit               INT                                                      CHECK(DiscountLimit > 0),-- NOT Null = percentage, Null = Value
         UsageCount                  SMALLINT    DEFAULT 1                       NOT NULL     CHECK(UsageCount >= 1),
         ExpirationDate              DATETIME                                    NOT NULL,            
