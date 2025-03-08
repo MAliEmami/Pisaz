@@ -1,4 +1,4 @@
-USE PsazDBTset2;
+USE Pisaz;
 
 GO
 CREATE OR ALTER TRIGGER GenerateUniqueReferralCode
@@ -182,7 +182,7 @@ END;
 GO
 CREATE OR ALTER TRIGGER NotExistsProduct
 ON AddedTo
-AFTER INSERT, UPDATE
+AFTER INSERT
 AS
 BEGIN 
     IF EXISTS (
@@ -194,6 +194,10 @@ BEGIN
         RAISERROR('Product not exists in warehouse.', 15, 2);
         ROLLBACK TRANSACTION;
     END
+
+	UPDATE Products
+	SET StockCount = StockCount - I.Quantity
+	FROM Products P JOIN INSERTED I ON P.ID = I.ProductID;
 END;
 
 GO
