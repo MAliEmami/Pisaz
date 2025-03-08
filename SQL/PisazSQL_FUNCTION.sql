@@ -36,7 +36,7 @@ BEGIN
 		FROM @Discounts AS D
 		WHERE D.rank = @Index;
 
-		IF( @Limit = NULL)
+		IF( @Limit is NULL)
 		BEGIN
 			SET @TotalPrice = @TotalPrice - @Amount;
 		END
