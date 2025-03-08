@@ -53,7 +53,7 @@ IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Disco
 BEGIN
     CREATE TABLE DiscountCode
     (
-        Code                        INT         PRIMARY KEY	 IDENTITY(1,1)		NOT NULL,
+        Code                        INT         PRIMARY KEY	            		NOT NULL,
         Amount                      DECIMAL                                     NOT NULL     CHECK(Amount > 0),
         DiscountLimit               INT                                                      CHECK(DiscountLimit > 0),-- NOT Null = percentage, Null = Value
         UsageCount                  SMALLINT    DEFAULT 1                       NOT NULL     CHECK(UsageCount >= 1),
