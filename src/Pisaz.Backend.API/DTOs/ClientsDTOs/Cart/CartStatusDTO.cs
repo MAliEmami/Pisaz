@@ -7,8 +7,7 @@ namespace Pisaz.Backend.API.DTOs.ClientsDTOs.Cart
 {
     public class CartStatusDTO
     {
-        public Int16 CartNumber;
+        public required Byte CartNumber { get; set; }
         public required string CartStatus { get; set; }
-        public int NumAvailableCart { get; set; }
     }
 }

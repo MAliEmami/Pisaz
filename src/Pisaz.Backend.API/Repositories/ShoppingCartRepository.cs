@@ -19,11 +19,10 @@ namespace Pisaz.Backend.API.Repositories
             const string CartStatusQuery = @"
                     SELECT 
                             CartNumber,
-                            CartStatus,
-                            (SELECT COUNT(*) From ShoppingCart WHERE CartStatus = 'active') As NumAvailableCart
+                            CartStatus
                     FROM ShoppingCart 
                     WHERE ID = @id";
-                    
+
             var parameters = new[]
             {
                 new SqlParameter("@Id", id)
@@ -32,7 +31,7 @@ namespace Pisaz.Backend.API.Repositories
                                     .ToListAsync())
                                     .Cast<CartStatusDTO?>()
                                     .ToList();
-                                    
+
         }
     }
 }
