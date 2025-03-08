@@ -18,8 +18,7 @@ namespace Pisaz.Backend.API.Repositories
                     WITH ReferralChain AS (
                         SELECT 
                             Referee, 
-                            Referrer, 
-                            1 AS Depth
+                            Referrer
                         FROM 
                             Refers
                         WHERE 
@@ -27,8 +26,7 @@ namespace Pisaz.Backend.API.Repositories
                         UNION ALL
                         SELECT 
                             R.Referee, 
-                            R.Referrer, 
-                            RC.Depth + 1 AS Depth
+                            R.Referrer
                         FROM 
                             Refers R
                         INNER JOIN 
@@ -37,10 +35,10 @@ namespace Pisaz.Backend.API.Repositories
                     SELECT 
                         (SELECT ReferralCode FROM Client WHERE ID = @id) AS ReferalCode,
                         (SELECT COUNT(*) FROM Refers WHERE Referrer = @id) AS NumInvited,
-                        MAX(Depth) AS NumDiscountGift
+                        COUNT(*) AS NumDiscountGift
                     FROM 
                         ReferralChain";
-                    
+
             var parameters = new[]
             {
                 new SqlParameter("@Id", id)
