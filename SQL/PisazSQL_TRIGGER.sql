@@ -272,6 +272,14 @@ BEGIN
 	SELECT @TotalPrice = dbo.CalculateFinalPrice(ID, CartNumber, LockedNumber)
 	FROM LockedShoppingCart;
 
+	IF (@TotalPrice > (SELECT WalletBalance FROM CLient AS C JOIN INSERTED AS I ON C.ID = I.ID))
+	BEGIN
+		RAISERROR('Your wallet balance is not enough.', 15, 2);
+        ROLLBACK TRANSACTION;
+		RETURN;
+	END
+
+
 	UPDATE Client
 	SET WalletBalance = C.WalletBalance - @TotalPrice
 	FROM Client AS C JOIN INSERTED AS I ON C.ID = I.ID;
