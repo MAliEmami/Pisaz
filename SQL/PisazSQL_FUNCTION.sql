@@ -1,4 +1,4 @@
-USE Pisaz;
+USE PsazDBTset2;
 
 GO
 CREATE OR ALTER FUNCTION CalculateFinalPrice (@ID INT, @CartNumber TINYINT, @LockedNumber INT)

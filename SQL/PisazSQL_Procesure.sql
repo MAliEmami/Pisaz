@@ -49,7 +49,7 @@ EXEC sp_add_jobstep
 		DEALLOCATE @MyCursor;
 	END;
 	',
-	@database_name = N'Pisaz',
+	@database_name = N'PsazDBTset2',
     @retry_attempts = 5,
     @retry_interval = 5 ;
 GO
@@ -124,7 +124,7 @@ EXEC sp_add_jobstep
 	FROM (SELECT * FROM ShoppingCart WHERE CartStatus = ''Locked'') AS S JOIN LockedShoppingCart AS L ON S.ID = L.ID AND S.CartNumber = L.CartNumber
 	WHERE  DATEADD(DAY, 7,LockTimestamp) < GETDATE(); 
 	',
-	@database_name = N'Pisaz',
+	@database_name = N'PsazDBTset2',
     @retry_attempts = 5,
     @retry_interval = 5 ;
 GO

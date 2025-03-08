@@ -1,4 +1,4 @@
-USE Pisaz;
+USE PsazDBTset2;
 
 GO
 CREATE OR ALTER TRIGGER GenerateUniqueReferralCode
