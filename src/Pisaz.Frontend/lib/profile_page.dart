@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:pisaz/addresses_page.dart';
+import 'package:pisaz/carts_page.dart';
 import 'package:pisaz/discount_codes_page.dart';
 import 'package:pisaz/models/user.dart';
 import 'package:pisaz/referral_page.dart';
@@ -106,21 +108,27 @@ class Profile extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            margin: EdgeInsets.all(15.0),
-            height: 100.0,
-            decoration: BoxDecoration(
-              color: Colors.amber,
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            ),
-          ),
+          // Container(
+          //   margin: EdgeInsets.all(15.0),
+          //   height: 100.0,
+          //   decoration: BoxDecoration(
+          //     color: Colors.amber,
+          //     borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          //   ),
+          // ),
           Container(
             padding: EdgeInsets.all(15.0),
             child: Row(
               children: [
                 Expanded(
                   child: ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CartsPage()),
+                      );
+                    },
                     leading: Icon(
                       Icons.shopping_cart_rounded,
                       color: Colors.green,
@@ -184,7 +192,12 @@ class Profile extends StatelessWidget {
           ListTile(
             title: Text('آدرس ها'),
             leading: Icon(Icons.location_on_outlined),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AddressesPage()),
+              );
+            },
             trailing: Icon(Icons.arrow_forward_ios_rounded),
           ),
           Divider(height: 1, indent: 40),
