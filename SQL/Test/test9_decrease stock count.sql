@@ -1,4 +1,4 @@
-USE Pisaz;
+
 
 BEGIN TRANSACTION
 
@@ -22,7 +22,7 @@ VALUES (
     1,
     1,
     (SELECT ID FROM Products WHERE Brand = 'BrandX' AND Model = 'ModelY'),
-    3,
+    1,
     50000
 );
 

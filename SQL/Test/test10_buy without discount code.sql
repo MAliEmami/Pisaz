@@ -1,4 +1,4 @@
-USE Pisaz;
+
 BEGIN TRANSACTION; -- Start the transaction
 
 -- Test Case 1: Successful Purchase Using Wallet
