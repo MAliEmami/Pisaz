@@ -223,7 +223,7 @@ BEGIN
         LockedNumber                    INT                                     NOT NULL,
         ProductID                       INT                                     NOT NULL,
         Quantity                        SMALLINT                                           CHECK (quantity > 0),
-        CartPrice                       INT                                                CHECK (CartPrice >= 0),
+        CartPrice                       INT                                     DEFAULT 0  CHECK (CartPrice >= 0),
         PRIMARY KEY (ID, CartNumber, LockedNumber, ProductID),
         FOREIGN KEY(ID, CartNumber, LockedNumber) REFERENCES LockedShoppingCart(ID, CartNumber, LockedNumber) ON UPDATE CASCADE ON DELETE CASCADE,
         FOREIGN KEY(ProductID) REFERENCES Products(ID) ON UPDATE CASCADE ON DELETE NO ACTION

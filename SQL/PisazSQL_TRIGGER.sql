@@ -196,6 +196,23 @@ BEGIN
     END
 END;
 
+GO
+CREATE OR ALTER TRIGGER SetCartPrice
+ON AddedTo
+AFTER INSERT, UPDATE
+AS
+BEGIN 
+    UPDATE AddedTo
+	SET CartPrice = A.CartPrice + P.CurrentPrice
+	FROM 
+		 (AddedTo AS A JOIN INSERTED AS I ON
+		 A.ID = I.ID AND 
+		 A.CartNumber = I.CartNumber AND 
+		 A.LockedNumber = I.LockedNumber
+		 )
+		 JOIN Products AS P ON P.ID = I.ProductID;
+END;
+
  
 
 GO
@@ -253,43 +270,7 @@ BEGIN
 	DECLARE @TotalPrice INT;
   
 	SELECT @TotalPrice = dbo.CalculateFinalPrice(ID, CartNumber, LockedNumber)
-	FROM INSERTED;
-
-	SELECT
-    D.Amount,
-	D.DiscountLimit,
-    ROW_NUMBER() OVER (ORDER BY A.ApplyTimestamp DESC) AS RANK
-	INTO #Discounts
-	FROM INSERTED AS I 
-		 JOIN AppliedTo AS A ON I.ID = A.ID AND I.CartNumber = A.CartNumber AND I.LockedNumber = A.LockedNumber
-		 JOIN DiscountCode AS D ON A.Code = D.Code;
-
-	DECLARE @Count INT;
-	DECLARE @Index INT;
-
-	SELECT @Count = Count(*)
-	FROM #Discounts;
-	SET @Index = 1;
-
-	DECLARE @Amount INT, @Limit INT;
-	WHILE @Index <= @Count
-	BEGIN
-		SELECT @Amount = D.Amount, @Limit = D.DiscountLimit
-		FROM #Discounts AS D
-		WHERE D.rank = @Index;
-
-		IF( @Limit = NULL)
-		BEGIN
-			SET @TotalPrice = @TotalPrice - @Amount;
-		END
-		ELSE
-		BEGIN
-			IF (@TotalPrice - @TotalPrice * @Amount > @Limit)
-				SET @TotalPrice = @TotalPrice - @Limit;
-			ELSE
-				SET @TotalPrice = @TotalPrice * @Amount;
-		END
-	END
+	FROM LockedShoppingCart;
 
 	UPDATE Client
 	SET WalletBalance = C.WalletBalance - @TotalPrice
