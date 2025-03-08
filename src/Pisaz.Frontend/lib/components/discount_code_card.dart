@@ -12,7 +12,7 @@ class DiscountCodeCard extends StatelessWidget {
 
   final int code;
   final int amount;
-  final int limit;
+  final int? limit;
   final int usageCount;
   final DateTime expiration;
 
@@ -21,10 +21,11 @@ class DiscountCodeCard extends StatelessWidget {
     return Card(
       child: ListTile(
         leading: Icon(Icons.discount_outlined),
-        title: Text(
-            limit == 0 ? 'کد تخفیف $amount ریالی' : 'کد تخفیف $amount درصدی'),
+        title: Text(limit == null
+            ? 'کد تخفیف $amount ریالی'
+            : 'کد تخفیف $amount درصدی'),
         subtitle: Text(
-            'تاریخ انقضا : ${DateFormat('yyyy-MM-dd – kk:mm').format(expiration)} \n تعداد : $usageCount ${limit != 0 ? '\n سقف : $limit ریال' : ''}'),
+            'تاریخ انقضا : ${DateFormat('yyyy-MM-dd – kk:mm').format(expiration)} \n تعداد : $usageCount ${limit != null ? '\n سقف : $limit ریال' : ''}'),
         trailing: Container(
           decoration: BoxDecoration(
             color: Colors.white,

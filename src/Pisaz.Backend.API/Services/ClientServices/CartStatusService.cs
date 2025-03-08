@@ -12,15 +12,15 @@ using Pisaz.Backend.API.Repositories;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class CartStatusService(ShoppingCartRepository shoppingCart) 
+    public class CartStatusService(ShoppingCartRepository shoppingCart)
     : IQueryService<ShoppingCart, CartStatusDTO>
     {
         private readonly ShoppingCartRepository _shoppingCart = shoppingCart;
         public async Task<IEnumerable<CartStatusDTO>> ListAsync(int id)
         {
             var cartStatus = await _shoppingCart.GetByIdAsync(id);
-            
-            if (cartStatus == null) 
+
+            if (cartStatus == null)
             {
                 return new List<CartStatusDTO>();
             }
@@ -29,8 +29,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
             .Select(cs => new CartStatusDTO
             {
                 CartNumber = cs.CartNumber,
-                CartStatus = cs.CartStatus,
-                NumAvailableCart = cs.NumAvailableCart
+                CartStatus = cs.CartStatus
             }).ToList();
         }
     }

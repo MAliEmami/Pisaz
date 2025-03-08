@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pisaz/components/custom_text_field.dart';
 import 'package:pisaz/components/rounded_button.dart';
+import 'package:pisaz/main_page.dart';
+import 'package:pisaz/services/backend.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,6 +18,32 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     TextEditingController controller = TextEditingController();
+
+    void navigateToMainPage() {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) => MainPage(),
+        ),
+      );
+    }
+
+    void login() async {
+      try {
+        if (await Backend.login(controller.text) == true) {
+          navigateToMainPage();
+        } else {
+          setState(() {
+            errorMessage = 'با این شماره همراه حسابی ساخته نشده است!';
+          });
+        }
+      } on Exception catch (e) {
+        setState(() {
+          errorMessage = 'ورود ناموفق با کد ${e.toString()}';
+        });
+      }
+    }
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -76,6 +104,8 @@ class _LoginPageState extends State<LoginPage> {
                         errorMessage = null;
                       });
                     }
+
+                    login();
                   },
                 )
               ],
