@@ -34,7 +34,7 @@ namespace Pisaz.Backend.API.Repositories
         {
             try
             {
-                const string checkSql = "SELECT COUNT(1) FROM Address WHERE ID = @id";
+                string checkSql = "SELECT COUNT(1) FROM Address WHERE ID = " + nameof(entity.ID);
                 var checkParameters = new[]
                 {
                     new SqlParameter("@id", entity.ID)

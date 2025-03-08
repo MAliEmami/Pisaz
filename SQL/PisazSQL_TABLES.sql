@@ -32,7 +32,7 @@ BEGIN
     CREATE TABLE VIPClient
     (
         ID                          INT         PRIMARY KEY                     NOT NULL,
-        SubsctiptionExpirationTime  DATETIME                                    NOT NULL,
+        SubsctiptionExpirationTime  DATETIME    DEFAULT DATEADD(day, 30, GETDATE()) NOT NULL,
         FOREIGN KEY(ID) REFERENCES Client(ID) ON UPDATE NO ACTION ON DELETE CASCADE
     );
 END;
@@ -53,7 +53,7 @@ IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Disco
 BEGIN
     CREATE TABLE DiscountCode
     (
-        Code                        INT         PRIMARY KEY					    NOT NULL,
+        Code                        INT         PRIMARY KEY	 IDENTITY(1,1)		NOT NULL,
         Amount                      INT                                         NOT NULL     CHECK(Amount > 0),
         DiscountLimit               INT                                                      CHECK(DiscountLimit > 0),-- NOT Null = percentage, Null = Value
         UsageCount                  SMALLINT    DEFAULT 1                       NOT NULL     CHECK(UsageCount >= 1),
@@ -99,7 +99,7 @@ BEGIN
     CREATE TABLE BankTransaction
     (
         TrackingCode                NVARCHAR(20)         PRIMARY KEY             NOT NULL,
-        CardNumber                  INT                                         NOT NULL    CHECK(LEN(CardNumber) = 16),
+        CardNumber                  CHAR(16)                                     NOT NULL,
         FOREIGN KEY(TrackingCode) REFERENCES Transactions(TrackingCode) ON UPDATE CASCADE ON DELETE CASCADE
     );
 END;
@@ -157,8 +157,7 @@ BEGIN
         ID                             INT                                    NOT NULL,
         CartNumber                     TINYINT           DEFAULT 1            NOT NULL	    CHECK (CartNumber IN (1, 2, 3, 4, 5)),
         LockedNumber                   INT                                    NOT NULL,
-
-        LockTimestamp    DATETIME   DEFAULT CURRENT_TIMESTAMP				  NOT NULL,
+        LockTimestamp                  DATETIME   DEFAULT CURRENT_TIMESTAMP	  NOT NULL,
         PRIMARY KEY(ID, CartNumber, LockedNumber),
         FOREIGN KEY(ID, CartNumber) REFERENCES ShoppingCart(ID, CartNumber) ON UPDATE CASCADE ON DELETE NO ACTION,
     );
@@ -172,7 +171,7 @@ BEGIN
         CartNumber                      TINYINT                                 NOT NULL,
         LockedNumber                    INT                                     NOT NULL,
         Code                            INT                                     NOT NULL,
-        ApplyTimestamp					DATETIME                                NOT NULL,
+        ApplyTimestamp					DATETIME  DEFAULT CURRENT_TIMESTAMP     NOT NULL,
         PRIMARY KEY(ID, CartNumber, LockedNumber, Code),
         FOREIGN KEY(ID, CartNumber, LockedNumber) REFERENCES LockedShoppingCart(ID, CartNumber, LockedNumber) ON UPDATE CASCADE ON DELETE CASCADE,
         FOREIGN KEY(Code) REFERENCES DiscountCode(Code) ON UPDATE CASCADE ON DELETE CASCADE

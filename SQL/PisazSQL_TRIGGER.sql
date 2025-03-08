@@ -1,6 +1,6 @@
 USE Pisaz;
 
-GO
+GO -- Cheked
 CREATE OR ALTER TRIGGER GenerateUniqueReferralCode
 ON Client
 AFTER INSERT
