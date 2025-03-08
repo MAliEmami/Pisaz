@@ -28,22 +28,29 @@ namespace Pisaz.Backend.API.Extensions
     {
         public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddScoped<IRepository<Client>, ClientRepository>();
-            services.AddScoped<ClientRepository>();
-            services.AddScoped<IRepository<Address>, AddressRepository>();
-            services.AddScoped<LoginRequestRepository>();
-            services.AddScoped<ShoppingCartRepository>();
-            services.AddScoped<DiscountRepository>();
-            services.AddScoped<PurchasehistoryRepository>();
-            services.AddScoped<RefersSystemRepository>();
-            services.AddScoped<CompatibleWithRepository>();
-            services.AddScoped<VIPClientRepository>();
+            // Repository DI
+            services.AddScoped<ICommandRepository<Client>, ClientRepository>();
+            services.AddScoped<IQueryRepository<ClientDTO>, ClientRepository>();
 
-            services.AddScoped<IClientService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>, ClientService>();
-            //services.AddScoped<IGeneralService<Address, AddressDTO, AddressAddDTO, AddressUpdateDTO>, AddressService>();
+            services.AddScoped<ICommandRepository<Address>, AddressRepository>();
+            services.AddScoped<IQueryRepository<Address>, AddressRepository>();
             
-            services.AddScoped<IQueryService<Address, AddressDTO>, AddressService>();
+            services.AddScoped<IQueryRepository<CartStatusDTO>, ShoppingCartRepository>();
+            services.AddScoped<IQueryRepository<DiscountCodeDTO>, DiscountRepository>();
+            services.AddScoped<IQueryRepository<PurchaseHistoryDTO>, PurchasehistoryRepository>();
+            services.AddScoped<IQueryRepository<RefersDTO>, RefersSystemRepository>();
+            services.AddScoped<CompatibleWithRepository>();
+            services.AddScoped<IQueryRepository<VIPClientDTO>, VIPClientRepository>();
+
+            services.AddScoped<LoginRequestRepository>();
+
+
+            // Service DI
+            services.AddScoped<ICommandService<Client, ClientAddDTO, ClientUpdateDTO>, ClientService>();
+            services.AddScoped<IQueryService<Client, ClientDTO>, ClientService>();
+
             services.AddScoped<ICommandService<Address, AddressAddDTO, AddressUpdateDTO>, AddressService>();
+            services.AddScoped<IQueryService<Address, AddressDTO>, AddressService>();
 
             services.AddScoped<IQueryService<DiscountCode, DiscountCodeDTO>, DiscountService>();
             services.AddScoped<IQueryService<ShoppingCart, CartStatusDTO>, CartStatusService>();
@@ -53,11 +60,9 @@ namespace Pisaz.Backend.API.Extensions
             services.AddScoped<IQueryCompatibleService<Products, CompatibleWithDTO>, CompatibleWithService>();
             services.AddScoped<IQueryService<VIPClient, VIPClientDTO>, VIPClientService>();
             
-            // services.AddScoped<CompatibleWithService>();
             services.AddScoped<AuthService>();
 
             services.AddLogging();
-
 
             services.AddCors(options =>
             {

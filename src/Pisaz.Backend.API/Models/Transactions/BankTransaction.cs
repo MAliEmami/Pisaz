@@ -8,6 +8,6 @@ namespace Pisaz.Backend.API.Models.Transactions
     public class BankTransaction
     {
         public required string TrackingCode { get; set; }
-        public int CardNumber { get; set; }
+        public required string CardNumber { get; set; }
     }
 }

@@ -12,10 +12,10 @@ using Pisaz.Backend.API.Repositories;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class CartStatusService(ShoppingCartRepository shoppingCart)
+    public class CartStatusService(IQueryRepository<CartStatusDTO> shoppingCart)
     : IQueryService<ShoppingCart, CartStatusDTO>
     {
-        private readonly ShoppingCartRepository _shoppingCart = shoppingCart;
+        private readonly IQueryRepository<CartStatusDTO> _shoppingCart = shoppingCart;
         public async Task<IEnumerable<CartStatusDTO>> ListAsync(int id)
         {
             var cartStatus = await _shoppingCart.GetByIdAsync(id);

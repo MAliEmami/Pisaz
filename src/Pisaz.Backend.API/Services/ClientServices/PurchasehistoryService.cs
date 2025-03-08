@@ -14,10 +14,10 @@ using Pisaz.Backend.API.Repositories;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class PurchaseHistoryService(PurchasehistoryRepository purchasehistory) 
+    public class PurchaseHistoryService(IQueryRepository<PurchaseHistoryDTO> purchasehistory) 
     : IQueryService<Products ,PurchaseHistoryDTO>
     {
-        private readonly PurchasehistoryRepository _purchasehistory = purchasehistory;
+        private readonly IQueryRepository<PurchaseHistoryDTO> _purchasehistory = purchasehistory;
         public async Task<IEnumerable<PurchaseHistoryDTO>> ListAsync(int id)
         {
             var PurchaseHistoryList = await _purchasehistory.GetByIdAsync(id);

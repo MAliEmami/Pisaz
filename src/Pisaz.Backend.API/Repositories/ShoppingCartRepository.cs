@@ -11,7 +11,7 @@ using Pisaz.Backend.API.Models.Product.Cart;
 
 namespace Pisaz.Backend.API.Repositories
 {
-    public class ShoppingCartRepository(PisazDB db) //: IQueryRepository<ShoppingCart>
+    public class ShoppingCartRepository(PisazDB db) : IQueryRepository<CartStatusDTO>
     {
         private readonly PisazDB _db = db;
         public async Task<List<CartStatusDTO?>> GetByIdAsync(int id)

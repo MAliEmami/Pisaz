@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Pisaz.Backend.API.DbContextes;
+using Pisaz.Backend.API.DTOs.ClientsDTOs.Dashboard;
 using Pisaz.Backend.API.Interfaces;
 using Pisaz.Backend.API.Models.ClientModels;
 
 namespace Pisaz.Backend.API.Repositories
 {
-    public class AddressRepository : IRepository<Address>
+    public class AddressRepository 
+    : IQueryRepository<Address>, ICommandRepository<Address>
     {
         private readonly PisazDB _db;
         private readonly ILogger<AddressRepository> _logger;
@@ -22,7 +24,7 @@ namespace Pisaz.Backend.API.Repositories
         }
         public async Task<List<Address?>> GetByIdAsync(int id)
         {
-            const string sql = "SELECT * FROM Addresses WHERE ID = @Id";
+            const string sql = @"SELECT * FROM Address WHERE ID = @Id";
             var parameters = new[]
             {
                 new SqlParameter("@Id", id)
@@ -34,21 +36,29 @@ namespace Pisaz.Backend.API.Repositories
         {
             try
             {
-                const string checkSql = "SELECT COUNT(1) FROM Addresses WHERE ID = @id";
-                var checkParameters = new[]
-                {
-                    new SqlParameter("@id", entity.ID)
-                };
+                // const string checkSql = @"
+                //         SELECT 
+                //             COUNT(1) 
+                //         FROM 
+                //             Address 
+                //         WHERE 
+                //             ID = @id AND Province = @province AND Remainder = @remainder";
+                // var checkParameters = new[]
+                // {
+                //     new SqlParameter("@id", entity.ID),
+                //     new SqlParameter("@province", entity.Province),
+                //     new SqlParameter("@remainder", entity.Remainder)
+                // };
 
-                var exists = _db.Addresses.FromSqlRaw(checkSql, checkParameters).Any();
+                // var exists = _db.Addresses.FromSqlRaw(checkSql, checkParameters).Any();
 
-                if (exists)
-                {
-                    throw new Exception("An address already exists.");
-                }
+                // if (exists)
+                // {
+                //     throw new Exception("An address already exists.");
+                // }
 
                 const string insertSql = @"
-                                    INSERT INTO Addresses (ID, Province, Remainder)
+                                    INSERT INTO Address (ID, Province, Remainder)
                                     VALUES (@ID, @Province, @Remainder);";
 
                 var parameters = new[]

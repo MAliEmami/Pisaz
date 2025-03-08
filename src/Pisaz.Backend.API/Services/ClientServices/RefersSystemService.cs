@@ -12,9 +12,9 @@ using Pisaz.Backend.API.Repositories;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class RefersSystemService(RefersSystemRepository refersSystem) : IQueryService<Refers, RefersDTO>
+    public class RefersSystemService(IQueryRepository<RefersDTO> refersSystem) : IQueryService<Refers, RefersDTO>
     {
-        private readonly RefersSystemRepository _refersSystem = refersSystem;
+        private readonly IQueryRepository<RefersDTO> _refersSystem = refersSystem;
         public async Task<IEnumerable<RefersDTO>> ListAsync(int id)
         {
             var refers = await _refersSystem.GetByIdAsync(id);

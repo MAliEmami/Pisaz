@@ -13,7 +13,8 @@ using Pisaz.Backend.API.DTOs.Clients;
 
 namespace Pisaz.Backend.API.Repositories
 {
-    public class ClientRepository(PisazDB db) //: IRepository<Client>
+    public class ClientRepository(PisazDB db) 
+    : IQueryRepository<ClientDTO>, ICommandRepository<Client>
     {
         private readonly PisazDB _db = db;
 

@@ -12,10 +12,10 @@ using Pisaz.Backend.API.Repositories;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class DiscountService(DiscountRepository discount) 
+    public class DiscountService(IQueryRepository<DiscountCodeDTO> discount) 
     : IQueryService<DiscountCode ,DiscountCodeDTO>
     {
-         private readonly DiscountRepository _discount = discount;
+         private readonly IQueryRepository<DiscountCodeDTO> _discount = discount;
 
         public async Task<IEnumerable<DiscountCodeDTO>> ListAsync(int id)
         {

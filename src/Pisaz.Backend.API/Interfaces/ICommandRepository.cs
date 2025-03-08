@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace Pisaz.Backend.API.Interfaces
 {
-    public interface ICommandRepository
+    public interface ICommandRepository<TEntity> where TEntity : class
     {
-        
+        Task<TEntity> AddAsync(TEntity entity);
+        Task<TEntity?> UpdateAsync(TEntity entity);
     }
 }

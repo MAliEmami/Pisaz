@@ -6,13 +6,14 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Pisaz.Backend.API.DbContextes;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Cart;
+using Pisaz.Backend.API.Interfaces;
 
 namespace Pisaz.Backend.API.Repositories
 {
-    public class PurchasehistoryRepository(PisazDB db) //: IQueryRepository<ShoppingCart>
+    public class PurchasehistoryRepository(PisazDB db) : IQueryRepository<PurchaseHistoryDTO>
     {
         private readonly PisazDB _db = db;
-        public async Task<List<PurchaseHistoryDTO?>> GetByIdAsync(int id)
+        public async Task<List<PurchaseHistoryDTO?>> GetByIdAsync(int id) 
         {
             const string DiscountCodeIsGoingToExpList = @"
                 SELECT TOP 5

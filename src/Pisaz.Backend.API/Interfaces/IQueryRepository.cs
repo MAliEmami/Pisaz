@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Pisaz.Backend.API.Interfaces
 {
-    public interface IQueryRepository<TEntity> where TEntity : class
+    public interface IQueryRepository<T> where T : class
     {
-        Task<List<TEntity?>> GetByIdAsync(int id);
+        Task<List<T?>> GetByIdAsync(int id);
     }
 }

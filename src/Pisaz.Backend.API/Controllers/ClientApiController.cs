@@ -15,9 +15,11 @@ namespace Pisaz.Backend.API.Controllers
 {
     [ApiController]
     [Route("Client/v1")]
-    public class ClientApiController(IClientService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO> service) : ControllerBase 
+    public class ClientApiController(ICommandService<Client, ClientAddDTO, ClientUpdateDTO> commandService , IQueryService<Client, ClientDTO> queryService) : ControllerBase 
     {
-        protected readonly IClientService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO> _service = service;
+        protected readonly ICommandService<Client, ClientAddDTO, ClientUpdateDTO> _commandService = commandService; 
+        protected readonly IQueryService<Client, ClientDTO> _queryService = queryService;
+        //protected readonly IClientService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO> _service = service;
 
         [HttpPost("add")]
         public async Task<IActionResult> Add(ClientAddDTO entity)
@@ -27,7 +29,7 @@ namespace Pisaz.Backend.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _service.AddAsync(entity);
+            var result = await _commandService.AddAsync(entity,-1);
             return Ok(result);
         }
 
@@ -47,7 +49,7 @@ namespace Pisaz.Backend.API.Controllers
                 return BadRequest("Invalid user ID in token.");
             }
             
-            var clients = await _service.ListAsync(id);
+            var clients = await _queryService.ListAsync(id);
 
             if (clients == null || !clients.Any())
             {

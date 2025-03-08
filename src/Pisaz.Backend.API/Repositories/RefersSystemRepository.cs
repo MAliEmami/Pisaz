@@ -6,10 +6,11 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Pisaz.Backend.API.DbContextes;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.ReferalCode;
+using Pisaz.Backend.API.Interfaces;
 
 namespace Pisaz.Backend.API.Repositories
 {
-    public class RefersSystemRepository(PisazDB db)
+    public class RefersSystemRepository(PisazDB db) : IQueryRepository<RefersDTO>
     {
         private readonly PisazDB _db = db;
         public async Task<List<RefersDTO?>> GetByIdAsync(int id)

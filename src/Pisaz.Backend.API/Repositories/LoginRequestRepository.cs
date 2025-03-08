@@ -9,7 +9,7 @@ using Microsoft.Data.SqlClient;
 
 namespace Pisaz.Backend.API.Repositories
 {
-    public class LoginRequestRepository(PisazDB db)
+    public class LoginRequestRepository(PisazDB db) 
     {
         private readonly PisazDB _db = db;
 
