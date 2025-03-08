@@ -11,7 +11,7 @@ using Pisaz.Backend.API.Models.ClientModels;
 
 namespace Pisaz.Backend.API.Repositories
 {
-    public class AddressRepository 
+    public class AddressRepository
     : IQueryRepository<Address>, ICommandRepository<Address>
     {
         private readonly PisazDB _db;
@@ -24,7 +24,7 @@ namespace Pisaz.Backend.API.Repositories
         }
         public async Task<List<Address?>> GetByIdAsync(int id)
         {
-            const string sql = @"SELECT * FROM Address WHERE ID = @Id";
+            const string sql = @"SELECT * FROM Addresses WHERE ID = @Id";
             var parameters = new[]
             {
                 new SqlParameter("@Id", id)
@@ -58,7 +58,7 @@ namespace Pisaz.Backend.API.Repositories
                 // }
 
                 const string insertSql = @"
-                                    INSERT INTO Address (ID, Province, Remainder)
+                                    INSERT INTO Addresses (ID, Province, Remainder)
                                     VALUES (@ID, @Province, @Remainder);";
 
                 var parameters = new[]
