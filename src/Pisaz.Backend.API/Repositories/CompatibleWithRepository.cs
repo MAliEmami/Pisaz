@@ -6,10 +6,11 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Pisaz.Backend.API.DbContextes;
 using Pisaz.Backend.API.DTOs.ProductsDTOs;
+using Pisaz.Backend.API.Interfaces;
 
 namespace Pisaz.Backend.API.Repositories
 {
-    public class CompatibleWithRepository(PisazDB db)
+    public class CompatibleWithRepository(PisazDB db) //: IQueryRepository<CompatibleWithDTO>
     {
         private readonly PisazDB _db = db;
         public async Task<List<CompatibleWithDTO?>> GetByIdAsync(int id)
@@ -71,10 +72,7 @@ namespace Pisaz.Backend.API.Repositories
             return (await _db.Database.SqlQueryRaw<CompatibleWithDTO>(CompatibleWithQuery, parameters)
                                     .ToListAsync())
                                     .Cast<CompatibleWithDTO?>()
-                                    .ToList();
-                // return await _db.Database.SqlQueryRaw<CompatibleWithDTO>(CompatibleWithQuery, parameters)
-                //              .ToListAsync();
-                                    
+                                    .ToList();                                    
         }
         public async Task<int?> GetByModel(string model)
         {
@@ -90,8 +88,6 @@ namespace Pisaz.Backend.API.Repositories
             {
                 new SqlParameter("@model", model)
             };
-            // return await _db.Database.SqlQueryRaw<int?>(GetIdBymodelQuery, parameters)
-            //                          .FirstOrDefaultAsync();
             return await _db.Products
                             .FromSqlRaw(GetIdBymodelQuery, new SqlParameter("@model", model))
                             .Select(p => p.ID)

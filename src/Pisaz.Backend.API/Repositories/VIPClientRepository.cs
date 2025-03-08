@@ -10,10 +10,10 @@ using Pisaz.Backend.API.Interfaces;
 
 namespace Pisaz.Backend.API.Repositories
 {
-    public class VIPClientRepository(PisazDB db)
+    public class VIPClientRepository(PisazDB db) : IQueryRepository<VIPClientDTO>
     {
         private readonly PisazDB _db = db;
-        public async Task<List<VIPClientDTO?>> GetByIdAsync(int id)
+        public async Task<List<VIPClientDTO?>> GetByIdAsync(int id) 
         {
             const string RefersInfoQuery = @"
                 SELECT 

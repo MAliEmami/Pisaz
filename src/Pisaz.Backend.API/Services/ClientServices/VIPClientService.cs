@@ -9,9 +9,9 @@ using Pisaz.Backend.API.Repositories;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class VIPClientService(VIPClientRepository vIPClient) : IQueryService<VIPClient, VIPClientDTO>
+    public class VIPClientService(IQueryRepository<VIPClientDTO> vIPClient) : IQueryService<VIPClient, VIPClientDTO>
     {
-        private readonly VIPClientRepository _vIPClient = vIPClient;
+        private readonly IQueryRepository<VIPClientDTO> _vIPClient = vIPClient;
         public async Task<IEnumerable<VIPClientDTO>> ListAsync(int id)
         {
             var refers = await _vIPClient.GetByIdAsync(id);

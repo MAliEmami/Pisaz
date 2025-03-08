@@ -15,14 +15,15 @@ using Pisaz.Backend.API.Repositories;
 
 namespace Pisaz.Backend.API.Services.ClientServices
 {
-    public class ClientService(ClientRepository clients) 
-    : IClientService<Client, ClientDTO, ClientAddDTO, ClientUpdateDTO>
+    public class ClientService(IQueryRepository<ClientDTO> queryClients, ICommandRepository<Client> commandClients) 
+    : ICommandService<Client, ClientAddDTO, ClientUpdateDTO>, IQueryService<Client, ClientDTO> 
     {
-        private readonly ClientRepository _clients = clients;
+        private readonly IQueryRepository<ClientDTO> _queryClients = queryClients;
+        private readonly ICommandRepository<Client> _commandClients = commandClients;
 
         public async Task<IEnumerable<ClientDTO>> ListAsync(int id)
         {
-            var clientInfoList = await _clients.GetByIdAsync(id);
+            var clientInfoList = await _queryClients.GetByIdAsync(id);
             
             if (clientInfoList == null) 
             {
@@ -39,7 +40,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
                 SignupDate = c.SignupDate
             });
         }
-        public async Task<Client> AddAsync(ClientAddDTO entity)
+        public async Task<Client> AddAsync(ClientAddDTO entity , int id = -1)
         {
             var c = new Client
             {
@@ -50,7 +51,7 @@ namespace Pisaz.Backend.API.Services.ClientServices
                 ReferralCode = default,
                 SignupDate = DateTime.Now
             };
-            return await _clients.AddAsync(c);
+            return await _commandClients.AddAsync(c);
         }
 
         public async Task<Client?> UpdateAsync(int id, ClientUpdateDTO entity)

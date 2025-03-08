@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Pisaz.Backend.API.DbContextes;
+using Pisaz.Backend.API.DTOs.ClientsDTOs.Dashboard;
 using Pisaz.Backend.API.Interfaces;
 using Pisaz.Backend.API.Models.ClientModels;
 
 namespace Pisaz.Backend.API.Repositories
 {
-    public class AddressRepository : IRepository<Address>
+    public class AddressRepository 
+    : IQueryRepository<Address>, ICommandRepository<Address>
     {
         private readonly PisazDB _db;
         private readonly ILogger<AddressRepository> _logger;

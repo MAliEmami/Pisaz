@@ -7,6 +7,7 @@ CREATE OR ALTER VIEW SimpleUserID AS
   EXCEPT
   SELECT ID
   From VIPClient;
+  
 GO
 CREATE OR ALTER VIEW FilteredShoppingCart AS
   SELECT C.*

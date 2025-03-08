@@ -6,10 +6,11 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Pisaz.Backend.API.DbContextes;
 using Pisaz.Backend.API.DTOs.ClientsDTOs.Discount;
+using Pisaz.Backend.API.Interfaces;
 
 namespace Pisaz.Backend.API.Repositories
 {
-    public class DiscountRepository(PisazDB db) //: IQueryRepository<ShoppingCart>
+    public class DiscountRepository(PisazDB db) : IQueryRepository<DiscountCodeDTO>
     {
         private readonly PisazDB _db = db;
         public async Task<List<DiscountCodeDTO?>> GetByIdAsync(int id)
