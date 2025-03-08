@@ -22,13 +22,18 @@ VALUES (@ID, 1, 1, (SELECT ID FROM Products WHERE Model = 'i7-12700K'), 1), -- P
        (@ID, 1, 1, (SELECT ID FROM Products WHERE Model = 'RTX 3080'), 1); -- Product 2 with a price of 100,000 Tomans
 
 	   
--- Create a discount code
+-- Create two discount code
 INSERT INTO DiscountCode (Code, Amount, DiscountLimit, UsageCount, ExpirationDate)
 VALUES (123, 25, 1000, 1, DATEADD(DAY, 7, GETDATE()));
+INSERT INTO DiscountCode (Code, Amount, DiscountLimit, UsageCount, ExpirationDate)
+VALUES (1234, 5, NULL, 1, DATEADD(DAY, 7, GETDATE()));
 
 -- Apply the discount code to the shopping cart
 INSERT INTO AppliedTo (ID, CartNumber, LockedNumber, Code, ApplyTimestamp)
 VALUES (@ID, 1, 1, 123, GETDATE());
+WAITFOR DELAY '00:00:00:01'; -- 
+INSERT INTO AppliedTo (ID, CartNumber, LockedNumber, Code, ApplyTimestamp)
+VALUES (@ID, 1, 1, 1234, GETDATE());
 
 
 -- Create a successful transaction
