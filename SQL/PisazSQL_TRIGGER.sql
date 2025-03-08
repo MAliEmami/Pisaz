@@ -302,16 +302,21 @@ BEGIN
 				  FROM INSERTED AS I JOIN ShoppingCart AS S ON I.ID = S.ID AND I.CartNumber = S.CartNumber
 				  WHERE S.CartStatus = 'active')
 	BEGIN
-		RAISERROR('You can''t apply a locked or blocked cart.', 20, 2);
+		RAISERROR('You can''t apply a locked or blocked cart.', 15, 2);
         ROLLBACK TRANSACTION;
 	END
 
 	IF EXISTS(SELECT 1 FROM INSERTED WHERE CartNumber  > 1) AND
 	   NOT EXISTS(SELECT 1 FROM VIPClient AS V JOIN INSERTED AS I ON V.ID = I.ID)
 	BEGIN
-		RAISERROR('You can''t apply more than one cart without VIP subscribtion.', 21, 2);
+		RAISERROR('You can''t apply more than one cart without VIP subscribtion.', 15, 2);
         ROLLBACK TRANSACTION;
 	END
+
+	UPDATE ShoppingCart
+	SET CartStatus = 'blocked'
+	FROM INSERTED AS I, ShoppingCart AS S 
+	WHERE I.ID = S.ID AND I.CartNumber = S.CartNumber
 END
 
 
