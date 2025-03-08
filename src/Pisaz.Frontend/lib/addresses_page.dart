@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pisaz/components/address_card.dart';
-import 'package:pisaz/components/discount_code_card.dart';
 import 'package:pisaz/models/address.dart';
-import 'package:pisaz/models/discount_code.dart';
 import 'package:pisaz/services/backend.dart';
 
 class AddressesPage extends StatelessWidget {

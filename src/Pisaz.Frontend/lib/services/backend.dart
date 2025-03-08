@@ -27,7 +27,7 @@ class Backend {
     String responseJson;
     try {
       responseJson = await network.getDiscountCodes();
-    } on Exception catch (e) {
+    } on Exception {
       return Future<List<DiscountCode>>.value([]);
     }
 
@@ -42,7 +42,7 @@ class Backend {
     String responseJson;
     try {
       responseJson = await network.getAddresses();
-    } on Exception catch (e) {
+    } on Exception {
       return Future<List<Address>>.value([]);
     }
 
@@ -57,7 +57,7 @@ class Backend {
     String responseJson;
     try {
       responseJson = await network.getCarts();
-    } on Exception catch (e) {
+    } on Exception {
       return;
     }
 

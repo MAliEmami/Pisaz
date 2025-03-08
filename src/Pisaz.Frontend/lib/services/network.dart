@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 
 class NetworkHelper {
   //-- Uncommnet this line if you dont use android emulator
-  //final String host = 'http://localhost:5184';
-  final String host = 'http://10.0.2.2:5184';
+  final String host = 'http://localhost:5184';
+  // final String host = 'http://10.0.2.2:5184';
   String? jwtToken;
 
   Future<bool> login(String phoneNumber) async {

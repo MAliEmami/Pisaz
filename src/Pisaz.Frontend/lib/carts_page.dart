@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pisaz/components/address_card.dart';
 import 'package:pisaz/components/cart_card.dart';
 import 'package:pisaz/models/cart_status.dart';
 import 'package:pisaz/services/backend.dart';
